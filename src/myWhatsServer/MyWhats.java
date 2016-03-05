@@ -15,6 +15,7 @@ public class MyWhats {
 	
 	public static void main( String[] args ) throws UnknownHostException, IOException, ClassNotFoundException, BadPwdException
     {
+		// epah cenas tas a ver ?
 		String[] server = args[2].split(":");
 		String IP = server[0];
 		int port = Integer.parseInt(server[1]);
