@@ -1,6 +1,10 @@
 package myWhatsServer;
 
+import java.awt.BufferCapabilities;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -54,22 +58,40 @@ public class MyWhatsServer{
 			try {
 				ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
 				ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
-
-				int n;
-			
-				try {
-					n = (Integer) inStream.readObject();
-					System.out.println("thread: depois de receber a dimensao");
-				}catch (ClassNotFoundException e1) {
-					e1.printStackTrace();
+				File f = new File("users.txt");
+				String auth = (String) inStream.readObject();
+				String[] data = auth.split(":");
+				String user;
+				String pwd;
+				if (data.length == 1) {
+					user = data[0];
+					pwd = (String) inStream.readObject();
 				}
+				else {
+					user = data[0];
+					pwd = data[1];
+				}
+				
+				//escrever no ficheiro caso user nao exista
+				FileWriter writer = new FileWriter(f.getAbsoluteFile());
+				BufferedWriter bw = new BufferedWriter(writer);
+				bw.write(user+":"+pwd);
+				
+//				int n;
+//			
+//				try {
+//					n = (Integer) inStream.readObject();
+//					System.out.println("thread: depois de receber a dimensao");
+//				}catch (ClassNotFoundException e1) {
+//					e1.printStackTrace();
+//				}
 
 				outStream.close();
 				inStream.close();
  			
 				socket.close();
 
-			} catch (IOException e) {
+			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
 		}
