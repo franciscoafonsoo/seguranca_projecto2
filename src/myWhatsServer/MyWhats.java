@@ -37,10 +37,9 @@ public class MyWhats {
         	user = user.concat(passwd);
         	out.writeObject(user);
         	String ack = (String) in.readObject();
-        	if (ack.equals("NOK")) {throw new BadPwdException("wrong password!");}
-        	argv.remove(1); argv.remove(1); argv.remove(1); argv.remove(1);
-        	handle(argv, out);
-        	
+        	if (ack.equals("NOK")) throw new BadPwdException("wrong password!");
+            argv.remove(1); argv.remove(1); argv.remove(1); argv.remove(1);
+            handle(argv, out);
         }
         
         else {
@@ -49,14 +48,11 @@ public class MyWhats {
         	String passwd = scan.next();
         	out.writeObject(passwd);
         	String ack = (String) in.readObject();
-        	if (ack.equals("NOK")) {throw new BadPwdException("wrong password!");}
+        	if (ack.equals("NOK")) throw new BadPwdException("wrong password!");
         	argv.remove(1); argv.remove(1);
         	handle(argv, out);
         }
-        
-        
-        
-        
+
         File f = new File("IIO-Exame_2014_01_20.pdf");
         FileInputStream input = new FileInputStream (f);
         out.writeObject(f.length());
@@ -70,24 +66,21 @@ public class MyWhats {
 	
 	private static void handle(List<String> lista, ObjectOutputStream out) throws IOException {
 		String[] args = (String[]) lista.toArray();
-		if (args[0] == "-r"){
-			String mensagem = null;
-			if (args.length==1) {
+		if (args[0].equals("-r")){
+
+			String mensagem;
+
+			if (args.length==1)
 				mensagem="-r";
-			}
-			else if (args.length==2) {
+			else if (args.length==2)
 				mensagem = args[0] + ":"+ args[1];
-			}
-			else {
+			else
 				mensagem = args[0] + ":"+ args[1] +":"+ args[2];
-			}
 			out.writeObject(mensagem);
 		}
 		else {
 			String mensagem2 = args[0] + ":"+ args[1] +":"+ args[2];
 			out.writeObject(mensagem2);
 		}
-		
-		}
-			
+    }
 }
