@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class MyWhats {
 
@@ -22,14 +23,23 @@ public class MyWhats {
         Socket s = new Socket(IP, port);
         ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
         ObjectInputStream in = new ObjectInputStream(s.getInputStream());
-        
+        Scanner scan = new Scanner(System.in);
         String user = args[1];
         byte[] buf = new byte[32];
         if (args[3] == "-p") {
         	String passwd = args[4];
-        	user.concat(":");
-        	user.concat(passwd);
+        	user = user.concat(":");
+        	user = user.concat(passwd);
         	out.writeObject(user);
+        	String ack = (String) in.readObject();
+        	if (ack=="NOK") {throw new BadPwdException("wrong password!");}
+        }
+        
+        else {
+        	out.writeObject(user);
+        	System.out.println("Enter password: ");
+        	String passwd = scan.next();
+        	out.writeObject(passwd);
         	String ack = (String) in.readObject();
         	if (ack=="NOK") {throw new BadPwdException("wrong password!");}
         }
