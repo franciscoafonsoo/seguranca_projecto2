@@ -8,11 +8,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 
-public class myWhatsServer{
+public class MyWhatsServer{
 
 	public static void main(String[] args) {
 		System.out.println("servidor: main");
-		myWhatsServer server = new myWhatsServer();
+		MyWhatsServer server = new MyWhatsServer();
 		server.startServer(Integer.parseInt(args[1]));
 	}
 

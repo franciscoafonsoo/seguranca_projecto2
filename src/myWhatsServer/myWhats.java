@@ -10,10 +10,10 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 
-public class myWhats {
+public class MyWhats {
 
 	
-	public static void main( String[] args ) throws UnknownHostException, IOException, ClassNotFoundException
+	public static void main( String[] args ) throws UnknownHostException, IOException, ClassNotFoundException, BadPwdException
     {
 		String[] server = args[2].split(":");
 		String IP = server[0];
@@ -22,7 +22,16 @@ public class myWhats {
         ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
         ObjectInputStream in = new ObjectInputStream(s.getInputStream());
         
+        String user = args[1];
         byte[] buf = new byte[32];
+        if (args[3] == "-p") {
+        	String passwd = args[4];
+        	user.concat(":");
+        	user.concat(passwd);
+        	out.writeObject(user);
+        	String ack = (String) in.readObject();
+        	if (ack=="NOK") {throw new BadPwdException("wrong password!");}
+        }
         
         File f = new File("IIO-Exame_2014_01_20.pdf");
         FileInputStream input = new FileInputStream (f);
