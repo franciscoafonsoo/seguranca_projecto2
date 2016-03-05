@@ -16,7 +16,6 @@ public class MyWhats {
 	
 	public static void main( String[] args ) throws UnknownHostException, IOException, ClassNotFoundException, BadPwdException
     {
-		// epah cenas tas a ver ?
 		String[] server = args[2].split(":");
 		String IP = server[0];
 		int port = Integer.parseInt(server[1]);
@@ -26,13 +25,13 @@ public class MyWhats {
         Scanner scan = new Scanner(System.in);
         String user = args[1];
         byte[] buf = new byte[32];
-        if (args[3] == "-p") {
+        if (args[3].equals("-p")) {
         	String passwd = args[4];
         	user = user.concat(":");
         	user = user.concat(passwd);
         	out.writeObject(user);
         	String ack = (String) in.readObject();
-        	if (ack=="NOK") {throw new BadPwdException("wrong password!");}
+        	if (ack.equals("NOK")) {throw new BadPwdException("wrong password!");}
         }
         
         else {
@@ -41,7 +40,7 @@ public class MyWhats {
         	String passwd = scan.next();
         	out.writeObject(passwd);
         	String ack = (String) in.readObject();
-        	if (ack=="NOK") {throw new BadPwdException("wrong password!");}
+        	if (ack.equals("NOK")) {throw new BadPwdException("wrong password!");}
         }
         
         File f = new File("IIO-Exame_2014_01_20.pdf");
@@ -52,10 +51,5 @@ public class MyWhats {
        while ((n = input.read(buf, 0, 32))!=-1) {
     	   out.write(buf, 0, n);
        }
-        
-        
-        
-        
     }
-	
 }
