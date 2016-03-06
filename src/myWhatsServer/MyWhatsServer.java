@@ -78,13 +78,12 @@ public class MyWhatsServer{
 				
 				String authenticated = skel.login(user, pwd);
 				
-				if (authenticated=="NOK");
+				if (authenticated=="NOK")
 					outStream.writeObject("NOK");
-				
-				//escrever no ficheiro caso user nao exista
-				FileWriter writer = new FileWriter(f.getAbsoluteFile());
-				BufferedWriter bw = new BufferedWriter(writer);
-				bw.write(user+":"+pwd);
+				else {
+					String pedido = (String) inStream.readObject();
+					skel.handle(pedido);
+				}
 				
 //				int n;
 //			
