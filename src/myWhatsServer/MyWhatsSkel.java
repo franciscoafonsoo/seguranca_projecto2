@@ -14,7 +14,7 @@ public class MyWhatsSkel {
 	 *
 	 */
 
-	public void auth(String user, String pass) {
+	public void login(String user, String pass) {
 
 	}
 
@@ -29,11 +29,11 @@ public class MyWhatsSkel {
 
 	/**
 	 * opcao -m
-	 * recebe mensagem e da autorizacao de acesso ao client "user"
+	 * recebe mensagem e a autorizacao de acesso ao client "user"
 	 *
 	 */
 
-	public void receiveMessage(String msg, String user) {
+	public void receiveMessage(String msg, String senduser, String recvuser) {
 
 	}
 
@@ -44,7 +44,7 @@ public class MyWhatsSkel {
 	 *
 	 */
 
-	public void receiveFile(File f, String user) {
+	public void receiveFile(File f, String senduser, String recvuser) {
 
 	}
 
@@ -55,6 +55,18 @@ public class MyWhatsSkel {
 	 *
 	 */
 
-	public void shareMessage(File f, String user, String)
+	public void shareMessage(String msg, String user) {
 
+	}
+
+	/**
+	 * opcao -r file
+	 *
+	 * partilhar um ficheiro trocado por outro client "user"
+	 *
+	 */
+
+	public void shareFile(File f, String user) {
+
+	}
 }
