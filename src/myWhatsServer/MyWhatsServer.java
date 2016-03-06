@@ -62,7 +62,31 @@ public class MyWhatsServer{
 			try {
 				ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
 				ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
-				File f = new File("users.txt");
+     
+			    // criar directorio
+			    File log = new File("log");
+
+			    boolean feito = log.mkdir();
+			    if (feito)
+			    {
+			      // sucesso
+			      System.out.println("pasta log criada");
+			    }
+
+			    /**
+			      * handle this shit, pedro
+			      * bitch
+			      *
+			      */
+			    else
+			    {
+			      // fail
+			      System.out.println("falha na criacao de 'log'");
+			    }
+
+				// cenas
+
+				File f = new File("log/users.txt");
 				String auth = (String) inStream.readObject();
 				String[] data = auth.split(":");
 				String user;

@@ -27,10 +27,10 @@ public class MyWhatsSkel {
 		Boolean found = false;
 		String line;
 		BufferedReader reader = new BufferedReader(new FileReader(new File("users.txt")));
-		while ((line=reader.readLine()) != null || !(found)) {
+		while ((line=reader.readLine()) != null || (!found)) {
 			String[] dataF = line.split(":");
-			if (dataF[0] == user) {
-				if (dataF[1]==pwd) {
+			if (dataF[0].equals(user)) {
+				if (dataF[1].equals(pwd)) {
 					found = true;
 				}
 				else {
@@ -39,7 +39,7 @@ public class MyWhatsSkel {
 			}
 			
 		}
-		if (!(found)) 
+		if ((!found))
 			this.register(user, pwd);
 		return "OK";
 		
@@ -58,7 +58,8 @@ public class MyWhatsSkel {
 		bw.write(user+":"+pwd);
 	}
 
-public void handle(String pedido) {
+
+	public void handle(String pedido) {
 		
 	}
 
@@ -66,6 +67,7 @@ public void handle(String pedido) {
 	/**
 	 * opcao -m
 	 * recebe mensagem e a autorizacao de acesso ao client "user"
+	 * escreve para um ficheiro log.txt na pasta log
 	 *
 	 */
 	
