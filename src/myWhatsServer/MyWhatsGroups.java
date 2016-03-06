@@ -5,16 +5,12 @@ package myWhatsServer;
  */
 public class MyWhatsGroups {
 
-	public MyWhatsGroups {
-		
-	}
-
 	/**
-	 *
+	 * create group
 	 *
 	 */
 
-	public File createGroup(String group) {
+	public MyWhatsGroups {
 
 	}
 

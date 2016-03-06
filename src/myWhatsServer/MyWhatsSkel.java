@@ -66,7 +66,7 @@ public class MyWhatsSkel {
 	 *
 	 */
 
-	public void shareFile(File f, String user) {
+	public File shareFile(File f, String user) {
 
 	}
 }
