@@ -58,16 +58,18 @@ public class MyWhatsSkel {
 		bw.write(user+":"+pwd);
 	}
 
+public void handle(String pedido) {
+		
+	}
+
+	
 	/**
 	 * opcao -m
 	 * recebe mensagem e a autorizacao de acesso ao client "user"
 	 *
 	 */
 	
-	public void handle(String pedido) {
-		
-	}
-
+	
 	public void receiveMessage(String msg, String senduser, String recvuser) {
 
 	}
