@@ -1,9 +1,11 @@
 package myWhatsServer;
 
 import java.awt.BufferCapabilities;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -70,6 +72,24 @@ public class MyWhatsServer{
 				else {
 					user = data[0];
 					pwd = data[1];
+				}
+				
+				
+				Boolean found = false;
+				String line;
+				BufferedReader reader = new BufferedReader(new FileReader(f));
+				while ((line=reader.readLine()) != null || !(found)) {
+					String[] dataF = line.split(":");
+					if (dataF[0] == user) {
+						if (dataF[1]==pwd) {
+							found = true;
+						}
+						else {
+							outStream.writeObject("NOK");
+						}
+					}
+					//registar o user
+					
 				}
 				
 				//escrever no ficheiro caso user nao exista

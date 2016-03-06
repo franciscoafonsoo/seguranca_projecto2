@@ -28,7 +28,6 @@ public class MyWhats {
         Socket s = new Socket(IP, port);
         ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
         ObjectInputStream in = new ObjectInputStream(s.getInputStream());
-        Scanner scan = new Scanner(System.in);
         String user = args[1];
         byte[] buf = new byte[32];
         if (args[3].equals("-p")) {
@@ -43,6 +42,7 @@ public class MyWhats {
         }
         
         else {
+            Scanner scan = new Scanner(System.in);
         	out.writeObject(user);
         	System.out.println("Enter password: ");
         	String passwd = scan.next();
@@ -51,6 +51,7 @@ public class MyWhats {
         	if (ack.equals("NOK")) throw new BadPwdException("wrong password!");
         	argv.remove(1); argv.remove(1);
         	handle(argv, out);
+        	scan.close();
         }
 
         File f = new File("IIO-Exame_2014_01_20.pdf");
@@ -61,6 +62,7 @@ public class MyWhats {
        while ((n = input.read(buf, 0, 32))!=-1) {
     	   out.write(buf, 0, n);
        }
+       
        
     }
 	
