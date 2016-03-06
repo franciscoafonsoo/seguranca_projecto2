@@ -24,6 +24,7 @@ public class MyWhatsServer{
 
 	public void startServer (int port){
 		ServerSocket sSoc = null;
+		MyWhatsSkel skel = new MyWhatsSkel();
         
 		try {
 			sSoc = new ServerSocket(port);
@@ -35,7 +36,7 @@ public class MyWhatsServer{
 		while(true) {
 			try {
 				Socket inSoc = sSoc.accept();
-				ServerThread newServerThread = new ServerThread(inSoc);
+				ServerThread newServerThread = new ServerThread(inSoc, skel);
 				newServerThread.start();
 		    }
 		    catch (IOException e) {
@@ -50,9 +51,10 @@ public class MyWhatsServer{
 	class ServerThread extends Thread {
 
 		private Socket socket = null;
-
-		ServerThread(Socket inSoc) {
+		private MyWhatsSkel skel;
+		ServerThread(Socket inSoc, MyWhatsSkel skel) {
 			socket = inSoc;
+			this.skel = skel;
 			System.out.println("thread do server para cada cliente");
 		}
  
@@ -74,23 +76,10 @@ public class MyWhatsServer{
 					pwd = data[1];
 				}
 				
+				String authenticated = skel.login(user, pwd);
 				
-				Boolean found = false;
-				String line;
-				BufferedReader reader = new BufferedReader(new FileReader(f));
-				while ((line=reader.readLine()) != null || !(found)) {
-					String[] dataF = line.split(":");
-					if (dataF[0] == user) {
-						if (dataF[1]==pwd) {
-							found = true;
-						}
-						else {
-							outStream.writeObject("NOK");
-						}
-					}
-					//registar o user
-					
-				}
+				if (authenticated=="NOK");
+					outStream.writeObject("NOK");
 				
 				//escrever no ficheiro caso user nao exista
 				FileWriter writer = new FileWriter(f.getAbsoluteFile());

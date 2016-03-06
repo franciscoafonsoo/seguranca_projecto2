@@ -10,8 +10,11 @@ public class MyWhatsGroups {
 	 *
 	 */
 
-	public MyWhatsGroups {
+	private String owner;
+	
+	public MyWhatsGroups(String owner) {
 
+		this.owner = owner;
 	}
 
 	/**
