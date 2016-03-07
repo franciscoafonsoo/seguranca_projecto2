@@ -106,7 +106,7 @@ public class MyWhatsServer{
 					outStream.writeObject("NOK");
 				else {
 					String pedido = (String) inStream.readObject();
-					skel.handle(pedido);
+					skel.handle(pedido, user);
 				}
 				
 //				int n;

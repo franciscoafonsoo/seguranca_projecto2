@@ -59,8 +59,26 @@ public class MyWhatsSkel {
 	}
 
 
-	public void handle(String pedido) {
-		
+	public void handle(String pedido, String user) {
+		String[] request = pedido.split(":");
+		String op = request[0];
+		switch (op) {
+		case "-m":
+			receiveMessage(request[2], user, request[1]);
+			break;
+		case "-f":
+			
+		case "-r":
+			if (request.length == 1) {
+				shareMessage(user);
+			}
+			else if (request.length == 2) {
+				shareContact(request[1], user);
+			}
+			else {
+				shareFile(request[1], request[2], user);
+			}
+		}
 	}
 
 	
@@ -94,7 +112,7 @@ public class MyWhatsSkel {
 	 *
 	 */
 
-	public void shareMessage(String msg, String user) {
+	public void shareMessage(String user) {
 
 	}
 
@@ -105,8 +123,11 @@ public class MyWhatsSkel {
 	 *
 	 */
 
-	public File shareFile(String fileName, String user) {
+	public void shareContact(String contact, String user) {
 
-		return null;
+	}
+	
+	public void shareFile(String contact, String fileName, String user) {
+		
 	}
 }
