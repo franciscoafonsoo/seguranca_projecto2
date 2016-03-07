@@ -15,6 +15,14 @@ public class MyWhatsSkel {
 	public MyWhatsSkel() {
 
 	}
+	
+	
+	/**
+	 * se calhar deviamos fazer uma classe para users tambem, em vez de ficheiros e assim guardamos logo a
+	 * password, o grupo e merdas dessas
+	 */
+	
+	
 
 	/**
 	 * autenticar um cliente "user"
@@ -117,15 +125,23 @@ public class MyWhatsSkel {
 	}
 
 	/**
-	 * opcao -r file
+	 * opcao -r contact
 	 *
-	 * partilhar um ficheiro trocado por outro client "user"
+	 * partilhar todas as informacoes entre user e contact
 	 *
 	 */
 
 	public void shareContact(String contact, String user) {
 
 	}
+	
+	
+	/**
+	 * 
+	 * opcao -r contact file
+	 * 
+	 * enviar o ficheiro com nome fileName, enviado por contact
+	 */
 	
 	public void shareFile(String contact, String fileName, String user) {
 		
