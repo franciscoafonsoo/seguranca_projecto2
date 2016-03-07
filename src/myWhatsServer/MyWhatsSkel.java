@@ -61,6 +61,8 @@ public class MyWhatsSkel {
 
 	public void register(String user, String pwd) throws IOException {
 
+		MyWhatsUser newuser = new MyWhatsUser(user, pwd);
+		
 		FileWriter writer = new FileWriter(new File("users.txt"));
 		BufferedWriter bw = new BufferedWriter(writer);
 		bw.write(user+":"+pwd);
