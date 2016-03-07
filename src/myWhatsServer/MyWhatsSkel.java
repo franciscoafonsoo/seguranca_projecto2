@@ -12,8 +12,10 @@ import java.io.IOException;
  */
 public class MyWhatsSkel {
 
+	private UserCatalog userCat;
+	
 	public MyWhatsSkel() {
-
+		userCat = UserCatalog.getInstance();
 	}
 	
 	
@@ -48,7 +50,7 @@ public class MyWhatsSkel {
 			
 		}
 		if ((!found))
-			this.register(user, pwd);
+			userCat.register(user, pwd);
 		return "OK";
 		
 	}
@@ -58,16 +60,7 @@ public class MyWhatsSkel {
 	 * @throws IOException 
 	 *
 	 */
-
-	public void register(String user, String pwd) throws IOException {
-
-		MyWhatsUser newuser = new MyWhatsUser(user, pwd);
-		
-		FileWriter writer = new FileWriter(new File("users.txt"));
-		BufferedWriter bw = new BufferedWriter(writer);
-		bw.write(user+":"+pwd);
-	}
-
+	
 
 	public void handle(String pedido, String user) {
 		String[] request = pedido.split(":");
