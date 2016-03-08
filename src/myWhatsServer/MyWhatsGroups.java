@@ -27,6 +27,7 @@ public class MyWhatsGroups {
 	}
 
 	/**
+	 * opcao -a user group
 	 * adicionar membro a um grupo
 	 *
 	 */
@@ -36,6 +37,7 @@ public class MyWhatsGroups {
 	}
 
 	/**
+	 * opcao -d user group
 	 * remover membro de um grupo
 	 *
 	 */
