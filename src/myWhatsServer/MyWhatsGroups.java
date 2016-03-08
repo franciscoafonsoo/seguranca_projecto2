@@ -1,16 +1,25 @@
 package myWhatsServer;
 
 /**
- * Created by sherby on 06-03-2016.
+ * cria e gera grupos
+ *
  */
+
+
 public class MyWhatsGroups {
 
 	/**
-	 * create group
+	 * instancias
 	 *
 	 */
 
 	private String owner;
+
+	/**
+	 * construtor
+	 *
+	 */
+
 	
 	public MyWhatsGroups(String owner) {
 
@@ -18,7 +27,7 @@ public class MyWhatsGroups {
 	}
 
 	/**
-	 *
+	 * adicionar membro a um grupo
 	 *
 	 */
 
@@ -27,7 +36,7 @@ public class MyWhatsGroups {
 	}
 
 	/**
-	 *
+	 * remover membro de um grupo
 	 *
 	 */
 

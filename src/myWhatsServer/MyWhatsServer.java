@@ -102,7 +102,7 @@ public class MyWhatsServer{
 				
 				String authenticated = skel.login(user, pwd);
 				
-				if (authenticated=="NOK")
+				if (authenticated.equals("NOK"))
 					outStream.writeObject("NOK");
 				else {
 					String pedido = (String) inStream.readObject();

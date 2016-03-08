@@ -7,24 +7,24 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-/**
- * Created by sherby on 06-03-2016.
- */
+
 public class MyWhatsSkel {
 
+	/**
+	 * instancias
+	 *
+	 */
+
 	private UserCatalog userCat;
+
+	/**
+	 * construtor
+	 *
+	 */
 	
 	public MyWhatsSkel() {
 		userCat = UserCatalog.getInstance();
 	}
-	
-	
-	/**
-	 * se calhar deviamos fazer uma classe para users tambem, em vez de ficheiros e assim guardamos logo a
-	 * password, o grupo e merdas dessas
-	 */
-	
-	
 
 	/**
 	 * autenticar um cliente "user"
@@ -36,28 +36,31 @@ public class MyWhatsSkel {
 
 		Boolean found = false;
 		String line;
-		BufferedReader reader = new BufferedReader(new FileReader(new File("users.txt")));
-		while ((line=reader.readLine()) != null || (!found)) {
-			String[] dataF = line.split(":");
-			if (dataF[0].equals(user)) {
-				if (dataF[1].equals(pwd)) {
-					found = true;
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(new File("users.txt")));
+			while ((line = reader.readLine()) != null || (!found)) {
+				String[] dataF = line.split(":");
+				if (dataF[0].equals(user)) {
+					if (dataF[1].equals(pwd)) {
+						found = true;
+					} else {
+						return "NOK";
+					}
 				}
-				else {
-					return "NOK";
-				}
+
 			}
-			
+			if ((!found))
+				userCat.register(user, pwd);
+			return "OK";
 		}
-		if ((!found))
-			userCat.register(user, pwd);
-		return "OK";
+		catch (IOException e){
+			throw new IOException("erro");
+		}
 		
 	}
 
 	/**
 	 * registar um client "user"
-	 * @throws IOException 
 	 *
 	 */
 	
@@ -99,7 +102,6 @@ public class MyWhatsSkel {
 
 	/**
 	 * opcao -f
-	 *
 	 * recebe um ficheiro no servidor e da autorizacao de acesso ao client "user"
 	 *
 	 */
@@ -109,8 +111,7 @@ public class MyWhatsSkel {
 	}
 
 	/**
-	 * opcao -r 
-	 *
+	 * opcao -r
 	 * partilha o nome ficheiro/mensagem trocada por outro client "user"
 	 *
 	 */
@@ -121,7 +122,6 @@ public class MyWhatsSkel {
 
 	/**
 	 * opcao -r contact
-	 *
 	 * partilhar todas as informacoes entre user e contact
 	 *
 	 */
@@ -132,10 +132,9 @@ public class MyWhatsSkel {
 	
 	
 	/**
-	 * 
 	 * opcao -r contact file
-	 * 
 	 * enviar o ficheiro com nome fileName, enviado por contact
+	 *
 	 */
 	
 	public void shareFile(String contact, String fileName, String user) {
