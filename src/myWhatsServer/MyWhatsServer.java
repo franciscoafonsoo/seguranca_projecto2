@@ -99,9 +99,20 @@ public class MyWhatsServer{
 					user = data[0];
 					pwd = data[1];
 				}
-				
+
+				/**
+				 * duplicado do codigo para verificar. PEDROOOOO
+				 */
+
+				if(!(UserCatalog.getInstance().login(user,pwd)))
+					outStream.writeObject("NOK");
+				else {
+					String pedido = (String) inStream.readObject();
+					skel.handle(pedido,user);
+				}
+
 				String authenticated = skel.login(user, pwd);
-				
+
 				if (authenticated.equals("NOK"))
 					outStream.writeObject("NOK");
 				else {
