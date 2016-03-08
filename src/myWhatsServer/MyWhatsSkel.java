@@ -34,29 +34,12 @@ public class MyWhatsSkel {
 
 	public String login(String user, String pwd) throws IOException{
 
-		Boolean found = false;
-		String line;
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(new File("users.txt")));
-			while ((line = reader.readLine()) != null || (!found)) {
-				String[] dataF = line.split(":");
-				if (dataF[0].equals(user)) {
-					if (dataF[1].equals(pwd)) {
-						found = true;
-					} else {
-						return "NOK";
-					}
-				}
-
-			}
-			if ((!found))
-				userCat.register(user, pwd);
+		if(userCat.login(user, pwd)) {
 			return "OK";
 		}
-		catch (IOException e){
-			throw new IOException("erro");
+		else {
+			return "NOK";
 		}
-		
 	}
 
 	/**
