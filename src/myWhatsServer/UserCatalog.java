@@ -1,9 +1,12 @@
 package myWhatsServer;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class UserCatalog {
 
@@ -33,10 +36,19 @@ public class UserCatalog {
 	 *
 	 * @param user nome utilizador
 	 * @param pwd pass utilizador
+	 * @throws FileNotFoundException 
      */
 	
-	public void register(String user, String pwd) {
+	public void register(String user, String pwd) throws FileNotFoundException {
 		MyWhatsUser newuser = new MyWhatsUser(user, pwd);
+		try {
+			PrintWriter escrever = new PrintWriter("log/users.txt");
+			String userpwd = user + ":" + pwd;
+			escrever.println(userpwd);
+		}
+		catch (FileNotFoundException e) {
+			throw new FileNotFoundException("ficheiro nao encontrado");
+		}
 		mapUsers.put(user, pwd);
 	}
 
@@ -45,12 +57,26 @@ public class UserCatalog {
 	 * @param user nome utilizador
 	 * @param pwd pass utilizador
      * @return works or not
+	 * @throws FileNotFoundException 
      */
 	
-	public boolean login(String user, String pwd) {
+	public boolean login(String user, String pwd) throws FileNotFoundException {
 		if(mapUsers.containsKey(user)){
 			if(mapUsers.get(user).equals(pwd)) {
-				return true;
+				Scanner scanner = new Scanner("log/users.txt");
+				String userpwd = user + ":" + pwd;
+
+				while(scanner.hasNextLine()){
+					if(userpwd.equals(scanner.nextLine().trim())){
+						return true;
+					}
+					else {
+						
+					}
+						
+				}
+				return false;
+				
 			}
 			else {
 				return false;
