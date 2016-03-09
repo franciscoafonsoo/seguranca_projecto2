@@ -39,17 +39,17 @@ public class UserCatalog {
 	 * @throws FileNotFoundException 
      */
 	
-	public void register(String user, String pwd) throws FileNotFoundException {
+	public boolean register(String user, String pwd) throws FileNotFoundException {
 		MyWhatsUser newuser = new MyWhatsUser(user, pwd);
 		try {
 			PrintWriter escrever = new PrintWriter("log/users.txt");
 			String userpwd = user + ":" + pwd;
 			escrever.println(userpwd);
+			return true;
 		}
 		catch (FileNotFoundException e) {
 			throw new FileNotFoundException("ficheiro nao encontrado");
 		}
-		mapUsers.put(user, pwd);
 	}
 
 	/**
@@ -61,30 +61,28 @@ public class UserCatalog {
      */
 	
 	public boolean login(String user, String pwd) throws FileNotFoundException {
-		if(mapUsers.containsKey(user)){
-			if(mapUsers.get(user).equals(pwd)) {
-				Scanner scanner = new Scanner("log/users.txt");
-				String userpwd = user + ":" + pwd;
+		try {
 
-				while(scanner.hasNextLine()){
-					if(userpwd.equals(scanner.nextLine().trim())){
-						return true;
-					}
-					else {
-						
-					}
-						
+			/**
+			 * em alternativa a este metodo pode-se usar um arraylist, e fazer a comparacao
+			 */
+
+			Scanner scanner = new Scanner("log/users.txt");
+			String userpwd = user + ":" + pwd;
+
+			while(scanner.hasNextLine()){
+				if(userpwd.equals(scanner.nextLine().trim())){
+					return true;
 				}
-				return false;
-				
+				else
+					if(register(user,pwd))
+						return true;
 			}
-			else {
-				return false;
-			}
+			return false;
 		}
-		else {
-			register(user, pwd);
-			return true;
+		catch (FileNotFoundException e){
+			throw new FileNotFoundException("ficheiro nao encontrado");
 		}
 	}
-}
+	}
+
