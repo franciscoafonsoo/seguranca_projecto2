@@ -63,10 +63,6 @@ public class UserCatalog {
 	public boolean login(String user, String pwd) throws FileNotFoundException {
 		try {
 
-			/**
-			 * em alternativa a este metodo pode-se usar um arraylist, e fazer a comparacao
-			 */
-
 			Scanner scanner = new Scanner("log/users.txt");
 			String userpwd = user + ":" + pwd;
 
