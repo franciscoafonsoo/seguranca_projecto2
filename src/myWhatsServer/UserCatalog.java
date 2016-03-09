@@ -63,6 +63,10 @@ public class UserCatalog {
 	public boolean login(String user, String pwd) throws FileNotFoundException {
 		if(mapUsers.containsKey(user)){
 			if(mapUsers.get(user).equals(pwd)) {
+
+				/**
+				 * acho desnecessario. check it
+				 */
 				Scanner scanner = new Scanner("log/users.txt");
 				String userpwd = user + ":" + pwd;
 
@@ -76,6 +80,10 @@ public class UserCatalog {
 						
 				}
 				return false;
+
+				/**
+				 * ate aqui
+				 */
 				
 			}
 			else {
