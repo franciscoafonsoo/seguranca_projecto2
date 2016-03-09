@@ -73,7 +73,7 @@ public class MyWhatsServer{
 						System.out.println("erro");
 				}
 				else
-					System.out.println("já existe");
+					System.out.println("ja existe");
 
 				File f = new File("log/users.txt");
 				String auth = (String) inStream.readObject();
