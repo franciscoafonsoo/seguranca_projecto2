@@ -6,6 +6,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 public class MyWhatsSkel {
@@ -74,13 +78,52 @@ public class MyWhatsSkel {
 	/**
 	 * opcao -m
 	 * recebe mensagem e a autorizacao de acesso ao client "user"
-	 * escreve para um ficheiro log.txt na pasta log
+	 * escreve para um ficheiro recvuser.txt na pasta msg
 	 *
 	 */
 	
 	
-	public void receiveMessage(String msg, String senduser, String recvuser) {
+	public void receiveMessage(String msg, String senduser, String recvuser) throws IOException {
 
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Calendar cal = Calendar.getInstance();
+
+		File log = new File("msg");
+
+		if(!(log.exists() && log.isDirectory())) {
+			boolean feito = log.mkdir();
+			if (feito)
+				System.out.println("dir created");
+			else
+				System.out.println("erro");
+		}
+		else
+			System.out.println("já existe");
+
+		String dt = dateFormat.format(cal.getTime());
+
+		File f = new File("msg/" + recvuser + ".txt");
+		if(f.exists() && !f.isDirectory()) {
+			try(PrintWriter output = new PrintWriter(new FileWriter(f,true)))
+			{
+				output.printf("%s", "Contact :"  + senduser + "/");
+				output.printf("%s", dt + "/");
+				output.printf("%s\r\n", msg);
+			}
+			catch (IOException e) {
+				throw new IOException("receiveMessage error");
+			}
+		}
+		else {
+			try(PrintStream output = new PrintStream(f)){
+				output.printf("%s", "Contact :"  + senduser + "/");
+				output.printf("%s", dt + "/");
+				output.printf("%s\r\n", msg);
+			}
+			catch (IOException e) {
+				throw new IOException("receiveMessage error");
+			}
+		}
 	}
 
 	/**
