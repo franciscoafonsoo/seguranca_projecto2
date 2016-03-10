@@ -63,17 +63,15 @@ public class MyWhatsServer{
 				ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
 				ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
 
-				File log = new File("log");
-
-				if(!(log.exists() && log.isDirectory())) {
-					boolean feito = log.mkdirs();
-					if (feito)
-						System.out.println("dir created");
-					else
-						System.out.println("erro");
+				try {
+					skel.dir("log");
+					skel.dir("msg");
+					skel.dir("groups");
+					skel.dir("files");
 				}
-				else
-					System.out.println("ja existe");
+				catch (DirException e) {
+					throw new DirException("check it");
+				}
 
 				File f = new File("log/users.txt");
 				String auth = (String) inStream.readObject();

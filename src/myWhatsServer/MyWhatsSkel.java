@@ -123,4 +123,24 @@ public class MyWhatsSkel {
 	public void shareFile(String contact, String fileName, String user) {
 		
 	}
+
+	/**
+	 * check and make dirs if not yet created
+	 */
+
+	public void dir(String name) throws DirException {
+		File log = new File(name);
+
+		if(!(log.exists() && log.isDirectory())) {
+			boolean feito = log.mkdirs();
+			if (feito) {
+				System.out.println(name + " CREATED");
+			}
+			else{
+				throw new DirException("verificar permissoes, etc.");
+			}
+		}
+		else
+			System.out.println(name + " OK");
+	}
 }
