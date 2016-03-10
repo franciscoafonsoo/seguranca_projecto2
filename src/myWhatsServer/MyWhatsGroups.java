@@ -1,5 +1,8 @@
 package myWhatsServer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * cria e gera grupos
  *
@@ -13,7 +16,9 @@ public class MyWhatsGroups {
 	 *
 	 */
 
-	private String owner;
+	private MyWhatsUser owner;
+	
+	private List<MyWhatsUser> users = new ArrayList<MyWhatsUser>();
 
 	/**
 	 * construtor
@@ -21,7 +26,7 @@ public class MyWhatsGroups {
 	 */
 
 	
-	public MyWhatsGroups(String owner) {
+	public MyWhatsGroups(MyWhatsUser owner) {
 
 		this.owner = owner;
 	}
@@ -32,8 +37,14 @@ public class MyWhatsGroups {
 	 *
 	 */
 
-	public void addGroup(String group, String user) {
-
+	public boolean addGroup(MyWhatsUser user) {
+		if (users.contains(user)) {
+			return false;
+		}
+		else {
+			users.add(user);
+			return true;
+		}
 	}
 
 	/**

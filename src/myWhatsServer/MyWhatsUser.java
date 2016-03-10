@@ -12,7 +12,7 @@ public class MyWhatsUser {
 
 	private String user;
 	private String pwd;
-	private MyWhatsGroups group;
+	private List<MyWhatsGroups> groups = new ArrayList<MyWhatsGroups>();;
 
 	/**
 	 * construtor
@@ -80,6 +80,16 @@ public class MyWhatsUser {
 		}
 		catch (FileNotFoundException e){
 			throw new FileNotFoundException("ficheiro nao encontrado");
+		}
+	}
+	
+	public boolean enterGroup(MyWhatsGroups group) {
+		if (groups.contains(group)) {
+			return false;
+		}
+		else {
+			groups.add(group);
+			return true;
 		}
 	}
 
