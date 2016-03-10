@@ -70,7 +70,7 @@ public class MyWhatsServer{
 					skel.dir("files");
 				}
 				catch (DirException e) {
-					throw new DirException("check it");
+					System.out.println("Error on dir...");;
 				}
 
 				File f = new File("log/users.txt");
