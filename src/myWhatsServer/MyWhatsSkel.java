@@ -48,11 +48,12 @@ public class MyWhatsSkel {
 
 	/**
 	 * registar um client "user"
+	 * @throws IOException 
 	 *
 	 */
 	
 
-	public void handle(String pedido, String user) {
+	public void handle(String pedido, String user) throws IOException {
 		String[] request = pedido.split(":");
 		String op = request[0];
 		switch (op) {
