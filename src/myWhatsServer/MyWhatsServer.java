@@ -19,7 +19,7 @@ public class MyWhatsServer{
 	public static void main(String[] args) {
 		System.out.println("servidor: main");
 		MyWhatsServer server = new MyWhatsServer();
-		server.startServer(Integer.parseInt(args[1]));
+		server.startServer(Integer.parseInt(args[0]));
 	}
 
 	public void startServer (int port){
