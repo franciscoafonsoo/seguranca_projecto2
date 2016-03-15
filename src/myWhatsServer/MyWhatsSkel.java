@@ -1,9 +1,7 @@
 package myWhatsServer;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.*;
@@ -51,7 +49,6 @@ public class MyWhatsSkel {
 	 * @throws IOException 
 	 *
 	 */
-	
 
 	public void handle(String pedido, String user) throws IOException {
 		String[] request = pedido.split(":");
@@ -78,7 +75,7 @@ public class MyWhatsSkel {
 	
 	/**
 	 * opcao -m
-	 * recebe mensagem e a autorizacao de acesso ao client "user"
+	 * recebe mensagem e nome do ficheiro partilhado e a autorizacao de acesso ao client "user"
 	 * escreve para um ficheiro recvuser.txt na pasta msg
 	 *
 	 */
@@ -88,18 +85,6 @@ public class MyWhatsSkel {
 
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Calendar cal = Calendar.getInstance();
-
-		File log = new File("msg");
-
-		if(!(log.exists() && log.isDirectory())) {
-			boolean feito = log.mkdir();
-			if (feito)
-				System.out.println("dir created");
-			else
-				System.out.println("erro");
-		}
-		else
-			System.out.println("já existe");
 
 		String dt = dateFormat.format(cal.getTime());
 
@@ -133,7 +118,25 @@ public class MyWhatsSkel {
 	 *
 	 */
 
-	public void receiveFile(File f, String senduser, String recvuser) {
+	public void receiveFile(ObjectInputStream is, String senduser, String recvuser, String name, byte[] barray) throws IOException {
+
+		// filename apartir de File f.getName()
+
+		// COMPLETAR E VERIFICAR
+
+		try {
+
+			FileOutputStream fos = new FileOutputStream(name);
+
+			BufferedOutputStream bos = new BufferedOutputStream(fos);
+
+			int bytesRead = is.read(barray, 0, barray.length);
+			bos.write(barray, 0, bytesRead);
+			bos.close();
+		}
+		catch (IOException e){
+			throw new IOException("receiveFile error");
+		}
 
 	}
 

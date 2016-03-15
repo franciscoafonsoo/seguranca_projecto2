@@ -1,11 +1,6 @@
 package myWhatsServer;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Arrays;
@@ -85,4 +80,15 @@ public class MyWhats {
 			out.writeObject(mensagem2);
 		}
     }
+
+	private void sendFile (ObjectOutputStream out, File f, byte[] barray) throws IOException {
+
+		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
+
+		// re check this line
+		bis.read(barray, 0, barray.length);
+
+		out.write(barray, 0, barray.length);
+		out.flush();
+	}
 }
