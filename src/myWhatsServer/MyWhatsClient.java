@@ -62,7 +62,7 @@ public class MyWhatsClient {
         	scan.close();
         }
 
-        handle(argv, out);
+        MyWhatsStub.handle(argv, out);
 
         // apartir deste ponto, deve-se escrever no stub.
         // passar la para handle e os metodos para as varias opcoes
@@ -80,56 +80,5 @@ public class MyWhatsClient {
        }
     }
 	
-	private static void handle(List<String> lista, ObjectOutputStream out) throws IOException {
-		String[] args = (String[]) lista.toArray();
-		if (args[0].equals("-r")){
 
-			String mensagem;
-
-			if (args.length==1)
-				mensagem="-r";
-			else if (args.length==2)
-				mensagem = args[0] + ":"+ args[1];
-			else
-				mensagem = args[0] + ":"+ args[1] +":"+ args[2];
-			out.writeObject(mensagem);
-		}
-		else {
-			String mensagem2 = args[0] + ":"+ args[1] +":"+ args[2];
-			out.writeObject(mensagem2);
-		}
-
-		if (args[0].equals("-f")){
-
-			File f = new File(args[2]);
-
-			byte[] barray = new byte[(int) f.length()];
-			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
-			bis.read(barray, 0, barray.length);
-			out.write(barray, 0, barray.length);
-			out.flush();
-
-			String mensagem;
-			if (args.length==1)
-				mensagem="-f";
-			else if (args.length==2)
-				mensagem = args[0] + ":"+ args[1];
-			else
-				mensagem = args[0] + ":"+ args[1] +":"+ args[2];
-			out.writeObject(mensagem);
-
-
-		}
-    }
-
-	private void sendFile (ObjectOutputStream out, File f, byte[] barray) throws IOException {
-
-		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
-
-		// re check this line
-		bis.read(barray, 0, barray.length);
-
-		out.write(barray, 0, barray.length);
-		out.flush();
-	}
 }
