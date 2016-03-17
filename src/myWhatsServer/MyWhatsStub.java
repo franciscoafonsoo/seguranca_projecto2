@@ -32,7 +32,7 @@ public class MyWhatsStub {
         }
 
         // opcao -m -f -a -d
-        // TODO - fazer passar o ficheiro na opcao -f em vez do nome
+        // TODO: fazer passar o ficheiro na opcao -f em vez do nome
         else {
             // NOT HANDLING BAD WRINTING
             msg = args[0] + args[1] + args[2];
