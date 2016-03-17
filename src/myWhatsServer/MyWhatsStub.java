@@ -1,9 +1,10 @@
 package myWhatsServer;
 
 
-import com.sun.xml.internal.bind.v2.TODO;
-
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class MyWhatsStub {
@@ -33,21 +34,20 @@ public class MyWhatsStub {
 
         // opcao -m -f -a -d
         // TODO: fazer passar o ficheiro na opcao -f em vez do nome
+        // TODO: feito aqui, falta no server
+        else if (args[0].equals("-f")){
+            Path path = Paths.get("IIO-Exame_2014_01_20.pdf");
+            byte[] data = Files.readAllBytes(path);
+
+            msg = args[0] + ":" + args[1] + ":" + args[2];
+
+            out.writeObject(msg);
+            out.writeObject(data);
+        }
         else {
             // NOT HANDLING BAD WRINTING
             msg = args[0] + args[1] + args[2];
             out.writeObject(msg);
         }
-    }
-
-    private void sendFile (ObjectOutputStream out, File f, byte[] barray) throws IOException {
-
-        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
-
-        // re check this line
-        bis.read(barray, 0, barray.length);
-
-        out.write(barray, 0, barray.length);
-        out.flush();
     }
 }

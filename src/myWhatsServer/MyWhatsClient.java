@@ -1,10 +1,8 @@
 package myWhatsServer;
 
-import com.sun.istack.internal.NotNull;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.*;
 
 public class MyWhatsClient {
@@ -28,7 +26,6 @@ public class MyWhatsClient {
 
 		// users and passwords. handle commands in the end
         String user = args[1];
-        byte[] buf = new byte[32];
         if (args[3].equals("-p")) {
 
             //prepare user and pass
@@ -69,16 +66,5 @@ public class MyWhatsClient {
 
 
 		// temp code
-
-        File f = new File("IIO-Exame_2014_01_20.pdf");
-        FileInputStream input = new FileInputStream (f);
-        out.writeObject(f.length());
-        int n;
-        
-       while ((n = input.read(buf, 0, 32))!=-1) {
-    	   out.write(buf, 0, n);
-       }
     }
-	
-
 }
