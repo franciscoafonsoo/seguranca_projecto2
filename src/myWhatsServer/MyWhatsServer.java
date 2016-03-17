@@ -22,7 +22,7 @@ public class MyWhatsServer{
 		server.startServer(Integer.parseInt(args[0]));
 	}
 
-	public void startServer (int port){
+	private void startServer(int port){
 		ServerSocket sSoc = null;
 		MyWhatsSkel skel = new MyWhatsSkel();
         
@@ -32,7 +32,8 @@ public class MyWhatsServer{
 			System.err.println(e.getMessage());
 			System.exit(-1);
 		}
-         
+
+		//noinspection InfiniteLoopStatement
 		while(true) {
 			try {
 				Socket inSoc = sSoc.accept();
@@ -42,20 +43,18 @@ public class MyWhatsServer{
 		    catch (IOException e) {
 		        e.printStackTrace();
 		    }
-		    
 		}
-		//sSoc.close();
 	}
 
 
-	class ServerThread extends Thread {
+	private class ServerThread extends Thread {
 
 		private Socket socket = null;
 		private MyWhatsSkel skel;
 		ServerThread(Socket inSoc, MyWhatsSkel skel) {
 			socket = inSoc;
 			this.skel = skel;
-			System.out.println("thread do server para cada cliente");
+			System.out.println("nova thread iniciada");
 		}
  
 		public void run(){
@@ -73,7 +72,7 @@ public class MyWhatsServer{
 					outStream.writeObject("Wrong dir");
 				}
 
-				File f = new File("log/users.txt");
+				File f = new File("log/passwords.txt");
 				String auth = (String) inStream.readObject();
 				String[] data = auth.split(":");
 				String user;
@@ -93,15 +92,6 @@ public class MyWhatsServer{
 					String pedido = (String) inStream.readObject();
 					skel.handle(pedido, user);
 				}
-				
-//				int n;
-//			
-//				try {
-//					n = (Integer) inStream.readObject();
-//					System.out.println("thread: depois de receber a dimensao");
-//				}catch (ClassNotFoundException e1) {
-//					e1.printStackTrace();
-//				}
 
 				outStream.close();
 				inStream.close();

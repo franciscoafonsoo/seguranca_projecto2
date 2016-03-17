@@ -1,39 +1,50 @@
 package myWhatsServer;
 
+import com.sun.istack.internal.NotNull;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Queue;
-import java.util.Scanner;
+import java.util.*;
 
-public class MyWhats {
+public class MyWhatsClient {
 
-	
-	public static void main( String[] args ) throws UnknownHostException, IOException, ClassNotFoundException, BadPwdException
-    {
+
+	public static void main( String[] args ) throws IOException, ClassNotFoundException, BadPwdException {
+
+		// ip and port
 		String[] server = args[2].split(":");
 		String IP = server[0];
 		int port = Integer.parseInt(server[1]);
-		List<String> argv = null;
-		for (String e : args) {
-			argv.add(e);
-		}
+
+        // filling argv array
+		List<String> argv = new ArrayList<>();
+        Collections.addAll(argv, args);
+
+		// sockets and in/out streams
         Socket s = new Socket(IP, port);
         ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
         ObjectInputStream in = new ObjectInputStream(s.getInputStream());
+
+		// users and passwords. handle commands in the end
         String user = args[1];
         byte[] buf = new byte[32];
         if (args[3].equals("-p")) {
+
+            //prepare user and pass
         	String passwd = args[4];
         	user = user.concat(":");
         	user = user.concat(passwd);
+
+            // write and read
         	out.writeObject(user);
         	String ack = (String) in.readObject();
         	if (ack.equals("NOK")) throw new BadPwdException("wrong password!");
-            argv.remove(1); argv.remove(1); argv.remove(1); argv.remove(1);
-            handle(argv, out);
+
+            // remover os argumentos já usados para poder correr o handle (4)
+            for(int i=0; i<4; i++)
+                argv.remove(1);
+            //handle(argv, out);
         }
         
         else {
@@ -44,10 +55,20 @@ public class MyWhats {
         	out.writeObject(passwd);
         	String ack = (String) in.readObject();
         	if (ack.equals("NOK")) throw new BadPwdException("wrong password!");
-        	argv.remove(1); argv.remove(1);
-        	handle(argv, out);
+
+            // remover os argumentos já usados para poder correr o handle (2)
+			argv.remove(1);argv.remove(1);
+        	//handle(argv, out);
         	scan.close();
         }
+
+        handle(argv, out);
+
+        // apartir deste ponto, deve-se escrever no stub.
+        // passar la para handle e os metodos para as varias opcoes
+
+
+		// temp code
 
         File f = new File("IIO-Exame_2014_01_20.pdf");
         FileInputStream input = new FileInputStream (f);
@@ -57,8 +78,6 @@ public class MyWhats {
        while ((n = input.read(buf, 0, 32))!=-1) {
     	   out.write(buf, 0, n);
        }
-       
-       
     }
 	
 	private static void handle(List<String> lista, ObjectOutputStream out) throws IOException {
@@ -78,6 +97,28 @@ public class MyWhats {
 		else {
 			String mensagem2 = args[0] + ":"+ args[1] +":"+ args[2];
 			out.writeObject(mensagem2);
+		}
+
+		if (args[0].equals("-f")){
+
+			File f = new File(args[2]);
+
+			byte[] barray = new byte[(int) f.length()];
+			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
+			bis.read(barray, 0, barray.length);
+			out.write(barray, 0, barray.length);
+			out.flush();
+
+			String mensagem;
+			if (args.length==1)
+				mensagem="-f";
+			else if (args.length==2)
+				mensagem = args[0] + ":"+ args[1];
+			else
+				mensagem = args[0] + ":"+ args[1] +":"+ args[2];
+			out.writeObject(mensagem);
+
+
 		}
     }
 
