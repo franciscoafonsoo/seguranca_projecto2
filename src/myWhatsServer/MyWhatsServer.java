@@ -59,8 +59,8 @@ public class MyWhatsServer{
  
 		public void run(){
 			try {
-				ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
-				ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
+				ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+				ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
 				try {
 					skel.dir("log");
@@ -69,17 +69,17 @@ public class MyWhatsServer{
 					skel.dir("files");
 				}
 				catch (DirException e) {
-					outStream.writeObject("Wrong dir");
+					out.writeObject("Wrong dir");
 				}
 
 				File f = new File("log/passwords.txt");
-				String auth = (String) inStream.readObject();
+				String auth = (String) in.readObject();
 				String[] data = auth.split(":");
 				String user;
 				String pwd;
 				if (data.length == 1) {
 					user = data[0];
-					pwd = (String) inStream.readObject();
+					pwd = (String) in.readObject();
 				}
 				else {
 					user = data[0];
@@ -87,14 +87,14 @@ public class MyWhatsServer{
 				}
 
 				if (skel.login(user, pwd).equals("NOK"))
-					outStream.writeObject("NOK");
+					out.writeObject("NOK");
 				else {
-					String pedido = (String) inStream.readObject();
-					skel.handle(pedido, user);
+					String pedido = (String) in.readObject();
+					skel.handle(pedido, user, in);
 				}
 
-				outStream.close();
-				inStream.close();
+				out.close();
+				in.close();
  			
 				socket.close();
 

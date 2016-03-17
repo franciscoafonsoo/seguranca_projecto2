@@ -17,37 +17,38 @@ public class MyWhatsStub {
 
     public static void handle(List<String> lista, ObjectOutputStream out) throws IOException {
         String[] args = (String[]) lista.toArray();
-
         String msg;
 
-        if (args[0].equals("-r")){
-            if (args.length==1)
-                msg="-r";
-                // contact
-            else if (args.length==2)
-                msg = args[0] + ":" + args[1];
-                // contact file
-            else
+        switch (args[0]) {
+            case "-r":
+                    // all
+                if (args.length==1)
+                    msg="-r";
+                    // contact
+                else if (args.length==2)
+                    msg = args[0] + ":" + args[1];
+                    // contact file
+                else
+                    msg = args[0] + ":" + args[1] + ":" + args[2];
+                out.writeObject(msg);
+                break;
+            case "-f":
+                Path path = Paths.get(args[2]);
+                byte[] data = Files.readAllBytes(path);
+
                 msg = args[0] + ":" + args[1] + ":" + args[2];
-            out.writeObject(msg);
-        }
 
-        // opcao -m -f -a -d
-        // TODO: fazer passar o ficheiro na opcao -f em vez do nome
-        // TODO: feito aqui, falta no server
-        else if (args[0].equals("-f")){
-            Path path = Paths.get("IIO-Exame_2014_01_20.pdf");
-            byte[] data = Files.readAllBytes(path);
-
-            msg = args[0] + ":" + args[1] + ":" + args[2];
-
-            out.writeObject(msg);
-            out.writeObject(data);
-        }
-        else {
-            // NOT HANDLING BAD WRINTING
-            msg = args[0] + args[1] + args[2];
-            out.writeObject(msg);
+                out.writeObject(msg);
+                out.writeObject(data);
+                break;
+            case "-m":
+            case "-a":
+            case "-d":
+                msg = args[0] + args[1] + args[2];
+                out.writeObject(msg);
+                break;
+            default:
+                throw new IOException("opcao errada");
         }
     }
 }

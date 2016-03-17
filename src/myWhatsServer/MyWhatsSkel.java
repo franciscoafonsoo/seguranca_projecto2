@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.*;
+import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -50,7 +51,7 @@ public class MyWhatsSkel {
 	 *
 	 */
 
-	public void handle(String pedido, String user) throws IOException {
+	public void handle(String pedido, String user, ObjectInputStream in) throws IOException {
 		String[] request = pedido.split(":");
 		String op = request[0];
 		switch (op) {
@@ -58,6 +59,8 @@ public class MyWhatsSkel {
 			receiveMessage(request[2], user, request[1]);
 			break;
 		case "-f":
+			receiveMessage(request[2], user, request[1]);
+            receiveFile(request[2], in);
 			
 		case "-r":
 			if (request.length == 1) {
@@ -118,25 +121,19 @@ public class MyWhatsSkel {
 	 *
 	 */
 
-	public void receiveFile(ObjectInputStream is, String senduser, String recvuser, String name, byte[] barray) throws IOException {
-
-		// filename apartir de File f.getName()
-
-		// COMPLETAR E VERIFICAR
+	public void receiveFile(String name, ObjectInputStream is) throws IOException {
 
 		try {
-
-			FileOutputStream fos = new FileOutputStream(name);
-
-			BufferedOutputStream bos = new BufferedOutputStream(fos);
-
-			int bytesRead = is.read(barray, 0, barray.length);
-			bos.write(barray, 0, bytesRead);
-			bos.close();
+            File f = new File("files/" + name);
+            byte[] content = (byte[]) is.readObject();
+            Files.write(f.toPath(), content);
 		}
 		catch (IOException e){
 			throw new IOException("receiveFile error");
 		}
+        catch (ClassNotFoundException i){
+            throw new ClassCastException("no ideia");
+        }
 
 	}
 
