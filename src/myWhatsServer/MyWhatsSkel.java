@@ -63,7 +63,7 @@ public class MyWhatsSkel {
 		case "-f":
 			receiveMessage(request[2], user, request[1]);
             receiveFile(request[2], in);
-			
+			break;
 		case "-r":
 			if (request.length == 1) {
 				shareMessage(user);
@@ -74,7 +74,9 @@ public class MyWhatsSkel {
 			else {
 				shareFile(request[1], request[2], user, out);
 			}
-		}
+            break;
+        }
+
 	}
 
 	
