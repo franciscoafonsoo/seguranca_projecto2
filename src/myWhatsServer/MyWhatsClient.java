@@ -64,7 +64,6 @@ public class MyWhatsClient {
         // apartir deste ponto, deve-se escrever no stub.
         // passar la para handle e os metodos para as varias opcoes
 
-
 		// temp code
     }
 }
