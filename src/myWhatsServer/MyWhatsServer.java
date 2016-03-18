@@ -11,13 +11,13 @@ import java.net.Socket;
 
 public class MyWhatsServer{
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws NumberFormatException, IOException {
 		System.out.println("servidor: main");
 		MyWhatsServer server = new MyWhatsServer();
 		server.startServer(Integer.parseInt(args[0]));
 	}
 
-	private void startServer(int port){
+	private void startServer(int port) throws IOException{
 		ServerSocket sSoc = null;
 		MyWhatsSkel skel = new MyWhatsSkel();
         

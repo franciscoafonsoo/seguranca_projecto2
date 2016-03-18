@@ -1,8 +1,13 @@
 package myWhatsServer;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -15,14 +20,18 @@ public class UserCatalog {
 	private static UserCatalog INSTANCE = null;
 
 	private Map<String,String> mapUsers;
-	private UserCatalog(){ mapUsers = new HashMap<>(); }
+	private UserCatalog() throws IOException{ 
+		mapUsers = new HashMap<>(); 
+		loadState();
+	}
 
 	/**
 	 * construtor
 	 * @return instancia do UserCatalog
+	 * @throws IOException 
      */
 	
-	public static UserCatalog getInstance() {
+	public static UserCatalog getInstance() throws IOException {
 		if(INSTANCE == null) {
 			INSTANCE = new UserCatalog();
 		}
@@ -42,7 +51,7 @@ public class UserCatalog {
 		try {
 			PrintWriter escrever = new PrintWriter("log/users.txt");
 			String userpwd = user + ":" + pwd;
-			escrever.println(userpwd);
+			escrever.printf("%s",userpwd);
 			return true;
 		}
 		catch (FileNotFoundException e) {
@@ -60,23 +69,33 @@ public class UserCatalog {
 	
 	public boolean login(String user, String pwd) throws FileNotFoundException {
 		try {
-
-			Scanner scanner = new Scanner("log/users.txt");
-			String userpwd = user + ":" + pwd;
-
-			while(scanner.hasNextLine()){
-				if(userpwd.equals(scanner.nextLine().trim())){
+			
+			if (mapUsers.containsKey(user)) {
+				if (mapUsers.get(user).equals(pwd)){
 					return true;
 				}
-				else
-					if(register(user,pwd))
-						return true;
+				else {
+					return false;
+				}
 			}
-			return false;
+			else {
+				register(user, pwd);
+				return true;
+			}
+			
 		}
 		catch (FileNotFoundException e){
 			throw new FileNotFoundException("ficheiro nao encontrado");
 		}
+	}
+	
+	private void loadState() throws IOException {
+		Path path = Paths.get("log/passwords.txt");
+        List<String> lines = Files.readAllLines(path);
+        for (String e : lines) {
+        	String[] user = e.split(":");
+        	mapUsers.put(user[0], user[1]);
+        }
 	}
 	}
 

@@ -22,10 +22,11 @@ public class MyWhatsSkel {
 
 	/**
 	 * construtor
+	 * @throws IOException 
 	 *
 	 */
 	
-	public MyWhatsSkel() {
+	public MyWhatsSkel() throws IOException {
 		userCat = UserCatalog.getInstance();
 	}
 
