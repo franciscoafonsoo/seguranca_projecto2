@@ -19,6 +19,8 @@ public class MyWhatsStub {
         String[] args = (String[]) lista.toArray();
         String msg;
 
+        // sou bue crianca. ass tiago. 
+        // A MINHA CONTRIBUICAO TA FEITA
         switch (args[0]) {
             case "-r":
                     // all
