@@ -55,7 +55,7 @@ public class UserCatalog {
         if (f.exists() && !f.isDirectory()) {
             try (PrintWriter output = new PrintWriter(new FileWriter(f, true))) {
                 output.printf("%s", user + ":");
-                output.printf("%s\r\n", pwd + "/");
+                output.printf("%s\r\n", pwd);
 
                 return true;
             } catch (IOException e) {
@@ -99,6 +99,7 @@ public class UserCatalog {
 		Path path = Paths.get("log/passwords.txt");
         List<String> lines = Files.readAllLines(path);
         for (String e : lines) {
+        	System.out.println(e);
         	String[] user = e.split(":");
         	mapUsers.put(user[0], user[1]);
         }
