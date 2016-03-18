@@ -99,8 +99,8 @@ public class MyWhatsSkel {
 			try(PrintWriter output = new PrintWriter(new FileWriter(f,true)))
 			{
 				output.printf("%s", "Contact :"  + senduser + "/");
-                output.printf("%s\r\n", msg);
-				output.printf("%s", dt + "/");
+                output.printf("%s", msg);
+				output.printf("%s\r\n", dt + "/");
 			}
 			catch (IOException e) {
 				throw new IOException("receiveMessage error");
@@ -109,8 +109,8 @@ public class MyWhatsSkel {
 		else {
 			try(PrintStream output = new PrintStream(f)){
 				output.printf("%s", "Contact :"  + senduser + "/");
-                output.printf("%s\r\n", msg);
-				output.printf("%s", dt + "/");
+                output.printf("%s", msg);
+				output.printf("%s\r\n", dt + "/");
 			}
 			catch (IOException e) {
 				throw new IOException("receiveMessage error");

@@ -49,17 +49,21 @@ public class UserCatalog {
      */
 	
 	public boolean register(String user, String pwd) throws IOException {
-		MyWhatsUser newuser = new MyWhatsUser(user, pwd);
-		try {
-			PrintWriter escrever = new PrintWriter(new FileWriter(new File("log/passwords.txt"), true));
-			String userpwd = user + ":" + pwd;
-			escrever.printf("%s\r\n",userpwd);
-			return true;
-		}
-		catch (FileNotFoundException e) {
-			throw new FileNotFoundException("ficheiro nao encontrado");
-		}
-	}
+
+        File f = new File("log/passwords.txt");
+
+        if (f.exists() && !f.isDirectory()) {
+            try (PrintWriter output = new PrintWriter(new FileWriter(f, true))) {
+                output.printf("%s", user + ":");
+                output.printf("%s\r\n", pwd + "/");
+
+                return true;
+            } catch (IOException e) {
+                throw new IOException("receiveMessage error");
+            }
+        }
+        return false;
+    }
 
 	/**
 	 * fazer login de um utilizador
