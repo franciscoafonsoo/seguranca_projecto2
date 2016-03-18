@@ -126,7 +126,7 @@ public class MyWhatsSkel {
 	public void receiveFile(String name, ObjectInputStream is) throws IOException {
 
 		try {
-            File f = new File("files/" + name);
+            File f = new File("files/" + name + ".txt");
             byte[] content = (byte[]) is.readObject();
             Files.write(f.toPath(), content);
 		}
@@ -146,7 +146,7 @@ public class MyWhatsSkel {
 
 	public void shareMessage(String user, ObjectOutputStream out) throws FileNotFoundException, IOException {
 
-        Path path = Paths.get("msg/" + user);
+        Path path = Paths.get("msg/" + user + ".txt");
         List<String> lines = Files.readAllLines(path);
 
         out.writeObject(lines);
