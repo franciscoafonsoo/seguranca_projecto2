@@ -11,15 +11,25 @@ import java.net.Socket;
 
 public class MyWhatsServer{
 
-	public static void main(String[] args) throws NumberFormatException, IOException {
+	public static void main(String[] args) throws NumberFormatException, IOException, DirException {
 		System.out.println("servidor: main");
 		MyWhatsServer server = new MyWhatsServer();
 		server.startServer(Integer.parseInt(args[0]));
 	}
 
-	private void startServer(int port) throws IOException{
+	private void startServer(int port) throws IOException, DirException{
 		ServerSocket sSoc = null;
 		MyWhatsSkel skel = new MyWhatsSkel();
+
+        try {
+            skel.dir("log");
+            skel.dir("msg");
+            skel.dir("groups");
+            skel.dir("files");
+        }
+        catch (DirException e) {
+            throw new DirException("wrong dir");
+        }
         
 		try {
 			sSoc = new ServerSocket(port);
@@ -56,16 +66,6 @@ public class MyWhatsServer{
 			try {
 				ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 				ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-
-				try {
-					skel.dir("log");
-					skel.dir("msg");
-					skel.dir("groups");
-					skel.dir("files");
-				}
-				catch (DirException e) {
-					out.writeObject("Wrong dir");
-				}
 
 				File f = new File("log/passwords.txt");
 
