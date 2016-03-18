@@ -21,22 +21,21 @@ public class MyWhatsServer{
 		ServerSocket sSoc = null;
 		MyWhatsSkel skel = new MyWhatsSkel();
 
-        try {
+		try {
+            sSoc = new ServerSocket(port);
+
             skel.dir("log");
             skel.dir("msg");
             skel.dir("groups");
             skel.dir("files");
-        }
-        catch (DirException e) {
-            throw new DirException("wrong dir");
-        }
-        
-		try {
-			sSoc = new ServerSocket(port);
-		} catch (IOException e) {
+		}
+        catch (IOException e) {
 			System.err.println(e.getMessage());
 			System.exit(-1);
 		}
+        catch (DirException e) {
+            throw new DirException("wrong dir");
+        }
 
 		//noinspection InfiniteLoopStatement
 		while(true) {
