@@ -1,6 +1,8 @@
 package myWhatsServer;
 
 
+import sun.misc.IOUtils;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,6 +10,7 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 
 public class MyWhatsSkel {
@@ -63,10 +66,10 @@ public class MyWhatsSkel {
 			break;
 		case "-r":
 			if (request.length == 1) {
-				shareMessage(user);
+				shareMessage(user, out);
 			}
 			else if (request.length == 2) {
-				shareContact(request[1], user);
+				shareContact(request[1], user, out);
 			}
 			else {
 				shareFile(request[1], request[2], user, out);
@@ -135,7 +138,6 @@ public class MyWhatsSkel {
         catch (ClassNotFoundException i){
             throw new ClassCastException("no ideia");
         }
-
 	}
 
 	/**
@@ -144,8 +146,12 @@ public class MyWhatsSkel {
 	 *
 	 */
 
-	public void shareMessage(String user) {
+	public void shareMessage(String user, ObjectOutputStream out) throws FileNotFoundException, IOException {
 
+        Path path = Paths.get("msg/" + user);
+        List<String> lines = Files.readAllLines(path);
+
+        out.writeObject(lines);
 	}
 
 	/**
@@ -154,7 +160,9 @@ public class MyWhatsSkel {
 	 *
 	 */
 
-	public void shareContact(String contact, String user) {
+	public void shareContact(String contact, String user, ObjectOutputStream out) {
+
+        //HALP.
 
 	}
 	
