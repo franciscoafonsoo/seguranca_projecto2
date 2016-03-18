@@ -11,7 +11,7 @@ public class MyWhatsClient {
 	public static void main( String[] args ) throws IOException, ClassNotFoundException, BadPwdException {
 
 		// ip and port
-		String[] server = args[2].split(":");
+		String[] server = args[1].split(":");
 		String IP = server[0];
 		int port = Integer.parseInt(server[1]);
 
@@ -25,11 +25,11 @@ public class MyWhatsClient {
         ObjectInputStream in = new ObjectInputStream(s.getInputStream());
 
 		// users and passwords. handle commands in the end
-        String user = args[1];
-        if (args[3].equals("-p")) {
+        String user = args[0];
+        if (args[2].equals("-p")) {
 
             //prepare user and pass
-        	String passwd = args[4];
+        	String passwd = args[3];
         	user = user.concat(":");
         	user = user.concat(passwd);
 
@@ -39,7 +39,7 @@ public class MyWhatsClient {
         	if (ack.equals("NOK")) throw new BadPwdException("wrong password!");
 
             // remover os argumentos já usados para poder correr o handle (4)
-            for(int i=0; i<4; i++)
+            for(int i=0; i<3; i++)
                 argv.remove(1);
             //handle(argv, out);
         }
