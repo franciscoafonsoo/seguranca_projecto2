@@ -1,6 +1,8 @@
 package myWhatsServer;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -43,15 +45,15 @@ public class UserCatalog {
 	 *
 	 * @param user nome utilizador
 	 * @param pwd pass utilizador
-	 * @throws FileNotFoundException 
+	 * @throws IOException 
      */
 	
-	public boolean register(String user, String pwd) throws FileNotFoundException {
+	public boolean register(String user, String pwd) throws IOException {
 		MyWhatsUser newuser = new MyWhatsUser(user, pwd);
 		try {
-			PrintWriter escrever = new PrintWriter("log/users.txt");
+			PrintWriter escrever = new PrintWriter(new FileWriter(new File("log/passwords.txt"), true));
 			String userpwd = user + ":" + pwd;
-			escrever.printf("%s",userpwd);
+			escrever.printf("%s\r\n",userpwd);
 			return true;
 		}
 		catch (FileNotFoundException e) {
@@ -64,10 +66,10 @@ public class UserCatalog {
 	 * @param user nome utilizador
 	 * @param pwd pass utilizador
      * @return works or not
-	 * @throws FileNotFoundException 
+	 * @throws IOException 
      */
 	
-	public boolean login(String user, String pwd) throws FileNotFoundException {
+	public boolean login(String user, String pwd) throws IOException {
 		try {
 			
 			if (mapUsers.containsKey(user)) {
