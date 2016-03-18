@@ -99,8 +99,8 @@ public class MyWhatsSkel {
 			try(PrintWriter output = new PrintWriter(new FileWriter(f,true)))
 			{
 				output.printf("%s", "Contact :"  + senduser + "/");
+                output.printf("%s\r\n", msg);
 				output.printf("%s", dt + "/");
-				output.printf("%s\r\n", msg);
 			}
 			catch (IOException e) {
 				throw new IOException("receiveMessage error");
@@ -109,8 +109,8 @@ public class MyWhatsSkel {
 		else {
 			try(PrintStream output = new PrintStream(f)){
 				output.printf("%s", "Contact :"  + senduser + "/");
+                output.printf("%s\r\n", msg);
 				output.printf("%s", dt + "/");
-				output.printf("%s\r\n", msg);
 			}
 			catch (IOException e) {
 				throw new IOException("receiveMessage error");
@@ -127,7 +127,7 @@ public class MyWhatsSkel {
 	public void receiveFile(String name, ObjectInputStream is) throws IOException {
 
 		try {
-            File f = new File("files/" + name);
+            File f = new File("files/" + name + ".txt");
             byte[] content = (byte[]) is.readObject();
             Files.write(f.toPath(), content);
 		}
@@ -147,7 +147,7 @@ public class MyWhatsSkel {
 
 	public void shareMessage(String user, ObjectOutputStream out) throws FileNotFoundException, IOException {
 
-        Path path = Paths.get("msg/" + user);
+        Path path = Paths.get("msg/" + user + ".txt");
         List<String> lines = Files.readAllLines(path);
 
         out.writeObject(lines);

@@ -15,7 +15,9 @@ public class MyWhatsStub {
      *
      */
 
-    public static void handle(List<String> lista, ObjectOutputStream out) throws IOException {
+    // TODO mau formato a ser impresso no ficheiro ( check SKEL )
+
+    public static void handle(List<String> lista, ObjectInputStream in, ObjectOutputStream out) throws IOException {
         String[] args = (String[]) lista.toArray();
         String msg;
 
@@ -48,6 +50,14 @@ public class MyWhatsStub {
             case "-d":
                 msg = args[0] + args[1] + args[2];
                 out.writeObject(msg);
+
+                // resposta do server
+
+                in.readObject(cenas);
+
+                // check -r or -a or -d
+                // print (-r: List<String>.split("\")
+
                 break;
             default:
                 throw new IOException("opcao errada");
