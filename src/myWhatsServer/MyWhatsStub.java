@@ -53,7 +53,7 @@ public class MyWhatsStub {
 
                 // resposta do server
 
-                in.readObject(cenas);
+                // in.readObject(cenas);
 
                 // check -r or -a or -d
                 // print (-r: List<String>.split("\")
