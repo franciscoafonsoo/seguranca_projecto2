@@ -6,6 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -51,7 +53,7 @@ public class MyWhatsSkel {
 	 *
 	 */
 
-	public void handle(String pedido, String user, ObjectInputStream in) throws IOException {
+	public void handle(String pedido, String user, ObjectInputStream in, ObjectOutputStream out) throws IOException {
 		String[] request = pedido.split(":");
 		String op = request[0];
 		switch (op) {
@@ -70,7 +72,7 @@ public class MyWhatsSkel {
 				shareContact(request[1], user);
 			}
 			else {
-				shareFile(request[1], request[2], user);
+				shareFile(request[1], request[2], user, out);
 			}
 		}
 	}
@@ -164,8 +166,20 @@ public class MyWhatsSkel {
 	 *
 	 */
 	
-	public void shareFile(String contact, String fileName, String user) {
-		
+	public void shareFile(String contact, String fileName, String user, ObjectOutputStream out) throws IOException {
+
+        try {
+            Path path = Paths.get(fileName);
+            byte[] data = Files.readAllBytes(path);
+
+            String msg = "-f:" + contact + ":" + path.getFileName();
+
+            out.writeObject(msg);
+            out.writeObject(data);
+        }
+        catch (IOException e){
+            throw new IOException("receiveFile error");
+        }
 	}
 
 	/**

@@ -73,6 +73,9 @@ public class MyWhatsServer{
 				}
 
 				File f = new File("log/passwords.txt");
+
+				// aqui devia carregar o ficheiro para as classes, certo ?
+
 				String auth = (String) in.readObject();
 				String[] data = auth.split(":");
 				String user;
@@ -90,7 +93,7 @@ public class MyWhatsServer{
 					out.writeObject("NOK");
 				else {
 					String pedido = (String) in.readObject();
-					skel.handle(pedido, user, in);
+					skel.handle(pedido, user, in, out);
 				}
 
 				out.close();
