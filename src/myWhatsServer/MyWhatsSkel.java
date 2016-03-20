@@ -109,7 +109,7 @@ public class MyWhatsSkel {
 			if(f.exists() && !f.isDirectory()) {
 				try(PrintWriter output = new PrintWriter(new FileWriter(f,true)))
 				{
-					output.printf("%s", senduser + ":" + msg);
+					output.printf("%s", senduser + "/" + msg + "/");
 					output.printf("%s\r\n", dt + "/");
 				}
 				catch (IOException e) {
@@ -141,7 +141,7 @@ public class MyWhatsSkel {
 	public void receiveFile(String name, ObjectInputStream is) throws IOException {
 
 		try {
-            File f = new File("files/" + name + ".txt");
+            File f = new File("files/" + name);
             byte[] content = (byte[]) is.readObject();
             Files.write(f.toPath(), content);
 		}
