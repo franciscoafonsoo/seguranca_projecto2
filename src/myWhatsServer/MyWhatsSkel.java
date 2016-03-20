@@ -119,8 +119,7 @@ public class MyWhatsSkel {
 			}
 			else {
 				try(PrintStream output = new PrintStream(f)){
-					output.printf("%s", "Contact :"  + senduser + "/");
-	                output.printf("%s", msg);
+					output.printf("%s", senduser + ":" + msg);
 					output.printf("%s\r\n", dt + "/");
 				}
 				catch (IOException e) {
