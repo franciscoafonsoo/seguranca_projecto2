@@ -218,10 +218,34 @@ public class MyWhatsSkel {
 	 *
 	 */
 
-	public void shareContact(String contact, String user, ObjectOutputStream out) {
+	public void shareContact(String contact, String user, ObjectOutputStream out) throws IOException {
 
-        String pesquisa = user + "_" + contact;
+       
+		List<String> alph = new ArrayList<String>();
+		alph.add(user);
+		alph.add(contact);
+		java.util.Collections.sort(alph);
+		String pesquisa = alph.get(0) + "_" + alph.get(1) + ".txt";
+		
+		File f = new File("msg/" + pesquisa);
+		
+		try {
+			Path path = Paths.get("msg/" + pesquisa);
+			List<String> data = Files.readAllLines(path);
+			
+			out.writeObject(data.size());
+			for (String elem : data) {
+				Path paths = Paths.get(elem);
+		        List<String> lines = Files.readAllLines(path);
+		        out.writeObject(lines.get(lines.size()-1));
 
+			}
+		
+		}
+        catch (IOException e){
+            throw new IOException("receiveFile error");
+        }
+		
 	}
 	
 	
