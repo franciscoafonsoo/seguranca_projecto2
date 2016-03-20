@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.io.File;
 
 
 public class MyWhatsServer{
@@ -23,18 +24,19 @@ public class MyWhatsServer{
 		MyWhatsSkel skel = new MyWhatsSkel();
 
 		try {
-            sSoc = new ServerSocket(port);
-
+			sSoc = new ServerSocket(port);
+			
+			skel.rmdir("log");
+			skel.rmdir("msg");
+			skel.rmdir("groups");
+			skel.rmdir("files");
+		
             skel.dir("log");
             skel.dir("msg");
             skel.dir("groups");
             skel.dir("files");
+            
 
-            String[]entries = index.list();
-			for(String s: entries){
-    			File currentFile = new File(index.getPath(),s);
-    			currentFile.delete();
-			}
 		}
         catch (IOException e) {
 			System.err.println(e.getMessage());
