@@ -202,12 +202,19 @@ public class MyWhatsSkel {
 	public void shareMessage(String user, ObjectOutputStream out) throws FileNotFoundException, IOException {
 
 		List<String> files = userCat.getAllFiles(user);
+
+		
 		out.writeObject(files.size());
 		for (String elem : files) {
-			Path path = Paths.get(elem);
-	        List<String> lines = Files.readAllLines(path);
-	        out.writeObject(lines.get(lines.size()-1));
-
+			File f = new File(elem);
+			if(f.exists() && !f.isDirectory()) {
+				Path path = Paths.get(elem);
+		        List<String> lines = Files.readAllLines(path);
+		        out.writeObject(lines.get(lines.size()-1));
+			}
+			else {
+				out.writeObject("nothing");
+			}
 		}
         
 	}

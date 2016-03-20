@@ -92,6 +92,7 @@ public class MyWhatsUser {
 		}
 		else {
 			groups.add(group);
+			files.add(group + ".txt");
 			return true;
 		}
 	}

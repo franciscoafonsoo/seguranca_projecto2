@@ -76,11 +76,13 @@ public class MyWhatsClient {
 	        	for (int i = 0; i<size; i++){
 	        		System.out.println("receber");
 	        		String message = (String) in.readObject();
-	        		System.out.println("imprimir");
-	        		String[] mensagem = message.split("/");
-	        		System.out.print("Contact: " + mensagem[0] + "\n");
-	        		System.out.print("me: " + mensagem[1] + "\n");
-	        		System.out.print("Data: " + mensagem[2] + "\n");
+	        		if (!(message.equals("nothing"))) {
+		        		System.out.println("imprimir");
+		        		String[] mensagem = message.split("/");
+		        		System.out.print("Contact: " + mensagem[0] + "\n");
+		        		System.out.print("me: " + mensagem[1] + "\n");
+		        		System.out.print("Data: " + mensagem[2] + "\n");
+	        		}
 	        	}
 	        }
         }
