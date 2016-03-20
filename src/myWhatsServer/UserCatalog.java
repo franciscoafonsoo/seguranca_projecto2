@@ -24,7 +24,7 @@ public class UserCatalog {
 	private Map<String, MyWhatsUser> mapObjs;
 	private UserCatalog() throws IOException{ 
 		mapUsers = new HashMap<>(); 
-		loadState();
+		//loadState();
 	}
 
 	/**
@@ -114,23 +114,23 @@ public class UserCatalog {
 		utilizador.enterGroup(group);
 	}
 	
-	private void loadState() throws IOException {
-
-		File f = new File("log/passwords.txt");
-
-		if(f.exists() && !f.isDirectory()) {
-
-			Path path = Paths.get("log/passwords.txt");
-        	List<String> lines = Files.readAllLines(path);
-
-	        for (String e : lines) {
-	        	System.out.println(e);
-	        	String[] user = e.split(":");
-	        	MyWhatsUser utilizador = new MyWhatsUser(user[0], user[1]);
-	        	mapUsers.put(user[0], user[1]);
-	        	mapObjs.put(user[0], utilizador);
-	        }
-	    }
-	}
+//	private void loadState() throws IOException {
+//
+//		File f = new File("log/passwords.txt");
+//
+//		if(f.exists() && !f.isDirectory()) {
+//
+//			Path path = Paths.get("log/passwords.txt");
+//        	List<String> lines = Files.readAllLines(path);
+//
+//	        for (String e : lines) {
+//	        	System.out.println(e);
+//	        	String[] user = e.split(":");
+//	        	MyWhatsUser utilizador = new MyWhatsUser(user[0], user[1]);
+//	        	mapUsers.put(user[0], user[1]);
+//	        	mapObjs.put(user[0], utilizador);
+//	        }
+//	    }
+//	}
 }
 

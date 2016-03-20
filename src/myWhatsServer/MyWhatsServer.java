@@ -99,12 +99,14 @@ public class MyWhatsServer{
 					String pedido = (String) in.readObject();
 					System.out.println(pedido);
 					System.out.println("entrar no skel");
-					boolean status = skel.handle(pedido, user, in, out);
-					if (status) {
-						out.writeObject("OK");
-					}
-					else {
-						out.writeObject("NOK");
+					if (!(pedido == "Nothing")) {
+						boolean status = skel.handle(pedido, user, in, out);
+						if (status) {
+							out.writeObject("OK");
+						}
+						else {
+							out.writeObject("NOK");
+						}
 					}
 				}
 
