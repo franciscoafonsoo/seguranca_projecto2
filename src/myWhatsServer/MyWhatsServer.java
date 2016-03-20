@@ -1,7 +1,6 @@
 package myWhatsServer;
 
 
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -17,6 +16,7 @@ public class MyWhatsServer{
 		server.startServer(Integer.parseInt(args[0]));
 	}
 
+	@SuppressWarnings("resource")
 	private void startServer(int port) throws IOException, DirException{
 		ServerSocket sSoc = null;
 		MyWhatsSkel skel = new MyWhatsSkel();
@@ -66,8 +66,7 @@ public class MyWhatsServer{
 				ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 				ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
-				File f = new File("log/passwords.txt");
-
+				//File f = new File("log/passwords.txt");
 				// aqui devia carregar o ficheiro para as classes, certo ?
 
 				String auth = (String) in.readObject();

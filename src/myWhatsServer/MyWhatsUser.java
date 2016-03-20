@@ -41,6 +41,7 @@ public class MyWhatsUser {
 			PrintWriter escrever = new PrintWriter("log/users.txt");
 			String userpwd = user + ":" + pwd;
 			escrever.println(userpwd);
+			escrever.close();
 			return true;
 		}
 		catch (FileNotFoundException e) {
@@ -76,6 +77,7 @@ public class MyWhatsUser {
 					if(writeUser(user,pwd))
 						return true;
 			}
+			scanner.close();
 			return false;
 		}
 		catch (FileNotFoundException e){
