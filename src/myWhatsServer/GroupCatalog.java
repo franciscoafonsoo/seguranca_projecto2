@@ -30,6 +30,7 @@ public class GroupCatalog {
 		}
 		else {
 			MyWhatsGroups grupo = new MyWhatsGroups(creator);
+			mapGroups.put(group, grupo);
 			return grupo.addGroup(user);
 		}
 	}
@@ -40,6 +41,8 @@ public class GroupCatalog {
 	
 	public boolean removeFromGroup(String group, String user) {
 		MyWhatsGroups groups = mapGroups.get(group);
+		System.out.println("user:");
+		System.out.println(user);
 		return groups.removeGroup(user);
 	}
 	

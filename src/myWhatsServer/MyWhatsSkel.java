@@ -79,8 +79,10 @@ public class MyWhatsSkel {
             break;
 		case "-a":
 			addToGroup(user, request[1], request[2]);
+			break;
 		case "-d":
 			removeUserFromGroup(request[1], request[2]);
+			break;
         }
 		return true;
 
@@ -263,30 +265,8 @@ public class MyWhatsSkel {
 	 */
 	
 	public void addToGroup(String creator, String user, String group) throws IOException {
-		boolean newGroup = !groupCat.hasGroup(group);
 		groupCat.addUserToGroup(creator, user, group);
-		File f = new File("groups/" + group + ".txt");
-		System.out.println("file " + group + ".txt criado");
-		if(f.exists() && !f.isDirectory()) {
-			try(PrintWriter output = new PrintWriter(new FileWriter(f,true)))
-			{
-				output.printf("%s\r\n", user + "/");
-			}
-			catch (IOException e) {
-				throw new IOException("receiveMessage error");
-			}
-		}
-		else {
-			try(PrintStream output = new PrintStream(f)){
-				if (newGroup) {
-					output.printf("%s\r\n", creator + "/");
-				}
-				output.printf("%s\r\n", user + "/");
-			}
-			catch (IOException e) {
-				throw new IOException("receiveMessage error");
-			}
-		}
+		
 	}
 	
 	public void removeUserFromGroup(String user, String group){

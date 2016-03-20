@@ -43,6 +43,9 @@ public class MyWhatsGroups {
 		}
 		else {
 			users.add(user);
+			for (String u : users) {
+				System.out.println(u);
+			}
 			return true;
 		}
 	}
@@ -55,7 +58,8 @@ public class MyWhatsGroups {
 
 	public boolean removeGroup(String user) {
 		if (users.contains(user)) {
-			return users.remove(user);
+			boolean sucess = users.remove(user);
+			return sucess;
 		}
 		else {
 			return false;
