@@ -85,6 +85,7 @@ public class MyWhatsServer{
 				if (skel.login(user, pwd).equals("NOK"))
 					out.writeObject("NOK");
 				else {
+					out.writeObject("OK");
 					System.out.println("receber mensagem");
 					String pedido = (String) in.readObject();
 					System.out.println(pedido);

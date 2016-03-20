@@ -18,28 +18,28 @@ public class MyWhatsStub {
     // TODO mau formato a ser impresso no ficheiro ( check SKEL )
 
     public static void handle(List<String> lista, ObjectInputStream in, ObjectOutputStream out) throws IOException {
-        String[] args = (String[]) lista.toArray();
+        
         String msg;
-
-       
-        switch (args[0]) {
+        
+       System.out.println("dentro do handle");
+        switch (lista.get(0)) {
             case "-r":
                     // all
-                if (args.length==1)
+                if (lista.size()==1)
                     msg="-r";
                     // contact
-                else if (args.length==2)
-                    msg = args[0] + ":" + args[1];
+                else if (lista.size()==2)
+                    msg = lista.get(0) + ":" + lista.get(1);
                     // contact file
                 else
-                    msg = args[0] + ":" + args[1] + ":" + args[2];
+                    msg = lista.get(0) + ":" + lista.get(1) + ":" + lista.get(2);
                 out.writeObject(msg);
                 break;
             case "-f":
-                Path path = Paths.get(args[2]);
+                Path path = Paths.get(lista.get(2));
                 byte[] data = Files.readAllBytes(path);
 
-                msg = args[0] + ":" + args[1] + ":" + args[2];
+                msg = lista.get(0) + ":" + lista.get(1) + ":" + lista.get(2);
 
                 out.writeObject(msg);
                 out.writeObject(data);
@@ -47,7 +47,8 @@ public class MyWhatsStub {
             case "-m":
             case "-a":
             case "-d":
-                msg = args[0] + ":" + args[1] + ":" + args[2];
+                msg = lista.get(0) + ":" + lista.get(1) + ":" + lista.get(2);
+                System.out.println(msg);
                 out.writeObject(msg);
 
                 // resposta do server

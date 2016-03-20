@@ -102,8 +102,10 @@ public class MyWhatsSkel {
 			alph.add(senduser);
 			alph.add(recvuser);
 			java.util.Collections.sort(alph);
-			
-			File f = new File("msg/" + alph.get(0) + ":" + alph.get(1) + ".txt");
+			System.out.println(alph.get(0));
+			System.out.println(alph.get(1));
+			File f = new File("msg/" + alph.get(0) + "_" + alph.get(1) + ".txt");
+			System.out.println("file " + alph.get(0) + "_" + alph.get(1) + ".txt criado");
 			if(f.exists() && !f.isDirectory()) {
 				try(PrintWriter output = new PrintWriter(new FileWriter(f,true)))
 				{

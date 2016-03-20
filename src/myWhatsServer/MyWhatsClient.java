@@ -26,6 +26,7 @@ public class MyWhatsClient {
 
 		// users and passwords. handle commands in the end
         String user = args[0];
+        System.out.println("inicio");
         if (args[2].equals("-p")) {
 
             //prepare user and pass
@@ -34,12 +35,15 @@ public class MyWhatsClient {
         	user = user.concat(passwd);
 
             // write and read
+        	System.out.println("write");
         	out.writeObject(user);
+        	System.out.println("read");
         	String ack = (String) in.readObject();
+        	System.out.println(ack);
         	if (ack.equals("NOK")) throw new BadPwdException("wrong password!");
 
             // remover os argumentos já usados para poder correr o handle (4)
-            for(int i=0; i<3; i++)
+            for(int i=0; i<4; i++)
                 argv.remove(0);
             //handle(argv, out);
         }
@@ -59,6 +63,7 @@ public class MyWhatsClient {
         	scan.close();
         }
 
+        System.out.println("handle");
         MyWhatsStub.handle(argv, in, out);
         out.close();
         in.close();
