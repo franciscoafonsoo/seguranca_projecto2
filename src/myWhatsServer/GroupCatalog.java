@@ -37,6 +37,10 @@ public class GroupCatalog {
 		return mapGroups.containsKey(group);
 	}
 	
+	public boolean removeFromGroup(String group, String user) {
+		MyWhatsGroups groups = mapGroups.get(group);
+		return groups.removeGroup(user);
+	}
 	
 	
 }

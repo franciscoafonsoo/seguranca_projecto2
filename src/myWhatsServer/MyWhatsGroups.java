@@ -53,7 +53,7 @@ public class MyWhatsGroups {
 	 *
 	 */
 
-	public boolean removeGroup(String group, String user) {
+	public boolean removeGroup(String user) {
 		if (users.contains(user)) {
 			return users.remove(user);
 		}
