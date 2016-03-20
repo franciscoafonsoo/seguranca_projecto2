@@ -60,7 +60,10 @@ public class MyWhatsClient {
         }
 
         MyWhatsStub.handle(argv, in, out);
-
+        out.close();
+        in.close();
+        s.close();
+        
         // apartir deste ponto, deve-se escrever no stub.
         // passar la para handle e os metodos para as varias opcoes
 
