@@ -79,6 +79,8 @@ public class MyWhatsSkel {
             break;
 		case "-a":
 			addToGroup(user, request[1], request[2]);
+		case "-d":
+			removeUserFromGroup(request[1], request[2]);
         }
 		return true;
 
@@ -285,5 +287,9 @@ public class MyWhatsSkel {
 				throw new IOException("receiveMessage error");
 			}
 		}
+	}
+	
+	public void removeUserFromGroup(String user, String group){
+		groupCat.removeFromGroup(group, user);
 	}
 }
