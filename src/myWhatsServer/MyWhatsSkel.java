@@ -109,8 +109,7 @@ public class MyWhatsSkel {
 			if(f.exists() && !f.isDirectory()) {
 				try(PrintWriter output = new PrintWriter(new FileWriter(f,true)))
 				{
-					output.printf("%s", "Contact :"  + senduser + "/");
-	                output.printf("%s", msg + "/");
+					output.printf("%s", senduser + ":" + msg);
 					output.printf("%s\r\n", dt + "/");
 				}
 				catch (IOException e) {
