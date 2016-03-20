@@ -250,6 +250,8 @@ public class MyWhatsSkel {
 
 	/**
 	 * check and make dirs if not yet created
+	 * 
+	 * @param name nome do dir
 	 */
 
 	public void dir(String name) throws DirException {
@@ -266,6 +268,28 @@ public class MyWhatsSkel {
 		}
 		else
 			System.out.println(name + " OK");
+	}
+	
+	/**
+	 * check and remove dirs if exists
+	 * 
+	 * @param name nome do dir
+	 */
+	
+	public void rmdir(String name){
+		File file = new File(name);      
+		String[] myFiles;    
+            if(file.isDirectory()){
+                myFiles = file.list();
+                for (int i=0; i<myFiles.length; i++) {
+                    File myFile = new File(file, myFiles[i]); 
+                    myFile.delete();
+                }
+                System.out.println(name + " REMOVED");
+             }
+            else{
+            	System.out.println(name + " NOT FOUND");
+            }
 	}
 
 	/**
