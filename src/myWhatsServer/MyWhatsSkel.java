@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -93,6 +94,10 @@ public class MyWhatsSkel {
 		Calendar cal = Calendar.getInstance();
 
 		String dt = dateFormat.format(cal.getTime());
+		
+		List<String> alph = new ArrayList<String>();
+		alph.add(senduser);
+		alph.add(recvuser);
 
 		File f = new File("msg/" + senduser + ":" + recvuser + ".txt");
 		if(f.exists() && !f.isDirectory()) {
