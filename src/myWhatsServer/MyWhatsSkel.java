@@ -58,6 +58,7 @@ public class MyWhatsSkel {
 		String op = request[0];
 		switch (op) {
 		case "-m":
+			System.out.println("entrar no recvmessage");
 			return receiveMessage(request[2], user, request[1]);
 		case "-f":
 			receiveMessage(request[2], user, request[1]);
@@ -90,6 +91,7 @@ public class MyWhatsSkel {
 	
 	public boolean receiveMessage(String msg, String senduser, String recvuser) throws IOException {
 
+		System.out.println(userCat.contactExists(recvuser));
 		if (userCat.contactExists(recvuser)) {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			Calendar cal = Calendar.getInstance();

@@ -74,7 +74,7 @@ public class UserCatalog {
 	
 	public boolean login(String user, String pwd) throws IOException {
 		try {
-			
+			System.out.println("login");
 			if (mapUsers.containsKey(user)) {
 				if (mapUsers.get(user).equals(pwd)){
 					return true;
