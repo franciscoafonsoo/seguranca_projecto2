@@ -77,6 +77,8 @@ public class MyWhatsSkel {
 				shareFile(request[1], request[2], user, out);
 			}
             break;
+		case "-a":
+			addToGroup(user, request[1], request[2]);
         }
 		return true;
 
@@ -252,5 +254,21 @@ public class MyWhatsSkel {
 		}
 		else
 			System.out.println(name + " OK");
+	}
+	
+	public void addToGroup(String creator, String user, String group) throws IOException {
+		
+		groupCat.addUserToGroup(creator, user, group);
+		File f = new File("groups/" + group + ".txt");
+		System.out.println("file " + group + ".txt criado");
+		if(f.exists() && !f.isDirectory()) {
+			try(PrintWriter output = new PrintWriter(new FileWriter(f,true)))
+			{
+				output.printf("%s", user + "/");
+			}
+			catch (IOException e) {
+				throw new IOException("receiveMessage error");
+			}
+		}
 	}
 }

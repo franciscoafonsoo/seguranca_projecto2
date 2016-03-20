@@ -23,6 +23,7 @@ public class GroupCatalog {
 	}
 	
 	public boolean addUserToGroup (String creator, String user, String group) {
+		System.out.println("adicionar ao grupo");
 		if (mapGroups.containsKey(group)){
 			MyWhatsGroups grupo = mapGroups.get(group);
 			return grupo.addGroup(user);
