@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -65,6 +66,15 @@ public class UserCatalog {
                 throw new IOException("receiveMessage error");
             }
         }
+		else {
+			try(PrintStream output = new PrintStream(f)){
+				output.printf("%s", user + ":");
+				output.printf("%s\r\n", pwd);
+			}
+        catch (IOException e) {
+            throw new IOException("receiveMessage error");
+        }
+		}
         return false;
     }
 
@@ -115,6 +125,11 @@ public class UserCatalog {
 	public void addToGroup(String user, String group) {
 		MyWhatsUser utilizador = mapObjs.get(user);
 		utilizador.enterGroup(group);
+	}
+	
+	public List<String> getAllFiles(String user) {
+		MyWhatsUser utilizador = mapObjs.get(user);
+		return utilizador.getAllFiles();
 	}
 	
 //	private void loadState() throws IOException {

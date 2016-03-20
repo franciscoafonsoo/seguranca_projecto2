@@ -99,5 +99,9 @@ public class MyWhatsUser {
 	public void associateFile(String file) {
 		files.add(file);
 	}
+	
+	public List<String> getAllFiles() {
+		return files;
+	}
 
 }

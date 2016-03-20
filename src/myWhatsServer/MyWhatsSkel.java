@@ -128,7 +128,7 @@ public class MyWhatsSkel {
 				try(PrintStream output = new PrintStream(f)){
 					userCat.associateFile(alph.get(0), "msg/" + alph.get(0) + "_" + alph.get(1) + ".txt");
 					userCat.associateFile(alph.get(1), "msg/" + alph.get(0) + "_" + alph.get(1) + ".txt");
-					output.printf("%s", senduser + ":" + msg);
+					output.printf("%s", senduser + "/" + msg + "/");
 					output.printf("%s\r\n", dt + "/");
 				}
 				catch (IOException e) {
@@ -158,7 +158,7 @@ public class MyWhatsSkel {
 			}
 			else {
 				try(PrintStream output = new PrintStream(f)){
-					output.printf("%s", senduser + ":" + msg);
+					output.printf("%s", senduser + "/" + msg);
 					output.printf("%s\r\n", dt + "/");
 				}
 				catch (IOException e) {
@@ -201,10 +201,15 @@ public class MyWhatsSkel {
 
 	public void shareMessage(String user, ObjectOutputStream out) throws FileNotFoundException, IOException {
 
-        Path path = Paths.get("msg/" + user + ".txt");
-        List<String> lines = Files.readAllLines(path);
+		List<String> files = userCat.getAllFiles(user);
+		out.writeObject(files.size());
+		for (String elem : files) {
+			Path path = Paths.get(elem);
+	        List<String> lines = Files.readAllLines(path);
+	        out.writeObject(lines.get(lines.size()-1));
 
-        out.writeObject(lines);
+		}
+        
 	}
 
 	/**

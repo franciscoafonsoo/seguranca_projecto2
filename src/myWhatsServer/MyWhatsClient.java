@@ -65,6 +65,25 @@ public class MyWhatsClient {
 
         System.out.println("handle");
         MyWhatsStub.handle(argv, in, out);
+        System.out.println("fora do handle");
+       
+        if (!(argv.size()==0)){
+        	 System.out.println(argv.get(0));
+	        if (argv.get(0).equals("-r")) {
+	        	int n;
+	        	System.out.println("antes do while");
+	        	int size = (Integer) in.readObject();
+	        	for (int i = 0; i<size; i++){
+	        		System.out.println("receber");
+	        		String message = (String) in.readObject();
+	        		System.out.println("imprimir");
+	        		String[] mensagem = message.split("/");
+	        		System.out.print("Contact: " + mensagem[0] + "\n");
+	        		System.out.print("me: " + mensagem[1] + "\n");
+	        		System.out.print("Data: " + mensagem[2] + "\n");
+	        	}
+	        }
+        }
         out.close();
         in.close();
         s.close();
