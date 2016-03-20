@@ -106,6 +106,7 @@ public class MyWhatsSkel {
 			System.out.println(alph.get(1));
 			File f = new File("msg/" + alph.get(0) + "_" + alph.get(1) + ".txt");
 			System.out.println("file " + alph.get(0) + "_" + alph.get(1) + ".txt criado");
+
 			if(f.exists() && !f.isDirectory()) {
 				try(PrintWriter output = new PrintWriter(new FileWriter(f,true)))
 				{
@@ -120,6 +121,8 @@ public class MyWhatsSkel {
 				try(PrintStream output = new PrintStream(f)){
 					output.printf("%s", senduser + ":" + msg);
 					output.printf("%s\r\n", dt + "/");
+					
+					userCat.addFileUser(f.getName());
 				}
 				catch (IOException e) {
 					throw new IOException("receiveMessage error");
