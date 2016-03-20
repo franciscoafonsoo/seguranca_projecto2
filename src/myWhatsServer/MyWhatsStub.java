@@ -47,7 +47,7 @@ public class MyWhatsStub {
             case "-m":
             case "-a":
             case "-d":
-                msg = args[0] + args[1] + args[2];
+                msg = args[0] + ":" + args[1] + ":" + args[2];
                 out.writeObject(msg);
 
                 // resposta do server

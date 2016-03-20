@@ -40,7 +40,7 @@ public class MyWhatsClient {
 
             // remover os argumentos já usados para poder correr o handle (4)
             for(int i=0; i<3; i++)
-                argv.remove(1);
+                argv.remove(0);
             //handle(argv, out);
         }
         
