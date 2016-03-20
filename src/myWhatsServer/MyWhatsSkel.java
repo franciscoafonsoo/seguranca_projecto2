@@ -30,6 +30,7 @@ public class MyWhatsSkel {
 	
 	public MyWhatsSkel() throws IOException {
 		userCat = UserCatalog.getInstance();
+		groupCat = GroupCatalog.getInstance();
 	}
 
 	/**
@@ -107,6 +108,36 @@ public class MyWhatsSkel {
 			System.out.println(alph.get(1));
 			File f = new File("msg/" + alph.get(0) + "_" + alph.get(1) + ".txt");
 			System.out.println("file " + alph.get(0) + "_" + alph.get(1) + ".txt criado");
+			if(f.exists() && !f.isDirectory()) {
+				try(PrintWriter output = new PrintWriter(new FileWriter(f,true)))
+				{
+					output.printf("%s", senduser + "/" + msg + "/");
+					output.printf("%s\r\n", dt + "/");
+				}
+				catch (IOException e) {
+					throw new IOException("receiveMessage error");
+				}
+			}
+			else {
+				try(PrintStream output = new PrintStream(f)){
+					output.printf("%s", senduser + ":" + msg);
+					output.printf("%s\r\n", dt + "/");
+				}
+				catch (IOException e) {
+					throw new IOException("receiveMessage error");
+				}
+			}
+			return true;
+		}
+		else if (groupCat.hasGroup(recvuser)){
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			Calendar cal = Calendar.getInstance();
+	
+			String dt = dateFormat.format(cal.getTime());
+			
+			
+			File f = new File("msg/" + recvuser + ".txt");
+			System.out.println("file " + recvuser + ".txt criado");
 			if(f.exists() && !f.isDirectory()) {
 				try(PrintWriter output = new PrintWriter(new FileWriter(f,true)))
 				{

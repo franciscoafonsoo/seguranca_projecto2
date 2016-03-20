@@ -7,13 +7,13 @@ public class GroupCatalog {
 
 	private static GroupCatalog INSTANCE;
 	
-	private Map<String,MyWhatsGroups> mapGroups = new HashMap<String, MyWhatsGroups>();
+	private Map<String,MyWhatsGroups> mapGroups;
 	
 	private GroupCatalog() {
-		INSTANCE = new GroupCatalog();
+		 mapGroups = new HashMap<String, MyWhatsGroups>();
 	}
 	
-	public GroupCatalog getInstance() {
+	public static GroupCatalog getInstance() {
 		if (INSTANCE==null) {
 			return new GroupCatalog();
 		}
