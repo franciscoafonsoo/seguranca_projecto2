@@ -94,7 +94,7 @@ public class MyWhatsSkel {
 
 		String dt = dateFormat.format(cal.getTime());
 
-		File f = new File("msg/" + recvuser + ".txt");
+		File f = new File("msg/" + senduser + ":" + recvuser + ".txt");
 		if(f.exists() && !f.isDirectory()) {
 			try(PrintWriter output = new PrintWriter(new FileWriter(f,true)))
 			{
