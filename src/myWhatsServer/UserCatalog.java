@@ -23,7 +23,8 @@ public class UserCatalog {
 	private Map<String,String> mapUsers;
 	private Map<String, MyWhatsUser> mapObjs;
 	private UserCatalog() throws IOException{ 
-		mapUsers = new HashMap<>(); 
+		mapUsers = new HashMap<String, String>(); 
+		mapObjs = new HashMap<String, MyWhatsUser>();
 		//loadState();
 	}
 
@@ -88,6 +89,8 @@ public class UserCatalog {
 			}
 			else {
 				register(user, pwd);
+				MyWhatsUser utilizador = new MyWhatsUser(user, pwd);
+				mapObjs.put(user, utilizador);
 				return true;
 			}
 			
