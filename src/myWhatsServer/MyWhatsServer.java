@@ -28,6 +28,12 @@ public class MyWhatsServer{
             skel.dir("msg");
             skel.dir("groups");
             skel.dir("files");
+
+            String[]entries = index.list();
+			for(String s: entries){
+    			File currentFile = new File(index.getPath(),s);
+    			currentFile.delete();
+			}
 		}
         catch (IOException e) {
 			System.err.println(e.getMessage());
