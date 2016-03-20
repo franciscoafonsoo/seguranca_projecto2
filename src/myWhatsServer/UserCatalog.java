@@ -21,6 +21,7 @@ public class UserCatalog {
 	private static UserCatalog INSTANCE = null;
 
 	private Map<String,String> mapUsers;
+	private Map<String, MyWhatsUser> mapObjs;
 	private UserCatalog() throws IOException{ 
 		mapUsers = new HashMap<>(); 
 		loadState();
@@ -55,7 +56,9 @@ public class UserCatalog {
             try (PrintWriter output = new PrintWriter(new FileWriter(f, true))) {
                 output.printf("%s", user + ":");
                 output.printf("%s\r\n", pwd);
-
+                mapUsers.put(user, pwd);
+                MyWhatsUser utilizador = new MyWhatsUser(user, pwd);
+                mapObjs.put(user, utilizador);
                 return true;
             } catch (IOException e) {
                 throw new IOException("receiveMessage error");
@@ -101,13 +104,25 @@ public class UserCatalog {
 		return false;
 	}
 	
+	public void associateFile(String user, String file) {
+		MyWhatsUser utilizador = mapObjs.get(user);
+		utilizador.associateFile(file);
+	}
+	
+	public void addToGroup(String user, String group) {
+		MyWhatsUser utilizador = mapObjs.get(user);
+		utilizador.enterGroup(group);
+	}
+	
 	private void loadState() throws IOException {
 		Path path = Paths.get("log/passwords.txt");
         List<String> lines = Files.readAllLines(path);
         for (String e : lines) {
         	System.out.println(e);
         	String[] user = e.split(":");
+        	MyWhatsUser utilizador = new MyWhatsUser(user[0], user[1]);
         	mapUsers.put(user[0], user[1]);
+        	mapObjs.put(user[0], utilizador);
         }
 	}
 	}

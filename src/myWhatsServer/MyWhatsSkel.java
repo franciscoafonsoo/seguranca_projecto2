@@ -126,6 +126,8 @@ public class MyWhatsSkel {
 			}
 			else {
 				try(PrintStream output = new PrintStream(f)){
+					userCat.associateFile(alph.get(0), "msg/" + alph.get(0) + "_" + alph.get(1) + ".txt");
+					userCat.associateFile(alph.get(1), "msg/" + alph.get(0) + "_" + alph.get(1) + ".txt");
 					output.printf("%s", senduser + ":" + msg);
 					output.printf("%s\r\n", dt + "/");
 				}
@@ -232,7 +234,6 @@ public class MyWhatsSkel {
 
         	String temp = "files/" + user + "/" + contact;
 
-        	dir(temp);
 
             Path path = Paths.get(temp + fileName);
             byte[] data = Files.readAllBytes(path);

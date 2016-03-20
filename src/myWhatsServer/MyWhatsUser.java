@@ -12,7 +12,8 @@ public class MyWhatsUser {
 
 	private String user;
 	private String pwd;
-	private List<MyWhatsGroups> groups = new ArrayList<MyWhatsGroups>();;
+	private List<String> groups = new ArrayList<String>();
+	private List<String> files = new ArrayList<String>();
 
 	/**
 	 * construtor
@@ -85,7 +86,7 @@ public class MyWhatsUser {
 		}
 	}
 	
-	public boolean enterGroup(MyWhatsGroups group) {
+	public boolean enterGroup(String group) {
 		if (groups.contains(group)) {
 			return false;
 		}
@@ -93,6 +94,10 @@ public class MyWhatsUser {
 			groups.add(group);
 			return true;
 		}
+	}
+	
+	public void associateFile(String file) {
+		files.add(file);
 	}
 
 }
