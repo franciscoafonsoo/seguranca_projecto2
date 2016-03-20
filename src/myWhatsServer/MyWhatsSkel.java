@@ -255,6 +255,10 @@ public class MyWhatsSkel {
 		else
 			System.out.println(name + " OK");
 	}
+
+	/**
+	 * add a user to a group 
+	 */
 	
 	public void addToGroup(String creator, String user, String group) throws IOException {
 		
@@ -264,7 +268,15 @@ public class MyWhatsSkel {
 		if(f.exists() && !f.isDirectory()) {
 			try(PrintWriter output = new PrintWriter(new FileWriter(f,true)))
 			{
-				output.printf("%s", user + "/");
+				output.printf("%s\r\n", user + "/");
+			}
+			catch (IOException e) {
+				throw new IOException("receiveMessage error");
+			}
+		}
+		else {
+			try(PrintStream output = new PrintStream(f)){
+				output.printf("%s\r\n", user + "/");
 			}
 			catch (IOException e) {
 				throw new IOException("receiveMessage error");
