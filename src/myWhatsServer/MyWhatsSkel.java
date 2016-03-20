@@ -53,13 +53,12 @@ public class MyWhatsSkel {
 	 *
 	 */
 
-	public void handle(String pedido, String user, ObjectInputStream in, ObjectOutputStream out) throws IOException {
+	public boolean handle(String pedido, String user, ObjectInputStream in, ObjectOutputStream out) throws IOException {
 		String[] request = pedido.split(":");
 		String op = request[0];
 		switch (op) {
 		case "-m":
-			receiveMessage(request[2], user, request[1]);
-			break;
+			return receiveMessage(request[2], user, request[1]);
 		case "-f":
 			receiveMessage(request[2], user, request[1]);
             receiveFile(request[2], in);
@@ -76,6 +75,7 @@ public class MyWhatsSkel {
 			}
             break;
         }
+		return true;
 
 	}
 
@@ -88,39 +88,45 @@ public class MyWhatsSkel {
 	 */
 	
 	
-	public void receiveMessage(String msg, String senduser, String recvuser) throws IOException {
+	public boolean receiveMessage(String msg, String senduser, String recvuser) throws IOException {
 
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		Calendar cal = Calendar.getInstance();
-
-		String dt = dateFormat.format(cal.getTime());
-		
-		List<String> alph = new ArrayList<String>();
-		alph.add(senduser);
-		alph.add(recvuser);
-		java.util.Collections.sort(alph);
-		
-		File f = new File("msg/" + alph.get(0) + ":" + alph.get(1) + ".txt");
-		if(f.exists() && !f.isDirectory()) {
-			try(PrintWriter output = new PrintWriter(new FileWriter(f,true)))
-			{
-				output.printf("%s", "Contact :"  + senduser + "/");
-                output.printf("%s", msg);
-				output.printf("%s\r\n", dt + "/");
+		if (userCat.contactExists(recvuser)) {
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			Calendar cal = Calendar.getInstance();
+	
+			String dt = dateFormat.format(cal.getTime());
+			
+			List<String> alph = new ArrayList<String>();
+			alph.add(senduser);
+			alph.add(recvuser);
+			java.util.Collections.sort(alph);
+			
+			File f = new File("msg/" + alph.get(0) + ":" + alph.get(1) + ".txt");
+			if(f.exists() && !f.isDirectory()) {
+				try(PrintWriter output = new PrintWriter(new FileWriter(f,true)))
+				{
+					output.printf("%s", "Contact :"  + senduser + "/");
+	                output.printf("%s", msg);
+					output.printf("%s\r\n", dt + "/");
+				}
+				catch (IOException e) {
+					throw new IOException("receiveMessage error");
+				}
 			}
-			catch (IOException e) {
-				throw new IOException("receiveMessage error");
+			else {
+				try(PrintStream output = new PrintStream(f)){
+					output.printf("%s", "Contact :"  + senduser + "/");
+	                output.printf("%s", msg);
+					output.printf("%s\r\n", dt + "/");
+				}
+				catch (IOException e) {
+					throw new IOException("receiveMessage error");
+				}
 			}
+			return true;
 		}
 		else {
-			try(PrintStream output = new PrintStream(f)){
-				output.printf("%s", "Contact :"  + senduser + "/");
-                output.printf("%s", msg);
-				output.printf("%s\r\n", dt + "/");
-			}
-			catch (IOException e) {
-				throw new IOException("receiveMessage error");
-			}
+			return false;
 		}
 	}
 
