@@ -98,8 +98,9 @@ public class MyWhatsSkel {
 		List<String> alph = new ArrayList<String>();
 		alph.add(senduser);
 		alph.add(recvuser);
-
-		File f = new File("msg/" + senduser + ":" + recvuser + ".txt");
+		java.util.Collections.sort(alph);
+		
+		File f = new File("msg/" + alph.get(0) + ":" + alph.get(1) + ".txt");
 		if(f.exists() && !f.isDirectory()) {
 			try(PrintWriter output = new PrintWriter(new FileWriter(f,true)))
 			{
