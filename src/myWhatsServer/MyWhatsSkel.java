@@ -220,7 +220,7 @@ public class MyWhatsSkel {
 
 	public void shareContact(String contact, String user, ObjectOutputStream out) {
 
-        //HALP.
+        String pesquisa = user + "_" + contact;
 
 	}
 	
