@@ -110,7 +110,7 @@ public class MyWhatsSkel {
 				try(PrintWriter output = new PrintWriter(new FileWriter(f,true)))
 				{
 					output.printf("%s", "Contact :"  + senduser + "/");
-	                output.printf("%s", msg);
+	                output.printf("%s", msg + "/");
 					output.printf("%s\r\n", dt + "/");
 				}
 				catch (IOException e) {
