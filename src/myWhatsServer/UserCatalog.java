@@ -95,6 +95,13 @@ public class UserCatalog {
 		}
 	}
 	
+	public boolean contactExists(String contact) {
+		if (mapUsers.containsKey(contact)) {
+			return true;
+		}
+		return false;
+	}
+	
 	private void loadState() throws IOException {
 		Path path = Paths.get("log/passwords.txt");
         List<String> lines = Files.readAllLines(path);
