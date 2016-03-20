@@ -16,9 +16,9 @@ public class MyWhatsGroups {
 	 *
 	 */
 
-	private MyWhatsUser owner;
+	private String owner;
 	
-	private List<MyWhatsUser> users = new ArrayList<MyWhatsUser>();
+	private List<String> users = new ArrayList<String>();
 
 	/**
 	 * construtor
@@ -26,7 +26,7 @@ public class MyWhatsGroups {
 	 */
 
 	
-	public MyWhatsGroups(MyWhatsUser owner) {
+	public MyWhatsGroups(String owner) {
 
 		this.owner = owner;
 	}
@@ -37,7 +37,7 @@ public class MyWhatsGroups {
 	 *
 	 */
 
-	public boolean addGroup(MyWhatsUser user) {
+	public boolean addGroup(String user) {
 		if (users.contains(user)) {
 			return false;
 		}
@@ -53,7 +53,12 @@ public class MyWhatsGroups {
 	 *
 	 */
 
-	public void removeGroup(String group, String user) {
-
+	public boolean removeGroup(String group, String user) {
+		if (users.contains(user)) {
+			return users.remove(user);
+		}
+		else {
+			return false;
+		}
 	}
 }
