@@ -235,9 +235,7 @@ public class MyWhatsSkel {
 			
 			out.writeObject(data.size());
 			for (String elem : data) {
-				Path paths = Paths.get(elem);
-		        List<String> lines = Files.readAllLines(path);
-		        out.writeObject(lines.get(lines.size()-1));
+		        out.writeObject(elem);
 
 			}
 		
