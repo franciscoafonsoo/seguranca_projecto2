@@ -222,12 +222,19 @@ public class MyWhatsSkel {
 	 * opcao -r contact file
 	 * enviar o ficheiro com nome fileName, enviado por contact
 	 *
+	 * user/contact/file
+	 *
 	 */
 	
 	public void shareFile(String contact, String fileName, String user, ObjectOutputStream out) throws IOException {
 
         try {
-            Path path = Paths.get(fileName);
+
+        	String temp = "files/" + user + "/" + contact;
+
+        	dir(temp);
+
+            Path path = Paths.get(temp + fileName);
             byte[] data = Files.readAllBytes(path);
 
             String msg = "-f:" + contact + ":" + path.getFileName();
