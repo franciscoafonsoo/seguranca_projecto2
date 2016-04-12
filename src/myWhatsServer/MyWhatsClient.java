@@ -23,6 +23,7 @@ public class MyWhatsClient {
         Collections.addAll(argv, args);
 
 		// sockets and in/out streams
+        System.setProperty("javax.net.ssl.trustStore", "SIClient.keystore");
         SocketFactory sf = SSLSocketFactory.getDefault();
         Socket s = sf.createSocket(IP, port);
         ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());

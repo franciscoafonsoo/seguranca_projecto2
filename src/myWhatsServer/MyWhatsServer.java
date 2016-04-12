@@ -30,8 +30,8 @@ public class MyWhatsServer{
 		MyWhatsSkel skel = new MyWhatsSkel();
 
 		try {
-			//System.setProperty("javax.net.ssl.keyStore", "keystore.jks");
-			//System.setProperty("javax.net.ssl.keyStorePassword","password");
+			System.setProperty("javax.net.ssl.keyStore", "SIServer.keystore");
+			System.setProperty("javax.net.ssl.keyStorePassword","Fculproject1");
 			ServerSocketFactory sf = SSLServerSocketFactory.getDefault();
 		    sSoc = sf.createServerSocket(port);
 			//sSoc = new ServerSocket(port);
