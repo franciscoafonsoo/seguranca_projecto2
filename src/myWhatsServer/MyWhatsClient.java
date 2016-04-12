@@ -5,6 +5,9 @@ import java.io.*;
 import java.net.Socket;
 import java.util.*;
 
+import javax.net.SocketFactory;
+import javax.net.ssl.SSLSocketFactory;
+
 public class MyWhatsClient {
 
 
@@ -20,7 +23,8 @@ public class MyWhatsClient {
         Collections.addAll(argv, args);
 
 		// sockets and in/out streams
-        Socket s = new Socket(IP, port);
+        SocketFactory sf = SSLSocketFactory.getDefault();
+        Socket s = sf.createSocket(IP, port);
         ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
         ObjectInputStream in = new ObjectInputStream(s.getInputStream());
 

@@ -7,6 +7,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import javax.net.ServerSocketFactory;
+import javax.net.SocketFactory;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocketFactory;
+
 import java.io.File;
 
 
@@ -24,7 +30,11 @@ public class MyWhatsServer{
 		MyWhatsSkel skel = new MyWhatsSkel();
 
 		try {
-			sSoc = new ServerSocket(port);
+			//System.setProperty("javax.net.ssl.keyStore", "keystore.jks");
+			//System.setProperty("javax.net.ssl.keyStorePassword","password");
+			ServerSocketFactory sf = SSLServerSocketFactory.getDefault();
+		    sSoc = sf.createServerSocket(port);
+			//sSoc = new ServerSocket(port);
 			
 			skel.rmdir("log");
 			skel.rmdir("msg");
