@@ -32,6 +32,8 @@ public class MyWhatsServer {
             System.setProperty("javax.net.ssl.keyStorePassword", "Fculproject1");
             ServerSocketFactory sf = SSLServerSocketFactory.getDefault();
             sSoc = sf.createServerSocket(port);
+
+            // antiga ligação
             //sSoc = new ServerSocket(port);
 
             skel.rmdir("log");
@@ -97,9 +99,12 @@ public class MyWhatsServer {
                     user = data[0];
                     pwd = data[1];
                 }
-                
+
+                // guarda internamente os bytes (já é sha-256)
                 messageDigest.update(pwd.getBytes());
+                // pwd passa a ser string da hash para comparação
                 pwd = new String(messageDigest.digest());
+                // tmp println
                 System.out.println(pwd);
 
                 if (skel.login(user, pwd).equals("NOK"))
