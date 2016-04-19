@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import javax.crypto.KeyGenerator;
 import javax.net.ServerSocketFactory;
 import javax.net.ssl.SSLServerSocketFactory;
 
@@ -88,6 +89,7 @@ public class MyWhatsServer {
                 String[] data = auth.split(":");
                 String user;
                 String pwd;
+                
                 if (data.length == 1) {
                     user = data[0];
                     pwd = (String) in.readObject();
@@ -95,6 +97,10 @@ public class MyWhatsServer {
                     user = data[0];
                     pwd = data[1];
                 }
+                
+                messageDigest.update(pwd.getBytes());
+                pwd = new String(messageDigest.digest());
+                System.out.println(pwd);
 
                 if (skel.login(user, pwd).equals("NOK"))
                     out.writeObject("NOK");
