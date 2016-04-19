@@ -6,6 +6,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import javax.net.ServerSocketFactory;
 import javax.net.ssl.SSLServerSocketFactory;
@@ -82,6 +84,7 @@ public class MyWhatsServer {
                 // aqui devia carregar o ficheiro para as classes, certo ?
 
                 String auth = (String) in.readObject();
+                MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
                 String[] data = auth.split(":");
                 String user;
                 String pwd;
@@ -111,7 +114,7 @@ public class MyWhatsServer {
 
                 socket.close();
 
-            } catch (IOException | ClassNotFoundException e) {
+            } catch (IOException | ClassNotFoundException | NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
         }
