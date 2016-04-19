@@ -5,64 +5,57 @@ import java.util.List;
 
 /**
  * cria e gera grupos
- *
  */
 
 
 public class MyWhatsGroups {
 
-	/**
-	 * instancias
-	 *
-	 */
+    /**
+     * instancias
+     */
 
-	private String owner;
-	
-	private List<String> users = new ArrayList<String>();
+    private String owner;
 
-	/**
-	 * construtor
-	 *
-	 */
+    private List<String> users = new ArrayList<String>();
 
-	
-	public MyWhatsGroups(String owner) {
+    /**
+     * construtor
+     */
 
-		this.owner = owner;
-	}
 
-	/**
-	 * opcao -a user group
-	 * adicionar membro a um grupo
-	 *
-	 */
+    public MyWhatsGroups(String owner) {
 
-	public boolean addGroup(String user) {
-		if (users.contains(user)) {
-			return false;
-		}
-		else {
-			users.add(user);
-			for (String u : users) {
-				System.out.println(u);
-			}
-			return true;
-		}
-	}
+        this.owner = owner;
+    }
 
-	/**
-	 * opcao -d user group
-	 * remover membro de um grupo
-	 *
-	 */
+    /**
+     * opcao -a user group
+     * adicionar membro a um grupo
+     */
 
-	public boolean removeGroup(String user) {
-		if (users.contains(user)) {
-			boolean sucess = users.remove(user);
-			return sucess;
-		}
-		else {
-			return false;
-		}
-	}
+    public boolean addGroup(String user) {
+        if (users.contains(user)) {
+            return false;
+        } else {
+            users.add(user);
+            for (String u : users) {
+                System.out.println(u);
+            }
+            return true;
+        }
+    }
+
+    /**
+     * opcao -d user group
+     * remover membro de um grupo
+     */
+
+    public boolean removeGroup(String user) {
+        if (users.contains(user)) {
+            boolean sucess = users.remove(user);
+            return sucess;
+        } else {
+            return false;
+        }
+    }
 }

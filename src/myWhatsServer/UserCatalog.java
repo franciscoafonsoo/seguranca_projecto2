@@ -15,42 +15,44 @@ import java.util.Map;
 
 public class UserCatalog {
 
-	/**
-	 * instancias
-	 */
-
-	private static UserCatalog INSTANCE = null;
-
-	private Map<String,String> mapUsers;
-	private Map<String, MyWhatsUser> mapObjs;
-	private UserCatalog() throws IOException{ 
-		mapUsers = new HashMap<String, String>(); 
-		mapObjs = new HashMap<String, MyWhatsUser>();
-		//loadState();
-	}
-
-	/**
-	 * construtor
-	 * @return instancia do UserCatalog
-	 * @throws IOException 
+    /**
+     * instancias
      */
-	
-	public static UserCatalog getInstance() throws IOException {
-		if(INSTANCE == null) {
-			INSTANCE = new UserCatalog();
-		}
-		return INSTANCE;
-	}
 
-	/**
-	 * registar um novo user no catalogo
-	 *
-	 * @param user nome utilizador
-	 * @param pwd pass utilizador
-	 * @throws IOException 
+    private static UserCatalog INSTANCE = null;
+
+    private Map<String, String> mapUsers;
+    private Map<String, MyWhatsUser> mapObjs;
+
+    private UserCatalog() throws IOException {
+        mapUsers = new HashMap<String, String>();
+        mapObjs = new HashMap<String, MyWhatsUser>();
+        //loadState();
+    }
+
+    /**
+     * construtor
+     *
+     * @return instancia do UserCatalog
+     * @throws IOException
      */
-	
-	public boolean register(String user, String pwd) throws IOException {
+
+    public static UserCatalog getInstance() throws IOException {
+        if (INSTANCE == null) {
+            INSTANCE = new UserCatalog();
+        }
+        return INSTANCE;
+    }
+
+    /**
+     * registar um novo user no catalogo
+     *
+     * @param user nome utilizador
+     * @param pwd  pass utilizador
+     * @throws IOException
+     */
+
+    public boolean register(String user, String pwd) throws IOException {
 
         File f = new File("log/passwords.txt");
 
@@ -65,73 +67,69 @@ public class UserCatalog {
             } catch (IOException e) {
                 throw new IOException("receiveMessage error");
             }
+        } else {
+            try (PrintStream output = new PrintStream(f)) {
+                output.printf("%s", user + ":");
+                output.printf("%s\r\n", pwd);
+            } catch (IOException e) {
+                throw new IOException("receiveMessage error");
+            }
         }
-		else {
-			try(PrintStream output = new PrintStream(f)){
-				output.printf("%s", user + ":");
-				output.printf("%s\r\n", pwd);
-			}
-        catch (IOException e) {
-            throw new IOException("receiveMessage error");
-        }
-		}
         return false;
     }
 
-	/**
-	 * fazer login de um utilizador
-	 * @param user nome utilizador
-	 * @param pwd pass utilizador
+    /**
+     * fazer login de um utilizador
+     *
+     * @param user nome utilizador
+     * @param pwd  pass utilizador
      * @return works or not
-	 * @throws IOException 
+     * @throws IOException
      */
-	
-	public boolean login(String user, String pwd) throws IOException {
-		try {
-			System.out.println("login");
-			if (mapUsers.containsKey(user)) {
-				if (mapUsers.get(user).equals(pwd)){
-					return true;
-				}
-				else {
-					return false;
-				}
-			}
-			else {
-				register(user, pwd);
-				MyWhatsUser utilizador = new MyWhatsUser(user, pwd);
-				mapObjs.put(user, utilizador);
-				return true;
-			}
-			
-		}
-		catch (FileNotFoundException e){
-			throw new FileNotFoundException("ficheiro nao encontrado");
-		}
-	}
-	
-	public boolean contactExists(String contact) {
-		if (mapUsers.containsKey(contact)) {
-			return true;
-		}
-		return false;
-	}
-	
-	public void associateFile(String user, String file) {
-		MyWhatsUser utilizador = mapObjs.get(user);
-		utilizador.associateFile(file);
-	}
-	
-	public void addToGroup(String user, String group) {
-		MyWhatsUser utilizador = mapObjs.get(user);
-		utilizador.enterGroup(group);
-	}
-	
-	public List<String> getAllFiles(String user) {
-		MyWhatsUser utilizador = mapObjs.get(user);
-		return utilizador.getAllFiles();
-	}
-	
+
+    public boolean login(String user, String pwd) throws IOException {
+        try {
+            System.out.println("login");
+            if (mapUsers.containsKey(user)) {
+                if (mapUsers.get(user).equals(pwd)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                register(user, pwd);
+                MyWhatsUser utilizador = new MyWhatsUser(user, pwd);
+                mapObjs.put(user, utilizador);
+                return true;
+            }
+
+        } catch (FileNotFoundException e) {
+            throw new FileNotFoundException("ficheiro nao encontrado");
+        }
+    }
+
+    public boolean contactExists(String contact) {
+        if (mapUsers.containsKey(contact)) {
+            return true;
+        }
+        return false;
+    }
+
+    public void associateFile(String user, String file) {
+        MyWhatsUser utilizador = mapObjs.get(user);
+        utilizador.associateFile(file);
+    }
+
+    public void addToGroup(String user, String group) {
+        MyWhatsUser utilizador = mapObjs.get(user);
+        utilizador.enterGroup(group);
+    }
+
+    public List<String> getAllFiles(String user) {
+        MyWhatsUser utilizador = mapObjs.get(user);
+        return utilizador.getAllFiles();
+    }
+
 //	private void loadState() throws IOException {
 //
 //		File f = new File("log/passwords.txt");
