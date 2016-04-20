@@ -1,14 +1,13 @@
 package myWhatsServer;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.PrintWriter;
+import javax.crypto.KeyGenerator;
+import javax.crypto.Mac;
+import javax.crypto.SecretKey;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -56,42 +55,65 @@ public class UserCatalog {
      * @throws NoSuchAlgorithmException 
      */
 
-    public boolean register(String user, String pwd) throws IOException, NoSuchAlgorithmException {
+    public boolean register(String user, String pwd) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
 
         File f = new File("log/passwords.txt");
 
-        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-    	Random rand = new Random();
-        int salt = rand.nextInt((999999 - 100000) +1) +100000;
-        System.out.println("salt=" + salt);
-     	// guarda internamente os bytes (ja eh sha-256)
-        pwd = pwd + ":" + salt;
-        System.out.println("pwd=" + pwd);
-        messageDigest.update(pwd.getBytes());
-        // pwd passa a ser string da hash para comparacao
-        pwd = new String(messageDigest.digest());
-        System.out.println(pwd);
-        if (f.exists() && !f.isDirectory()) {
-            try (PrintWriter output = new PrintWriter(new FileWriter(f, true))) {
-            	
-                output.printf("%s", user + ":" + salt + ":");
-                output.printf("%s\r\n", pwd);
-                mapUsers.put(user, pwd);
-                MyWhatsUser utilizador = new MyWhatsUser(user, pwd, salt);
-                mapObjs.put(user, utilizador);
-                return true;
-            } catch (IOException e) {
-                throw new IOException("receiveMessage error");
+        try {
+            // get a key generator for the HMAC-MD5 keyed-hashing algorithm
+            KeyGenerator keyGen = KeyGenerator.getInstance("hmacSha256");
+            // generate a key from the generator
+            SecretKey key = keyGen.generateKey();
+            // create a MAC and initialize with the above key
+            Mac mac = Mac.getInstance(key.getAlgorithm());
+            mac.init(key);
+
+            String message = "LINHA AQUI";
+
+            // get the string as UTF-8 bytes
+            byte[] b = message.getBytes("UTF-8");
+            // create a digest from the byte array
+            byte[] digest = mac.doFinal(b);
+
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            Random rand = new Random();
+            int salt = rand.nextInt((999999 - 100000) + 1) + 100000;
+            System.out.println("salt=" + salt);
+            // guarda internamente os bytes (ja eh sha-256)
+            pwd = pwd + ":" + salt;
+            System.out.println("pwd=" + pwd);
+            messageDigest.update(pwd.getBytes());
+            // pwd passa a ser string da hash para comparacao
+            pwd = new String(messageDigest.digest());
+            System.out.println(pwd);
+            if (f.exists() && !f.isDirectory()) {
+                try (PrintWriter output = new PrintWriter(new FileWriter(f, true))) {
+
+                    output.printf("%s", user + ":" + salt + ":");
+                    output.printf("%s\r\n", pwd);
+                    mapUsers.put(user, pwd);
+                    MyWhatsUser utilizador = new MyWhatsUser(user, pwd, salt);
+                    mapObjs.put(user, utilizador);
+                    return true;
+                } catch (IOException e) {
+                    throw new IOException("receiveMessage error");
+                }
+            } else {
+                try (PrintStream output = new PrintStream(f)) {
+                    output.printf("%s", user + ":" + salt + ":");
+                    output.printf("%s\r\n", pwd);
+                    MyWhatsUser utilizador = new MyWhatsUser(user, pwd, salt);
+                    mapObjs.put(user, utilizador);
+                } catch (IOException e) {
+                    throw new IOException("receiveMessage error");
+                }
             }
-        } else {
-            try (PrintStream output = new PrintStream(f)) {
-                output.printf("%s", user + ":" + salt + ":");
-                output.printf("%s\r\n", pwd);
-                MyWhatsUser utilizador = new MyWhatsUser(user, pwd, salt);
-                mapObjs.put(user, utilizador);
-            } catch (IOException e) {
-                throw new IOException("receiveMessage error");
-            }
+        } catch (NoSuchAlgorithmException e) {
+            throw new NoSuchAlgorithmException("catalog - register");
+        } catch (UnsupportedEncodingException e) {
+            throw new UnsupportedEncodingException("catalog - register");
+        } catch (InvalidKeyException e) {
+            throw new InvalidKeyException("catalog - register");
         }
         return false;
     }
@@ -106,7 +128,7 @@ public class UserCatalog {
      * @throws NoSuchAlgorithmException 
      */
 
-    public boolean login(String user, String pwd) throws IOException, NoSuchAlgorithmException {
+    public boolean login(String user, String pwd) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
         try {
             System.out.println("login");
             System.out.println("user = " + user);
