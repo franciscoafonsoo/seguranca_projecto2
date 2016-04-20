@@ -84,7 +84,7 @@ public class MyWhatsServer {
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
                 String auth = (String) in.readObject();
-                MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+                
                 String[] data = auth.split(":");
                 String user;
                 String pwd;
@@ -97,19 +97,10 @@ public class MyWhatsServer {
                     pwd = data[1];
                 }
                 
-                Random rand = new Random();
-                int salt = rand.nextInt((999999 - 100000) +1) +100000;
-                System.out.println("salt=" + salt);
-             	// guarda internamente os bytes (ja eh sha-256)
-                pwd = pwd + ":" + salt;
-                System.out.println("pwd=" + pwd);
-                messageDigest.update(pwd.getBytes());
-                // pwd passa a ser string da hash para comparacao
-                pwd = new String(messageDigest.digest());
-                System.out.println(pwd);
+                
                 
 
-                if (skel.login(user, pwd, salt).equals("NOK"))
+                if (skel.login(user, pwd).equals("NOK"))
                     out.writeObject("NOK");
                 else {
                     out.writeObject("OK");

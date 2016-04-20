@@ -5,6 +5,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,11 +37,12 @@ public class MyWhatsSkel {
      * autenticar um cliente "user"
      *
      * @throws IOException
+     * @throws NoSuchAlgorithmException 
      */
 
-    public String login(String user, String pwd, int salt) throws IOException {
+    public String login(String user, String pwd) throws IOException, NoSuchAlgorithmException {
 
-        if (userCat.login(user, pwd, salt)) {
+        if (userCat.login(user, pwd)) {
             return "OK";
         } else {
             return "NOK";

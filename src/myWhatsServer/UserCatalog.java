@@ -9,9 +9,12 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class UserCatalog {
 
@@ -50,14 +53,27 @@ public class UserCatalog {
      * @param user nome utilizador
      * @param pwd  pass utilizador
      * @throws IOException
+     * @throws NoSuchAlgorithmException 
      */
 
-    public boolean register(String user, String pwd, int salt) throws IOException {
+    public boolean register(String user, String pwd) throws IOException, NoSuchAlgorithmException {
 
         File f = new File("log/passwords.txt");
 
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+    	Random rand = new Random();
+        int salt = rand.nextInt((999999 - 100000) +1) +100000;
+        System.out.println("salt=" + salt);
+     	// guarda internamente os bytes (ja eh sha-256)
+        pwd = pwd + ":" + salt;
+        System.out.println("pwd=" + pwd);
+        messageDigest.update(pwd.getBytes());
+        // pwd passa a ser string da hash para comparacao
+        pwd = new String(messageDigest.digest());
+        System.out.println(pwd);
         if (f.exists() && !f.isDirectory()) {
             try (PrintWriter output = new PrintWriter(new FileWriter(f, true))) {
+            	
                 output.printf("%s", user + ":" + salt + ":");
                 output.printf("%s\r\n", pwd);
                 mapUsers.put(user, pwd);
@@ -71,6 +87,8 @@ public class UserCatalog {
             try (PrintStream output = new PrintStream(f)) {
                 output.printf("%s", user + ":" + salt + ":");
                 output.printf("%s\r\n", pwd);
+                MyWhatsUser utilizador = new MyWhatsUser(user, pwd, salt);
+                mapObjs.put(user, utilizador);
             } catch (IOException e) {
                 throw new IOException("receiveMessage error");
             }
@@ -85,9 +103,10 @@ public class UserCatalog {
      * @param pwd  pass utilizador
      * @return works or not
      * @throws IOException
+     * @throws NoSuchAlgorithmException 
      */
 
-    public boolean login(String user, String pwd, int salt) throws IOException {
+    public boolean login(String user, String pwd) throws IOException, NoSuchAlgorithmException {
         try {
             System.out.println("login");
             if (mapUsers.containsKey(user)) {
@@ -97,9 +116,7 @@ public class UserCatalog {
                     return false;
                 }
             } else {
-                register(user, pwd, salt);
-                MyWhatsUser utilizador = new MyWhatsUser(user, pwd, salt);
-                mapObjs.put(user, utilizador);
+                register(user, pwd);
                 return true;
             }
 
