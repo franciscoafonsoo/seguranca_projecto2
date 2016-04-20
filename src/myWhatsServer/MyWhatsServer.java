@@ -8,6 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 import javax.net.ServerSocketFactory;
 import javax.net.ssl.SSLServerSocketFactory;
@@ -98,15 +99,20 @@ public class MyWhatsServer {
                     user = data[0];
                     pwd = data[1];
                 }
-
-                // guarda internamente os bytes (ja eh sha-256)
+                
+                Random rand = new Random();
+                int salt = rand.nextInt((999999 - 100000) +1) +100000;
+                System.out.println("salt=" + salt);
+             	// guarda internamente os bytes (ja eh sha-256)
+                pwd = pwd+":"+salt;
+                System.out.println("pwd=" + pwd);
                 messageDigest.update(pwd.getBytes());
                 // pwd passa a ser string da hash para comparacao
                 pwd = new String(messageDigest.digest());
-                // tmp println
                 System.out.println(pwd);
+                
 
-                if (skel.login(user, pwd).equals("NOK"))
+                if (skel.login(user, pwd, salt).equals("NOK"))
                     out.writeObject("NOK");
                 else {
                     out.writeObject("OK");

@@ -12,6 +12,7 @@ public class MyWhatsUser {
 
     private String user;
     private String pwd;
+    private int salt;
     private List<String> groups = new ArrayList<String>();
     private List<String> files = new ArrayList<String>();
 
@@ -22,9 +23,10 @@ public class MyWhatsUser {
      * @param pwd  password
      */
 
-    public MyWhatsUser(String user, String pwd) {
+    public MyWhatsUser(String user, String pwd, int salt) {
         this.user = user;
         this.pwd = pwd;
+        this.salt = salt;
     }
 
     /**
@@ -40,7 +42,7 @@ public class MyWhatsUser {
 
         try {
             PrintWriter escrever = new PrintWriter("log/users.txt");
-            String userpwd = user + ":" + pwd;
+            String userpwd = user + ":" +salt+ ":"+ pwd;
             escrever.println(userpwd);
             escrever.close();
             return true;

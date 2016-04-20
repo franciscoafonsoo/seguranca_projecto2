@@ -38,9 +38,9 @@ public class MyWhatsSkel {
      * @throws IOException
      */
 
-    public String login(String user, String pwd) throws IOException {
+    public String login(String user, String pwd, int salt) throws IOException {
 
-        if (userCat.login(user, pwd)) {
+        if (userCat.login(user, pwd, salt)) {
             return "OK";
         } else {
             return "NOK";

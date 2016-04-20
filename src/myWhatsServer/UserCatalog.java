@@ -52,16 +52,16 @@ public class UserCatalog {
      * @throws IOException
      */
 
-    public boolean register(String user, String pwd) throws IOException {
+    public boolean register(String user, String pwd, int salt) throws IOException {
 
         File f = new File("log/passwords.txt");
 
         if (f.exists() && !f.isDirectory()) {
             try (PrintWriter output = new PrintWriter(new FileWriter(f, true))) {
-                output.printf("%s", user + ":");
+                output.printf("%s", user + ":" + salt + ":");
                 output.printf("%s\r\n", pwd);
                 mapUsers.put(user, pwd);
-                MyWhatsUser utilizador = new MyWhatsUser(user, pwd);
+                MyWhatsUser utilizador = new MyWhatsUser(user, pwd, salt);
                 mapObjs.put(user, utilizador);
                 return true;
             } catch (IOException e) {
@@ -69,7 +69,7 @@ public class UserCatalog {
             }
         } else {
             try (PrintStream output = new PrintStream(f)) {
-                output.printf("%s", user + ":");
+                output.printf("%s", user + ":" + salt + ":");
                 output.printf("%s\r\n", pwd);
             } catch (IOException e) {
                 throw new IOException("receiveMessage error");
@@ -87,7 +87,7 @@ public class UserCatalog {
      * @throws IOException
      */
 
-    public boolean login(String user, String pwd) throws IOException {
+    public boolean login(String user, String pwd, int salt) throws IOException {
         try {
             System.out.println("login");
             if (mapUsers.containsKey(user)) {
@@ -97,8 +97,8 @@ public class UserCatalog {
                     return false;
                 }
             } else {
-                register(user, pwd);
-                MyWhatsUser utilizador = new MyWhatsUser(user, pwd);
+                register(user, pwd, salt);
+                MyWhatsUser utilizador = new MyWhatsUser(user, pwd, salt);
                 mapObjs.put(user, utilizador);
                 return true;
             }
