@@ -1,16 +1,15 @@
 package myWhatsServer;
 
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.security.InvalidKeyException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
 import java.util.Random;
 
+import javax.crypto.*;
 import javax.net.ServerSocketFactory;
 import javax.net.ssl.SSLServerSocketFactory;
 
@@ -34,8 +33,9 @@ public class MyWhatsServer {
             ServerSocketFactory sf = SSLServerSocketFactory.getDefault();
             sSoc = sf.createServerSocket(port);
 
-            // antiga ligação
-            //sSoc = new ServerSocket(port);
+            skel.createkey(pass);
+
+            // criar os directorios
 
             skel.rmdir("log");
             skel.rmdir("msg");

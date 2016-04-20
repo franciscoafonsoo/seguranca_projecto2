@@ -88,12 +88,13 @@ public class UserCatalog {
                 output.printf("%s\r\n", pwd);
                 MyWhatsUser utilizador = new MyWhatsUser(user, pwd, salt);
                 mapObjs.put(user, utilizador);
+                output.close();
             } catch (IOException e) {
                 throw new IOException("receiveMessage error");
             }
         }
         try {
-            // get a key generator for the HMAC-MD5 keyed-hashing algorithm
+            // get a key generator for the HMAC-SHA256 keyed-hashing algorithm
             KeyGenerator keyGen = KeyGenerator.getInstance("hmacSha256");
             // generate a key from the generator
             SecretKey key = keyGen.generateKey();

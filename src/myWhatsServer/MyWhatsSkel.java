@@ -1,12 +1,14 @@
 package myWhatsServer;
 
 
+import javax.crypto.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -236,7 +238,6 @@ public class MyWhatsSkel {
 
             String temp = "files/" + user + "/" + contact;
 
-
             Path path = Paths.get(temp + fileName);
             byte[] data = Files.readAllBytes(path);
 
@@ -288,6 +289,84 @@ public class MyWhatsSkel {
         } else {
             System.out.println(name + " NOT FOUND");
         }
+
+    }
+
+    public Key createkey(String pass) {
+        Key key = null;
+        try {
+            File aeskey = new File("aeskey.key");
+
+            if (aeskey.exists() && !aeskey.isDirectory()) {
+                // load do keystore
+                FileInputStream readkeystore = new FileInputStream("SIServer.keystore");
+                KeyStore readcert = KeyStore.getInstance("RSA");
+                readcert.load(readkeystore, pass.toCharArray());
+
+                // gera uma chave privada
+                Key privatekey = readcert.getKey("SIServer", pass.toCharArray());
+
+                // cria cifra apartir do certificado
+                Cipher cph = Cipher.getInstance("RSA");
+                cph.init(Cipher.UNWRAP_MODE, privatekey);
+
+                FileInputStream cenas = new FileInputStream(aeskey);
+                ObjectInputStream maiscenas = new ObjectInputStream(cenas);
+                byte[] keyencoded = new byte[16];
+
+                //noinspection ResultOfMethodCallIgnored
+                maiscenas.read(keyencoded);
+
+                // cria uma chave
+                key = cph.unwrap(keyencoded, "AES", Cipher.SECRET_KEY);
+
+            } else {
+                // gera uma chave AES
+                KeyGenerator kg = KeyGenerator.getInstance("AES");
+                kg.init(128);
+
+                // gera uma chave secreta
+                key = kg.generateKey();
+
+                // load do keystore
+                FileInputStream readkeystore = new FileInputStream("SIServer.keystore");
+                KeyStore readcert = KeyStore.getInstance("RSA");
+                readcert.load(readkeystore, pass.toCharArray());
+
+                // obtem certificado
+                Certificate cert = readcert.getCertificate("SIServer");
+
+                // cria cifra apartir do certificado
+                Cipher cph = Cipher.getInstance("RSA");
+                cph.init(Cipher.WRAP_MODE, cert);
+
+                // escrever a chave ja encriptada po ficheiro
+                FileOutputStream writeaes = new FileOutputStream(aeskey);
+                ObjectOutputStream cenas = new ObjectOutputStream(writeaes);
+                byte[] keyencoded = cph.wrap(key);
+                cenas.write(keyencoded);
+                cenas.close();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        }
+        return key;
     }
 
     /**
