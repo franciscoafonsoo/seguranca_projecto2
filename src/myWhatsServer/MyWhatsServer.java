@@ -83,9 +83,6 @@ public class MyWhatsServer {
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
-                //File f = new File("log/passwords.txt");
-                // aqui devia carregar o ficheiro para as classes, certo ?
-
                 String auth = (String) in.readObject();
                 MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
                 String[] data = auth.split(":");
