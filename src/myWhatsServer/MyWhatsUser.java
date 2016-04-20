@@ -101,5 +101,9 @@ public class MyWhatsUser {
     public List<String> getAllFiles() {
         return files;
     }
+    
+    public int getSalt() {
+    	return salt;
+    }
 
 }

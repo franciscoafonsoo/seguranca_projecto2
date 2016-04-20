@@ -5,6 +5,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -38,9 +39,10 @@ public class MyWhatsSkel {
      *
      * @throws IOException
      * @throws NoSuchAlgorithmException 
+     * @throws InvalidKeyException 
      */
 
-    public String login(String user, String pwd) throws IOException, NoSuchAlgorithmException {
+    public String login(String user, String pwd) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
 
         if (userCat.login(user, pwd)) {
             return "OK";

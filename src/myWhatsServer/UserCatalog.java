@@ -133,6 +133,15 @@ public class UserCatalog {
             System.out.println("login");
             System.out.println("user = " + user);
             if (mapUsers.containsKey(user)) {
+            	MyWhatsUser userA = mapObjs.get(user);
+            	int salt = userA.getSalt();
+            	pwd = pwd + ":" +  salt;
+            	MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            	messageDigest.update(pwd.getBytes());
+                // pwd passa a ser string da hash para comparacao
+                pwd = new String(messageDigest.digest());
+                System.out.println("pass guardada = " + mapUsers.get(user));
+                System.out.println("pass hashada no login = " + pwd);
                 if (mapUsers.get(user).equals(pwd)) {
                     return true;
                 } else {
