@@ -59,6 +59,39 @@ public class UserCatalog {
 
         File f = new File("log/passwords.txt");
 
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+        Random rand = new Random();
+        int salt = rand.nextInt((999999 - 100000) + 1) + 100000;
+        System.out.println("salt=" + salt);
+        // guarda internamente os bytes (ja eh sha-256)
+        pwd = pwd + ":" + salt;
+        System.out.println("pwd=" + pwd);
+        messageDigest.update(pwd.getBytes());
+        // pwd passa a ser string da hash para comparacao
+        pwd = new String(messageDigest.digest());
+        System.out.println(pwd);
+        if (f.exists() && !f.isDirectory()) {
+            try (PrintWriter output = new PrintWriter(new FileWriter(f, true))) {
+
+                output.printf("%s", user + ":" + salt + ":");
+                output.printf("%s\r\n", pwd);
+                mapUsers.put(user, pwd);
+                MyWhatsUser utilizador = new MyWhatsUser(user, pwd, salt);
+                mapObjs.put(user, utilizador);
+                return true;
+            } catch (IOException e) {
+                throw new IOException("receiveMessage error");
+            }
+        } else {
+            try (PrintStream output = new PrintStream(f)) {
+                output.printf("%s", user + ":" + salt + ":");
+                output.printf("%s\r\n", pwd);
+                MyWhatsUser utilizador = new MyWhatsUser(user, pwd, salt);
+                mapObjs.put(user, utilizador);
+            } catch (IOException e) {
+                throw new IOException("receiveMessage error");
+            }
+        }
         try {
             // get a key generator for the HMAC-MD5 keyed-hashing algorithm
             KeyGenerator keyGen = KeyGenerator.getInstance("hmacSha256");
@@ -68,46 +101,12 @@ public class UserCatalog {
             Mac mac = Mac.getInstance(key.getAlgorithm());
             mac.init(key);
 
-            String message = "LINHA AQUI";
+            Path path = Paths.get(f.getAbsolutePath());
+            byte[] data = Files.readAllBytes(path);
 
-            // get the string as UTF-8 bytes
-            byte[] b = message.getBytes("UTF-8");
             // create a digest from the byte array
-            byte[] digest = mac.doFinal(b);
+            byte[] digest = mac.doFinal(data);
 
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-            Random rand = new Random();
-            int salt = rand.nextInt((999999 - 100000) + 1) + 100000;
-            System.out.println("salt=" + salt);
-            // guarda internamente os bytes (ja eh sha-256)
-            pwd = pwd + ":" + salt;
-            System.out.println("pwd=" + pwd);
-            messageDigest.update(pwd.getBytes());
-            // pwd passa a ser string da hash para comparacao
-            pwd = new String(messageDigest.digest());
-            System.out.println(pwd);
-            if (f.exists() && !f.isDirectory()) {
-                try (PrintWriter output = new PrintWriter(new FileWriter(f, true))) {
-
-                    output.printf("%s", user + ":" + salt + ":");
-                    output.printf("%s\r\n", pwd);
-                    mapUsers.put(user, pwd);
-                    MyWhatsUser utilizador = new MyWhatsUser(user, pwd, salt);
-                    mapObjs.put(user, utilizador);
-                    return true;
-                } catch (IOException e) {
-                    throw new IOException("receiveMessage error");
-                }
-            } else {
-                try (PrintStream output = new PrintStream(f)) {
-                    output.printf("%s", user + ":" + salt + ":");
-                    output.printf("%s\r\n", pwd);
-                    MyWhatsUser utilizador = new MyWhatsUser(user, pwd, salt);
-                    mapObjs.put(user, utilizador);
-                } catch (IOException e) {
-                    throw new IOException("receiveMessage error");
-                }
-            }
         } catch (NoSuchAlgorithmException e) {
             throw new NoSuchAlgorithmException("catalog - register");
         } catch (UnsupportedEncodingException e) {
