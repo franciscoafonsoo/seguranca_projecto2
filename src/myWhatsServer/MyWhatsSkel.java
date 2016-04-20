@@ -98,7 +98,7 @@ public class MyWhatsSkel {
      */
 
 
-    public boolean receiveMessage(String msg, String senduser, String recvuser) throws IOException {
+    private boolean receiveMessage(String msg, String senduser, String recvuser) throws IOException {
 
         System.out.println(userCat.contactExists(recvuser));
         if (userCat.contactExists(recvuser)) {
@@ -107,7 +107,7 @@ public class MyWhatsSkel {
 
             String dt = dateFormat.format(cal.getTime());
 
-            List<String> alph = new ArrayList<String>();
+            List<String> alph = new ArrayList<>();
             alph.add(senduser);
             alph.add(recvuser);
             java.util.Collections.sort(alph);
@@ -155,7 +155,7 @@ public class MyWhatsSkel {
      * recebe um ficheiro no servidor e da autorizacao de acesso ao client "user"
      */
 
-    public void receiveFile(String name, ObjectInputStream is) throws IOException {
+    private void receiveFile(String name, ObjectInputStream is) throws IOException {
 
         try {
             File f = new File("files/" + name);
@@ -173,7 +173,7 @@ public class MyWhatsSkel {
      * partilha o nome ficheiro/mensagem trocada por outro client "user"
      */
 
-    public void shareMessage(String user, ObjectOutputStream out) throws FileNotFoundException, IOException {
+    private void shareMessage(String user, ObjectOutputStream out) throws IOException {
 
         List<String> files = userCat.getAllFiles(user);
 
@@ -197,10 +197,9 @@ public class MyWhatsSkel {
      * partilhar todas as informacoes entre user e contact
      */
 
-    public void shareContact(String contact, String user, ObjectOutputStream out) throws IOException {
+    private void shareContact(String contact, String user, ObjectOutputStream out) throws IOException {
 
-
-        List<String> alph = new ArrayList<String>();
+        List<String> alph = new ArrayList<>();
         alph.add(user);
         alph.add(contact);
         java.util.Collections.sort(alph);
@@ -232,7 +231,7 @@ public class MyWhatsSkel {
      * user/contact/file
      */
 
-    public void shareFile(String contact, String fileName, String user, ObjectOutputStream out) throws IOException {
+    private void shareFile(String contact, String fileName, String user, ObjectOutputStream out) throws IOException {
 
         try {
 
@@ -281,15 +280,14 @@ public class MyWhatsSkel {
         String[] myFiles;
         if (file.isDirectory()) {
             myFiles = file.list();
-            for (int i = 0; i < myFiles.length; i++) {
-                File myFile = new File(file, myFiles[i]);
+            for (String myFile1 : myFiles) {
+                File myFile = new File(file, myFile1);
                 myFile.delete();
             }
             System.out.println(name + " REMOVED");
         } else {
             System.out.println(name + " NOT FOUND");
         }
-
     }
 
     public Key createkey(String pass) {
@@ -373,12 +371,12 @@ public class MyWhatsSkel {
      * add a user to a group
      */
 
-    public void addToGroup(String creator, String user, String group) throws IOException {
+    private void addToGroup(String creator, String user, String group) throws IOException {
         groupCat.addUserToGroup(creator, user, group);
 
     }
 
-    public void removeUserFromGroup(String user, String group) {
+    private void removeUserFromGroup(String user, String group) {
         groupCat.removeFromGroup(group, user);
     }
 }

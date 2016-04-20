@@ -33,7 +33,9 @@ public class MyWhatsServer {
             ServerSocketFactory sf = SSLServerSocketFactory.getDefault();
             sSoc = sf.createServerSocket(port);
 
-            skel.createkey(pass);
+            //criar chave
+
+            Key key = skel.createkey(pass);
 
             // criar os directorios
 
