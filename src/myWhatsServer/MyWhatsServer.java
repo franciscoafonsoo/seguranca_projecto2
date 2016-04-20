@@ -19,17 +19,17 @@ public class MyWhatsServer {
     public static void main(String[] args) throws NumberFormatException, IOException, DirException {
         System.out.println("servidor: main");
         MyWhatsServer server = new MyWhatsServer();
-        server.startServer(Integer.parseInt(args[0]));
+        server.startServer(Integer.parseInt(args[0]), args[1]);
     }
 
     @SuppressWarnings("resource")
-    private void startServer(int port) throws IOException, DirException {
+    private void startServer(int port, String pass) throws IOException, DirException {
         ServerSocket sSoc = null;
         MyWhatsSkel skel = new MyWhatsSkel();
 
         try {
             System.setProperty("javax.net.ssl.keyStore", "SIServer.keystore");
-            System.setProperty("javax.net.ssl.keyStorePassword", "Fculproject1");
+            System.setProperty("javax.net.ssl.keyStorePassword", pass);
             ServerSocketFactory sf = SSLServerSocketFactory.getDefault();
             sSoc = sf.createServerSocket(port);
 
