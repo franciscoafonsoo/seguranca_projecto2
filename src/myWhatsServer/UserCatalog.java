@@ -109,6 +109,7 @@ public class UserCatalog {
     public boolean login(String user, String pwd) throws IOException, NoSuchAlgorithmException {
         try {
             System.out.println("login");
+            System.out.println("user = " + user);
             if (mapUsers.containsKey(user)) {
                 if (mapUsers.get(user).equals(pwd)) {
                     return true;
