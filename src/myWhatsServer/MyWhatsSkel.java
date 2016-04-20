@@ -111,23 +111,21 @@ public class MyWhatsSkel {
             System.out.println(alph.get(1));
             File f = new File("msg/" + alph.get(0) + "_" + alph.get(1) + ".txt");
             System.out.println("file " + alph.get(0) + "_" + alph.get(1) + ".txt criado");
+            //inicio de tentativa
             if (f.exists() && !f.isDirectory()) {
-                try (PrintWriter output = new PrintWriter(new FileWriter(f, true))) {
-                    output.printf("%s", senduser + "/" + msg + "/");
-                    output.printf("%s\r\n", dt + "/");
-                } catch (IOException e) {
-                    throw new IOException("receiveMessage error");
-                }
+            	String escrever = senduser + "/" + msg + "/" + dt+"/";
+            	FileOutputStream output = new FileOutputStream(f);
+            	output.write(escrever.getBytes());
+                
             } else {
-                try (PrintStream output = new PrintStream(f)) {
-                    userCat.associateFile(alph.get(0), "msg/" + alph.get(0) + "_" + alph.get(1) + ".txt");
-                    userCat.associateFile(alph.get(1), "msg/" + alph.get(0) + "_" + alph.get(1) + ".txt");
-                    output.printf("%s", senduser + "/" + msg + "/");
-                    output.printf("%s\r\n", dt + "/");
-                } catch (IOException e) {
-                    throw new IOException("receiveMessage error");
-                }
+                userCat.associateFile(alph.get(0), "msg/" + alph.get(0) + "_" + alph.get(1) + ".txt");
+                userCat.associateFile(alph.get(1), "msg/" + alph.get(0) + "_" + alph.get(1) + ".txt");
+                String escrever = senduser + "/" + msg + "/" + dt+"/";
+               	FileOutputStream output = new FileOutputStream(f);
+               	output.write(escrever.getBytes());
+                
             }
+            //fim de tentativa
             return true;
         } else if (groupCat.hasGroup(recvuser)) {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -138,21 +136,10 @@ public class MyWhatsSkel {
 
             File f = new File("msg/" + recvuser + ".txt");
             System.out.println("file " + recvuser + ".txt criado");
-            if (f.exists() && !f.isDirectory()) {
-                try (PrintWriter output = new PrintWriter(new FileWriter(f, true))) {
-                    output.printf("%s", senduser + "/" + msg + "/");
-                    output.printf("%s\r\n", dt + "/");
-                } catch (IOException e) {
-                    throw new IOException("receiveMessage error");
-                }
-            } else {
-                try (PrintStream output = new PrintStream(f)) {
-                    output.printf("%s", senduser + "/" + msg);
-                    output.printf("%s\r\n", dt + "/");
-                } catch (IOException e) {
-                    throw new IOException("receiveMessage error");
-                }
-            }
+                String escrever = senduser + "/" + msg + "/" + dt+"/";
+               	FileOutputStream output = new FileOutputStream(f);
+               	output.write(escrever.getBytes());
+            
             return true;
         } else {
             return false;
