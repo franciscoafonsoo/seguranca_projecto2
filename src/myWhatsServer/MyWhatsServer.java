@@ -99,9 +99,9 @@ public class MyWhatsServer {
                     pwd = data[1];
                 }
 
-                // guarda internamente os bytes (já é sha-256)
+                // guarda internamente os bytes (ja eh sha-256)
                 messageDigest.update(pwd.getBytes());
-                // pwd passa a ser string da hash para comparação
+                // pwd passa a ser string da hash para comparacao
                 pwd = new String(messageDigest.digest());
                 // tmp println
                 System.out.println(pwd);
