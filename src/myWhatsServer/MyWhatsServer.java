@@ -101,7 +101,7 @@ public class MyWhatsServer {
                 int salt = rand.nextInt((999999 - 100000) +1) +100000;
                 System.out.println("salt=" + salt);
              	// guarda internamente os bytes (ja eh sha-256)
-                pwd = pwd+":"+salt;
+                pwd = pwd + ":" + salt;
                 System.out.println("pwd=" + pwd);
                 messageDigest.update(pwd.getBytes());
                 // pwd passa a ser string da hash para comparacao
