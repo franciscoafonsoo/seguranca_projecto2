@@ -38,9 +38,7 @@ public class MyWhatsGroups {
             return false;
         } else {
             users.add(user);
-            for (String u : users) {
-                System.out.println(u);
-            }
+            users.forEach(System.out::println);
             return true;
         }
     }
