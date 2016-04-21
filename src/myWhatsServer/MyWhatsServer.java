@@ -6,6 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.*;
 
+import javax.crypto.NoSuchPaddingException;
 import javax.net.ServerSocketFactory;
 import javax.net.ssl.SSLServerSocketFactory;
 
@@ -115,7 +116,7 @@ public class MyWhatsServer {
 
                 socket.close();
 
-            } catch (IOException | ClassNotFoundException | NoSuchAlgorithmException | InvalidKeyException e) {
+            } catch (IOException | ClassNotFoundException | NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException e) {
                 e.printStackTrace();
             }
         }
