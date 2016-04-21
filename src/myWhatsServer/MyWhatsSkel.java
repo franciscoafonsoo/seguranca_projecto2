@@ -35,7 +35,7 @@ public class MyWhatsSkel {
     public MyWhatsSkel(String pass) throws IOException {
         this.key = createkey(pass);
         userCat = UserCatalog.getInstance(key);
-        groupCat = GroupCatalog.getInstance();
+        groupCat = GroupCatalog.getInstance(key);
     }
 
     /**

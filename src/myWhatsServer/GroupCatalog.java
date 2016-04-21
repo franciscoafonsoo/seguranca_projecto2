@@ -1,6 +1,7 @@
 package myWhatsServer;
 
 import java.io.IOException;
+import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,14 +12,14 @@ public class GroupCatalog {
     private UserCatalog userCat;
     private Map<String, MyWhatsGroups> mapGroups;
 
-    private GroupCatalog() throws IOException {
+    private GroupCatalog(Key key) throws IOException {
         mapGroups = new HashMap<String, MyWhatsGroups>();
-        userCat = UserCatalog.getInstance();
+        userCat = UserCatalog.getInstance(key);
     }
 
-    public static GroupCatalog getInstance() throws IOException {
+    public static GroupCatalog getInstance(Key key) throws IOException {
         if (INSTANCE == null) {
-            return new GroupCatalog();
+            return new GroupCatalog(key);
         } else {
             return INSTANCE;
         }
