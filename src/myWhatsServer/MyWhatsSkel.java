@@ -24,6 +24,7 @@ public class MyWhatsSkel {
 
     private UserCatalog userCat;
     private GroupCatalog groupCat;
+    private Key key;
 
     /**
      * construtor
@@ -31,8 +32,9 @@ public class MyWhatsSkel {
      * @throws IOException
      */
 
-    public MyWhatsSkel() throws IOException {
-        userCat = UserCatalog.getInstance();
+    public MyWhatsSkel(String pass) throws IOException {
+        this.key = createkey(pass);
+        userCat = UserCatalog.getInstance(key);
         groupCat = GroupCatalog.getInstance();
     }
 
@@ -59,31 +61,32 @@ public class MyWhatsSkel {
      * @throws IOException
      */
 
-    public boolean handle(String pedido, String user, ObjectInputStream in, ObjectOutputStream out) throws IOException {
+    public boolean handle(String pedido, String user, ObjectInputStream in, ObjectOutputStream out) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException {
+
         String[] request = pedido.split(":");
         String op = request[0];
         switch (op) {
             case "-m":
                 System.out.println("entrar no recvmessage");
-                return receiveMessage(request[2], user, request[1]);
+                return receiveMessage(request[2], user, request[1], key);
             case "-f":
-                receiveMessage(request[2], user, request[1]);
-                receiveFile(request[2], in);
+                receiveMessage(request[2], user, request[1], key);
+                receiveFile(request[2], in, key);
                 break;
             case "-r":
                 if (request.length == 1) {
-                    shareMessage(user, out);
+                    shareMessage(user, out, key);
                 } else if (request.length == 2) {
                     shareContact(request[1], user, out);
                 } else {
-                    shareFile(request[1], request[2], user, out);
+                    shareFile(request[1], request[2], user, out, key);
                 }
                 break;
             case "-a":
-                addToGroup(user, request[1], request[2]);
+                addToGroup(user, request[1], request[2], key);
                 break;
             case "-d":
-                removeUserFromGroup(request[1], request[2]);
+                removeUserFromGroup(request[1], request[2], key);
                 break;
         }
         return true;
@@ -98,13 +101,13 @@ public class MyWhatsSkel {
      */
 
 
-    private boolean receiveMessage(String msg, String senduser, String recvuser) throws IOException {
+    private boolean receiveMessage(String msg, String senduser, String recvuser, Key key) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException {
 
         System.out.println(userCat.contactExists(recvuser));
         if (userCat.contactExists(recvuser)) {
+
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             Calendar cal = Calendar.getInstance();
-
             String dt = dateFormat.format(cal.getTime());
 
             List<String> alph = new ArrayList<>();
@@ -118,8 +121,10 @@ public class MyWhatsSkel {
             //inicio de tentativa
             if (f.exists() && !f.isDirectory()) {
             	String escrever = senduser + "/" + msg + "/" + dt+"/";
-            	FileOutputStream output = new FileOutputStream(f);
-            	output.write(escrever.getBytes());
+                FileOutputStream output = new FileOutputStream(f);
+                encryptfile(escrever.getBytes(), output, key);
+                // temp code
+                // output.write(escrever.getBytes());
                 
             } else {
                 userCat.associateFile(alph.get(0), "msg/" + alph.get(0) + "_" + alph.get(1) + ".txt");
@@ -155,7 +160,7 @@ public class MyWhatsSkel {
      * recebe um ficheiro no servidor e da autorizacao de acesso ao client "user"
      */
 
-    private void receiveFile(String name, ObjectInputStream is) throws IOException {
+    private void receiveFile(String name, ObjectInputStream is, Key key) throws IOException {
 
         try {
             File f = new File("files/" + name);
@@ -173,10 +178,9 @@ public class MyWhatsSkel {
      * partilha o nome ficheiro/mensagem trocada por outro client "user"
      */
 
-    private void shareMessage(String user, ObjectOutputStream out) throws IOException {
+    private void shareMessage(String user, ObjectOutputStream out, Key key) throws IOException {
 
         List<String> files = userCat.getAllFiles(user);
-
 
         out.writeObject(files.size());
         for (String elem : files) {
@@ -214,15 +218,12 @@ public class MyWhatsSkel {
             out.writeObject(data.size());
             for (String elem : data) {
                 out.writeObject(elem);
-
             }
 
         } catch (IOException e) {
             throw new IOException("receiveFile error");
         }
-
     }
-
 
     /**
      * opcao -r contact file
@@ -231,7 +232,7 @@ public class MyWhatsSkel {
      * user/contact/file
      */
 
-    private void shareFile(String contact, String fileName, String user, ObjectOutputStream out) throws IOException {
+    private void shareFile(String contact, String fileName, String user, ObjectOutputStream out, Key key) throws IOException {
 
         try {
 
@@ -367,16 +368,23 @@ public class MyWhatsSkel {
         return key;
     }
 
+    private void encryptfile(byte[] escrever, FileOutputStream fos, Key key) throws IOException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException {
+        Cipher c = Cipher.getInstance("AES");
+        c.init(128, key);
+        CipherOutputStream cos = new CipherOutputStream(fos, c);
+        cos.write(escrever);
+    }
+
     /**
      * add a user to a group
      */
 
-    private void addToGroup(String creator, String user, String group) throws IOException {
+    private void addToGroup(String creator, String user, String group, Key key) throws IOException {
         groupCat.addUserToGroup(creator, user, group);
 
     }
 
-    private void removeUserFromGroup(String user, String group) {
+    private void removeUserFromGroup(String user, String group, Key key) {
         groupCat.removeFromGroup(group, user);
     }
 }

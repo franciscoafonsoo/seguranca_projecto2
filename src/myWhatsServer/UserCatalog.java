@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -25,10 +26,12 @@ public class UserCatalog {
 
     private Map<String, String> mapUsers;
     private Map<String, MyWhatsUser> mapObjs;
+    private Key key;
 
-    private UserCatalog() throws IOException {
+    private UserCatalog(Key key) throws IOException {
         mapUsers = new HashMap<String, String>();
         mapObjs = new HashMap<String, MyWhatsUser>();
+        this.key = key;
         //loadState();
     }
 
@@ -39,9 +42,9 @@ public class UserCatalog {
      * @throws IOException
      */
 
-    public static UserCatalog getInstance() throws IOException {
+    public static UserCatalog getInstance(Key key) throws IOException {
         if (INSTANCE == null) {
-            INSTANCE = new UserCatalog();
+            INSTANCE = new UserCatalog(key);
         }
         return INSTANCE;
     }

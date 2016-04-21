@@ -5,11 +5,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.*;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
-import java.util.Random;
 
-import javax.crypto.*;
 import javax.net.ServerSocketFactory;
 import javax.net.ssl.SSLServerSocketFactory;
 
@@ -25,7 +21,7 @@ public class MyWhatsServer {
     @SuppressWarnings("resource")
     private void startServer(int port, String pass) throws IOException, DirException {
         ServerSocket sSoc = null;
-        MyWhatsSkel skel = new MyWhatsSkel();
+        MyWhatsSkel skel = new MyWhatsSkel(pass);
 
         try {
             System.setProperty("javax.net.ssl.keyStore", "SIServer.keystore");
@@ -35,7 +31,7 @@ public class MyWhatsServer {
 
             //criar chave
 
-            Key key = skel.createkey(pass);
+
 
             // criar os directorios
 
@@ -99,9 +95,6 @@ public class MyWhatsServer {
                     user = data[0];
                     pwd = data[1];
                 }
-                
-                
-                
 
                 if (skel.login(user, pwd).equals("NOK"))
                     out.writeObject("NOK");
@@ -112,6 +105,7 @@ public class MyWhatsServer {
                     System.out.println(pedido);
                     System.out.println("entrar no skel");
                     if (!(pedido.equals("Nothing"))) {
+                        // TODO atao tamos a criar a chave para depois so usar no skel ??
                         skel.handle(pedido, user, in, out);
                     }
                 }
@@ -121,12 +115,9 @@ public class MyWhatsServer {
 
                 socket.close();
 
-            } catch (IOException | ClassNotFoundException | NoSuchAlgorithmException e) {
+            } catch (IOException | ClassNotFoundException | NoSuchAlgorithmException | InvalidKeyException e) {
                 e.printStackTrace();
-            } catch (InvalidKeyException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+            }
         }
     }
 }
