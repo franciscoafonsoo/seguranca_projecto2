@@ -5,6 +5,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.*;
+import java.util.Scanner;
 
 import javax.crypto.NoSuchPaddingException;
 import javax.net.ServerSocketFactory;
@@ -77,6 +78,10 @@ public class MyWhatsServer {
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
+                Scanner scan = new Scanner(System.in);
+                System.out.println("Enter password: ");
+                String passwd = scan.next();
+                
                 String auth = (String) in.readObject();
                 
                 String[] data = auth.split(":");

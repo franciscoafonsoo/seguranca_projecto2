@@ -96,28 +96,7 @@ public class UserCatalog {
                 throw new IOException("receiveMessage error");
             }
         }
-        try {
-            // get a key generator for the HMAC-SHA256 keyed-hashing algorithm
-            KeyGenerator keyGen = KeyGenerator.getInstance("hmacSha256");
-            // generate a key from the generator
-            SecretKey key = keyGen.generateKey();
-            // create a MAC and initialize with the above key
-            Mac mac = Mac.getInstance(key.getAlgorithm());
-            mac.init(key);
-
-            Path path = Paths.get(f.getAbsolutePath());
-            byte[] data = Files.readAllBytes(path);
-
-            // create a digest from the byte array
-            byte[] digest = mac.doFinal(data);
-
-        } catch (NoSuchAlgorithmException e) {
-            throw new NoSuchAlgorithmException("catalog - register");
-        } catch (UnsupportedEncodingException e) {
-            throw new UnsupportedEncodingException("catalog - register");
-        } catch (InvalidKeyException e) {
-            throw new InvalidKeyException("catalog - register");
-        }
+        
         return false;
     }
 
