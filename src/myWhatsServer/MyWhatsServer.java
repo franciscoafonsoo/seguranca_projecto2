@@ -29,11 +29,6 @@ public class MyWhatsServer {
             System.setProperty("javax.net.ssl.keyStorePassword", pass);
             ServerSocketFactory sf = SSLServerSocketFactory.getDefault();
             sSoc = sf.createServerSocket(port);
-
-            //criar chave
-
-
-
             // criar os directorios
 
             skel.rmdir("log");
@@ -45,7 +40,6 @@ public class MyWhatsServer {
             skel.dir("msg");
             skel.dir("groups");
             skel.dir("files");
-
 
         } catch (IOException e) {
             System.err.println(e.getMessage());
@@ -105,15 +99,11 @@ public class MyWhatsServer {
                     String pedido = (String) in.readObject();
                     System.out.println(pedido);
                     System.out.println("entrar no skel");
-                    if (!(pedido.equals("Nothing"))) {
-                        // TODO atao tamos a criar a chave para depois so usar no skel ??
-                        skel.handle(pedido, user, in, out);
-                    }
+                    if (!(pedido.equals("Nothing"))) skel.handle(pedido, user, in, out);
                 }
 
                 out.close();
                 in.close();
-
                 socket.close();
 
             } catch (IOException | ClassNotFoundException | NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException e) {
