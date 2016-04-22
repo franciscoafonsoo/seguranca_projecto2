@@ -2,6 +2,7 @@ package myWhatsServer;
 
 
 import javax.crypto.*;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -122,7 +123,7 @@ public class MyWhatsSkel {
             if (f.exists() && !f.isDirectory()) {
             	String escrever = senduser + "/" + msg + "/" + dt+"/";
                 FileOutputStream output = new FileOutputStream(f);
-                encryptfile(escrever.getBytes(), output, key);
+                encryptFile(escrever.getBytes(), output, key);
                 // temp code
                 // output.write(escrever.getBytes());
                 
@@ -176,9 +177,12 @@ public class MyWhatsSkel {
     /**
      * opcao -r
      * partilha o nome ficheiro/mensagem trocada por outro client "user"
+     * @throws InvalidKeyException 
+     * @throws NoSuchPaddingException 
+     * @throws NoSuchAlgorithmException 
      */
 
-    private void shareMessage(String user, ObjectOutputStream out, Key key) throws IOException {
+    private void shareMessage(String user, ObjectOutputStream out, Key key) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         List<String> files = userCat.getAllFiles(user);
 
@@ -186,9 +190,21 @@ public class MyWhatsSkel {
         for (String elem : files) {
             File f = new File(elem);
             if (f.exists() && !f.isDirectory()) {
-                Path path = Paths.get(elem);
-                List<String> lines = Files.readAllLines(path);
-                out.writeObject(lines.get(lines.size() - 1));
+            	FileInputStream fis = new FileInputStream(f);
+            	Cipher c = Cipher.getInstance("AES");
+            	//cifra para decifrar o ficheiro
+            	c.init(Cipher.DECRYPT_MODE, key);
+            	CipherInputStream cis = new CipherInputStream(fis, c);
+            	byte[] b = new byte[1024];
+            	int i;
+            	String s = "";
+            	while((i=cis.read(b)) != -1) {
+            		s.concat(new String(b));
+            	}
+            	System.out.println(s);
+//                Path path = Paths.get(elem);
+//                List<String> lines = Files.readAllLines(path);
+//                out.writeObject(lines.get(lines.size() - 1));
             } else {
                 out.writeObject("nothing");
             }
@@ -299,19 +315,21 @@ public class MyWhatsSkel {
             if (aeskey.exists() && !aeskey.isDirectory()) {
                 // load do keystore
                 FileInputStream readkeystore = new FileInputStream("SIServer.keystore");
-                KeyStore readcert = KeyStore.getInstance("RSA");
+                KeyStore readcert = KeyStore.getInstance("JKS");
                 readcert.load(readkeystore, pass.toCharArray());
 
                 // gera uma chave privada
                 Key privatekey = readcert.getKey("SIServer", pass.toCharArray());
 
+                System.out.println(privatekey);
                 // cria cifra apartir do certificado
                 Cipher cph = Cipher.getInstance("RSA");
                 cph.init(Cipher.UNWRAP_MODE, privatekey);
 
                 FileInputStream cenas = new FileInputStream(aeskey);
                 ObjectInputStream maiscenas = new ObjectInputStream(cenas);
-                byte[] keyencoded = new byte[16];
+                //TODO ler o tamanho do ficheiro
+                byte[] keyencoded = new byte[256];
 
                 //noinspection ResultOfMethodCallIgnored
                 maiscenas.read(keyencoded);
@@ -328,12 +346,12 @@ public class MyWhatsSkel {
                 key = kg.generateKey();
 
                 // load do keystore
-                FileInputStream readkeystore = new FileInputStream("SIServer.keystore");
-                KeyStore readcert = KeyStore.getInstance("RSA");
+                FileInputStream readkeystore = new FileInputStream("SIClient.keystore");
+                KeyStore readcert = KeyStore.getInstance("JKS");
                 readcert.load(readkeystore, pass.toCharArray());
 
                 // obtem certificado
-                Certificate cert = readcert.getCertificate("SIServer");
+                Certificate cert = readcert.getCertificate("SIClient");
 
                 // cria cifra apartir do certificado
                 Cipher cph = Cipher.getInstance("RSA");
@@ -368,13 +386,17 @@ public class MyWhatsSkel {
         return key;
     }
 
-    private void encryptfile(byte[] escrever, FileOutputStream fos, Key key) throws IOException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException {
+    private void encryptFile(byte[] escrever, FileOutputStream fos, Key key) throws IOException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException {
         Cipher c = Cipher.getInstance("AES");
-        c.init(128, key);
+        //como a cifra vai cifrar o ficheiro, o primeiro parametro tem de ser encrypt mode
+        c.init(Cipher.ENCRYPT_MODE, key);
         CipherOutputStream cos = new CipherOutputStream(fos, c);
         cos.write(escrever);
     }
 
+    
+    
+    
     /**
      * add a user to a group
      */
