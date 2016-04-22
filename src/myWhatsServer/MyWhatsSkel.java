@@ -93,13 +93,11 @@ public class MyWhatsSkel {
 
     }
 
-
     /**
      * opcao -m
      * recebe mensagem e nome do ficheiro partilhado e a autorizacao de acesso ao client "user"
      * escreve para um ficheiro recvuser.txt na pasta msg
      */
-
 
     private boolean receiveMessage(String msg, String senduser, String recvuser, Key key) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException {
 
