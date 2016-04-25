@@ -36,11 +36,13 @@ public class MyWhatsServer {
             skel.rmdir("msg");
             skel.rmdir("groups");
             skel.rmdir("files");
+            skel.dir("mac");
 
             skel.dir("log");
             skel.dir("msg");
             skel.dir("groups");
             skel.dir("files");
+            skel.dir("mac");
 
         } catch (IOException e) {
             System.err.println(e.getMessage());
