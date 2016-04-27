@@ -7,6 +7,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.SecureRandom;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.MessageDigest;
@@ -63,7 +64,10 @@ public class UserCatalog {
         File f = new File("log/passwords.txt");
 
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-        Random rand = new Random();
+
+        // Random rand = new Random();
+        SecureRandom rand = new SecureRandom();
+
         int salt = rand.nextInt((999999 - 100000) + 1) + 100000;
         System.out.println("salt=" + salt);
         // guarda internamente os bytes (ja eh sha-256)

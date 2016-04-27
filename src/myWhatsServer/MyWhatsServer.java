@@ -36,7 +36,7 @@ public class MyWhatsServer {
             skel.rmdir("msg");
             skel.rmdir("groups");
             skel.rmdir("files");
-            skel.dir("mac");
+            skel.rmdir("mac");
 
             skel.dir("log");
             skel.dir("msg");
