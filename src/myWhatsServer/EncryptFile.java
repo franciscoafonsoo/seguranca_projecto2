@@ -36,21 +36,23 @@ public class EncryptFile {
         fos.close();
     }
 	
-	public String decryptFile(File f) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
+	public File decryptFile(File f) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
 		Cipher c = Cipher.getInstance("AES");
         //como a cifra vai cifrar o ficheiro, o primeiro parametro tem de ser encrypt mode
         c.init(Cipher.DECRYPT_MODE, key);
+        File tempFile = new File("temporary_files/tempfile.pdf");
         FileInputStream fis = new FileInputStream(f);
+        FileOutputStream fos = new FileOutputStream(tempFile);
         CipherInputStream cis = new CipherInputStream(fis, c);
         byte[] byteArray = new byte[1024];
         int i = cis.read(byteArray);
-        String s = new String(byteArray);
+        fos.write(byteArray);
         while ((i=cis.read(byteArray))!= -1) {
-        	s.concat(new String(byteArray));
+        	fos.write(byteArray);
 		}
         cis.close();
         fis.close();
-        return s;
+        return tempFile;
 	}
 	
 }

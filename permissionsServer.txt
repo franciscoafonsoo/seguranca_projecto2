@@ -5,3 +5,6 @@ grant codeBase "file:bin/"{
 	permission java.util.PropertyPermission "javax.net.ssl.keyStore", "write";
 	permission java.util.PropertyPermission "javax.net.ssl.keyStorePassword", "write";
 	};
+	
+	
+	"java.util.PropertyPermission" "user.dir" "read"

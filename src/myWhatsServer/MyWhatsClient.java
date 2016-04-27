@@ -11,7 +11,7 @@ import javax.net.ssl.SSLSocketFactory;
 public class MyWhatsClient {
 
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException, BadPwdException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, BadPwdException, DirException {
 
         // ip and port
         String[] server = args[1].split(":");
@@ -50,6 +50,7 @@ public class MyWhatsClient {
             // remover os argumentos já usados para poder correr o handle (4)
             for (int i = 0; i < 4; i++)
                 argv.remove(0);
+            
             //handle(argv, out);
         } else {
             Scanner scan = new Scanner(System.in);
@@ -63,6 +64,7 @@ public class MyWhatsClient {
             // remover os argumentos já usados para poder correr o handle (2)
             argv.remove(1);
             argv.remove(1);
+            
             //handle(argv, out);
             scan.close();
         }

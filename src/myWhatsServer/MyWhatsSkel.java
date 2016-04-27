@@ -74,7 +74,7 @@ public class MyWhatsSkel {
                 return receiveMessage(request[2], user, request[1], key);
             case "-f":
                 receiveMessage(request[2], user, request[1], key);
-                receiveFile(request[2], in, key);
+                receiveFile(request[2],request[1], user, in, key);
                 break;
             case "-r":
                 if (request.length == 1) {
@@ -159,14 +159,25 @@ public class MyWhatsSkel {
     /**
      * opcao -f
      * recebe um ficheiro no servidor e da autorizacao de acesso ao client "user"
+     * @throws InvalidKeyException 
+     * @throws NoSuchPaddingException 
+     * @throws NoSuchAlgorithmException 
      */
 
-    private void receiveFile(String name, ObjectInputStream is, Key key) throws IOException {
+    private void receiveFile(String fileName, String recvuser,String contact, ObjectInputStream is, Key key) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         try {
-            File f = new File("files/" + name);
+        	List<String> alph = new ArrayList<>();
+            alph.add(contact);
+            alph.add(recvuser);
+            java.util.Collections.sort(alph);
+            File f = new File("files/" + alph.get(0) + "_" + alph.get(1) + "_" + fileName + ".txt");
             byte[] content = (byte[]) is.readObject();
-            FileOutputStream fos = new FileOutputStream(f);
+            encrypter.encryptFile(content, f);
+            System.out.println("nome = " + fileName);
+            System.out.println("contact = " + contact);
+            
+            
             //Files.write(f.toPath(), content);
         } catch (IOException e) {
             throw new IOException("receiveFile error");
@@ -247,21 +258,24 @@ public class MyWhatsSkel {
      * enviar o ficheiro com nome fileName, enviado por contact
      * <p>
      * user/contact/file
+     * @throws NoSuchPaddingException 
+     * @throws NoSuchAlgorithmException 
+     * @throws InvalidKeyException 
      */
 
-    private void shareFile(String contact, String fileName, String user, ObjectOutputStream out, Key key) throws IOException {
+    private void shareFile(String contact, String fileName, String user, ObjectOutputStream out, Key key) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         try {
 
-            String temp = "files/" + user + "/" + contact;
-
-            Path path = Paths.get(temp + fileName);
-            byte[] data = Files.readAllBytes(path);
-
-            String msg = "-f:" + contact + ":" + path.getFileName();
-
-            out.writeObject(msg);
-            out.writeObject(data);
+        	List<String> alph = new ArrayList<>();
+            alph.add(contact);
+            alph.add(user);
+            java.util.Collections.sort(alph);
+            File f = new File("files/" + alph.get(0) + "_" + alph.get(1) + "_" + fileName + ".txt");
+            File tempFile = encrypter.decryptFile(f);
+            
+            
+            out.writeObject(Files.readAllBytes(Paths.get(tempFile.getAbsolutePath())));
         } catch (IOException e) {
             throw new IOException("receiveFile error");
         }

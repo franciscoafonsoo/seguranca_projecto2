@@ -3,6 +3,7 @@ package myWhatsServer;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -13,13 +14,17 @@ public class MyWhatsStub {
      * trata dos argumentos introduzidos pelo utilizador para enviar para o servidor
      *
      * @throws IOException
+     * @throws ClassNotFoundException 
+     * @throws DirException 
      */
 
     // TODO mau formato a ser impresso no ficheiro ( check SKEL )
-    public static void handle(List<String> lista, ObjectInputStream in, ObjectOutputStream out) throws IOException {
+    public static void handle(List<String> lista, ObjectInputStream in, ObjectOutputStream out) throws IOException, ClassNotFoundException, DirException {
 
         String msg;
 
+        dir("client");
+        
         System.out.println("dentro do handle");
         if (!(lista.size() == 0)) {
             switch (lista.get(0)) {
@@ -34,6 +39,8 @@ public class MyWhatsStub {
                     else
                         msg = lista.get(0) + ":" + lista.get(1) + ":" + lista.get(2);
                     out.writeObject(msg);
+                    byte[] file = (byte[]) in.readObject();
+                    Files.write(Paths.get("client/a.pdf"), file);
                     break;
                 case "-f":
                     Path path = Paths.get(lista.get(2));
@@ -43,6 +50,7 @@ public class MyWhatsStub {
 
                     out.writeObject(msg);
                     out.writeObject(data);
+                    
                     break;
                 case "-m":
                 case "-a":
@@ -65,6 +73,21 @@ public class MyWhatsStub {
         } else {
             out.writeObject("Nothing");
         }
-
+        
+        
     }
+    public static void dir(String name) throws DirException {
+        File log = new File(name);
+
+        if (!(log.exists() && log.isDirectory())) {
+            boolean feito = log.mkdirs();
+            if (feito) {
+                System.out.println(name + " CREATED");
+            } else {
+                throw new DirException("verificar permissoes, etc.");
+            }
+        } else
+            System.out.println(name + " OK");
+    }
+    
 }

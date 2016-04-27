@@ -37,12 +37,14 @@ public class MyWhatsServer {
             skel.rmdir("groups");
             skel.rmdir("files");
             skel.rmdir("mac");
+            skel.rmdir("temporary_files");
 
             skel.dir("log");
             skel.dir("msg");
             skel.dir("groups");
             skel.dir("files");
             skel.dir("mac");
+            skel.dir("temporary_files");
 
         } catch (IOException e) {
             System.err.println(e.getMessage());
@@ -80,9 +82,7 @@ public class MyWhatsServer {
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
-                Scanner scan = new Scanner(System.in);
-                System.out.println("Enter password: ");
-                String passwd = scan.next();
+                
                 
                 String auth = (String) in.readObject();
                 
