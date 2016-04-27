@@ -26,6 +26,7 @@ public class MyWhatsSkel {
     private UserCatalog userCat;
     private GroupCatalog groupCat;
     private Key key;
+    private EncryptFile encrypter;
 
     /**
      * construtor
@@ -37,6 +38,7 @@ public class MyWhatsSkel {
         this.key = createkey(pass);
         userCat = UserCatalog.getInstance(key);
         groupCat = GroupCatalog.getInstance(key);
+        encrypter = new EncryptFile(key);
     }
 
     /**
@@ -121,7 +123,7 @@ public class MyWhatsSkel {
             if (f.exists() && !f.isDirectory()) {
             	String escrever = senduser + "/" + msg + "/" + dt+"/";
                 // FileOutputStream output = new FileOutputStream(f);
-                encryptFile(escrever.getBytes(), f, key);
+                encrypter.encryptFile(escrever.getBytes(), f);
                 // temp code
                 // output.write(escrever.getBytes());
                 
@@ -129,9 +131,9 @@ public class MyWhatsSkel {
                 userCat.associateFile(alph.get(0), "msg/" + alph.get(0) + "_" + alph.get(1) + ".txt");
                 userCat.associateFile(alph.get(1), "msg/" + alph.get(0) + "_" + alph.get(1) + ".txt");
                 String escrever = senduser + "/" + msg + "/" + dt+"/";
-               	FileOutputStream output = new FileOutputStream(f);
-               	output.write(escrever.getBytes());
-                
+//               	FileOutputStream output = new FileOutputStream(f);
+//               	output.write(escrever.getBytes());
+                encrypter.encryptFile(escrever.getBytes(), f);
             }
             //fim de tentativa
             return true;
@@ -145,9 +147,9 @@ public class MyWhatsSkel {
             File f = new File("msg/" + recvuser + ".txt");
             System.out.println("file " + recvuser + ".txt criado");
                 String escrever = senduser + "/" + msg + "/" + dt+"/";
-               	FileOutputStream output = new FileOutputStream(f);
-               	output.write(escrever.getBytes());
-            
+//               	FileOutputStream output = new FileOutputStream(f);
+//               	output.write(escrever.getBytes());
+               	encrypter.encryptFile(escrever.getBytes(), f);
             return true;
         } else {
             return false;
@@ -164,7 +166,8 @@ public class MyWhatsSkel {
         try {
             File f = new File("files/" + name);
             byte[] content = (byte[]) is.readObject();
-            Files.write(f.toPath(), content);
+            FileOutputStream fos = new FileOutputStream(f);
+            //Files.write(f.toPath(), content);
         } catch (IOException e) {
             throw new IOException("receiveFile error");
         } catch (ClassNotFoundException i) {
@@ -384,17 +387,7 @@ public class MyWhatsSkel {
         return key;
     }
 
-    private void encryptFile(byte[] escrever, File f, Key key) throws IOException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException {
-        Cipher c = Cipher.getInstance("AES");
-        //como a cifra vai cifrar o ficheiro, o primeiro parametro tem de ser encrypt mode
-        c.init(Cipher.ENCRYPT_MODE, key);
-        FileOutputStream fos = new FileOutputStream(f);
-        CipherOutputStream cos = new CipherOutputStream(fos, c);
-
-        cos.close();
-        fos.close();
-        cos.write(escrever);
-    }
+    
 
     /**
      * add a user to a group
