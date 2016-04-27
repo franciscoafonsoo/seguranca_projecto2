@@ -120,8 +120,8 @@ public class MyWhatsSkel {
             //inicio de tentativa
             if (f.exists() && !f.isDirectory()) {
             	String escrever = senduser + "/" + msg + "/" + dt+"/";
-                FileOutputStream output = new FileOutputStream(f);
-                encryptFile(escrever.getBytes(), output, key);
+                // FileOutputStream output = new FileOutputStream(f);
+                encryptFile(escrever.getBytes(), f, key);
                 // temp code
                 // output.write(escrever.getBytes());
                 
@@ -384,17 +384,18 @@ public class MyWhatsSkel {
         return key;
     }
 
-    private void encryptFile(byte[] escrever, FileOutputStream fos, Key key) throws IOException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException {
+    private void encryptFile(byte[] escrever, File f, Key key) throws IOException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException {
         Cipher c = Cipher.getInstance("AES");
         //como a cifra vai cifrar o ficheiro, o primeiro parametro tem de ser encrypt mode
         c.init(Cipher.ENCRYPT_MODE, key);
+        FileOutputStream fos = new FileOutputStream(f);
         CipherOutputStream cos = new CipherOutputStream(fos, c);
+
+        cos.close();
+        fos.close();
         cos.write(escrever);
     }
 
-    
-    
-    
     /**
      * add a user to a group
      */
