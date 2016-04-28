@@ -13,9 +13,7 @@ import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.NoSuchPaddingException;
 
-/**
- * Created by sherby on 27-04-2016.
- */
+
 public class EncryptFile {
 
 	private Key key;

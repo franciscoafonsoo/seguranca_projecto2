@@ -401,7 +401,6 @@ public class MyWhatsSkel {
         return key;
     }
 
-    
 
     /**
      * add a user to a group

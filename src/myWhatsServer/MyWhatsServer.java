@@ -14,17 +14,46 @@ import javax.net.ssl.SSLServerSocketFactory;
 
 public class MyWhatsServer {
 
-    public static void main(String[] args) throws NumberFormatException, IOException, DirException {
+    public static void main(String[] args) throws NumberFormatException, IOException, DirException, NoSuchAlgorithmException, InvalidKeyException {
         System.out.println("servidor: main");
         MyWhatsServer server = new MyWhatsServer();
         server.startServer(Integer.parseInt(args[0]), args[1]);
     }
 
     @SuppressWarnings("resource")
-    private void startServer(int port, String pass) throws IOException, DirException {
+    private void startServer(int port, String pass) throws IOException, DirException, InvalidKeyException, NoSuchAlgorithmException {
         ServerSocket sSoc = null;
         MyWhatsSkel skel = new MyWhatsSkel(pass);
 
+        Console cnsl = null;
+        char[] passwd = cnsl.readPassword("Password MAC: ");
+        MacGenerator mac = new MacGenerator();
+        mac.setPassword(passwd);
+        File f = new File("logs/passwords.txt");
+        String filemac = "mac/passwords.txt";
+        File g = new File(filemac);
+
+
+        // verificacoes do mac do ficheiro de passwords.
+        if (g.exists()) {
+            if (!mac.checkMac(f, g)) {
+                System.out.print("comparação de mac falhou. exiting...");
+                System.exit(1);
+            } else {
+                int i = 0;
+                while (i != 1 && i != 2) {
+                    System.out.print("Criar novo MAC(1) ou Sair(2)?");
+                    Scanner scn = new Scanner(System.in);
+                    i = scn.nextInt();
+                    if (i == 1)
+                        mac.createMac(f, filemac);
+                    if (i == 2) {
+                        scn.close();
+                        System.exit(1);
+                    }
+                }
+            }
+        }
         try {
             System.setProperty("javax.net.ssl.keyStore", "SIServer.keystore");
             System.setProperty("javax.net.ssl.keyStorePassword", pass);

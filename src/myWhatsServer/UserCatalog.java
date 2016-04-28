@@ -1,12 +1,7 @@
 package myWhatsServer;
 
-import javax.crypto.KeyGenerator;
-import javax.crypto.Mac;
-import javax.crypto.SecretKey;
+
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -15,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
+
 
 public class UserCatalog {
 
@@ -28,10 +23,12 @@ public class UserCatalog {
     private Map<String, String> mapUsers;
     private Map<String, MyWhatsUser> mapObjs;
     private Key key;
+    private MacGenerator mac;
 
     private UserCatalog(Key key) throws IOException {
         mapUsers = new HashMap<String, String>();
         mapObjs = new HashMap<String, MyWhatsUser>();
+        mac = new MacGenerator();
         this.key = key;
         //loadState();
     }
@@ -65,7 +62,6 @@ public class UserCatalog {
 
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 
-        // Random rand = new Random();
         SecureRandom rand = new SecureRandom();
 
         int salt = rand.nextInt((999999 - 100000) + 1) + 100000;
@@ -81,10 +77,6 @@ public class UserCatalog {
         System.out.println(pwd);
 
         if (f.exists() && !f.isDirectory()) {
-
-        }
-
-        if (f.exists() && !f.isDirectory()) {
             try (PrintWriter output = new PrintWriter(new FileWriter(f, true))) {
 
                 output.printf("%s", user + ":" + salt + ":");
@@ -92,22 +84,23 @@ public class UserCatalog {
                 mapUsers.put(user, pwd);
                 MyWhatsUser utilizador = new MyWhatsUser(user, pwd, salt);
                 mapObjs.put(user, utilizador);
-                return true;
+                return mac.createMac(f, "mac/passwords.txt");
             } catch (IOException e) {
                 throw new IOException("receiveMessage error");
             }
-        } else {
+        } else if (!f.exists() && !f.isDirectory()) {
             try (PrintStream output = new PrintStream(f)) {
                 output.printf("%s", user + ":" + salt + ":");
                 output.printf("%s\r\n", pwd);
                 MyWhatsUser utilizador = new MyWhatsUser(user, pwd, salt);
                 mapObjs.put(user, utilizador);
                 output.close();
+                // TODO VERIFICAR SE AQUI TAMBEM LEVA RETURN TRUE OU NAO
+                return mac.createMac(f, "mac/passwords.txt");
             } catch (IOException e) {
                 throw new IOException("receiveMessage error");
             }
         }
-        
         return false;
     }
 
@@ -135,11 +128,7 @@ public class UserCatalog {
                 pwd = new String(messageDigest.digest());
                 System.out.println("pass guardada = " + mapUsers.get(user));
                 System.out.println("pass hashada no login = " + pwd);
-                if (mapUsers.get(user).equals(pwd)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return mapUsers.get(user).equals(pwd);
             } else {
                 register(user, pwd);
                 return true;
@@ -151,10 +140,7 @@ public class UserCatalog {
     }
 
     public boolean contactExists(String contact) {
-        if (mapUsers.containsKey(contact)) {
-            return true;
-        }
-        return false;
+        return mapUsers.containsKey(contact);
     }
 
     public void associateFile(String user, String file) {

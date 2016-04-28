@@ -1,8 +1,7 @@
 package myWhatsServer;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,18 +12,31 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+
 public class MacGenerator {
-	
-	private String pwd;
-	
-	public MacGenerator(String pwd) {
-		this.pwd = pwd;
+
+    private byte[] pwd;
+
+    //eu a bater com a cabeca na parede por causa de java. f-u-c-k java
+
+    // ignore, tou a deixar aqui só pa se rirem. no espaco de 1h, ja mudei esta classe de
+    // singleton, para ter dois construtores, um com password outro sem...
+    private boolean trigger = false;
+
+
+    public MacGenerator() {
+
 	}
-	
-	public String generateMac(File f) throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeyException {
-		try {
+
+    public void setPassword(char[] pass) {
+        this.pwd = new String(pass).getBytes();
+    }
+
+
+    private String generateMac(File f) throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeyException {
+        try {
             // get a key for the HMAC-SHA256 keyed-hashing algorithm using the password given by the method caller
-			SecretKey key = new SecretKeySpec(pwd.getBytes(), "HmacSHA256");
+            SecretKey key = new SecretKeySpec(pwd, "HmacSHA256");
             
             // create a MAC and initialize with the above key
             Mac mac = Mac.getInstance(key.getAlgorithm());
@@ -53,7 +65,38 @@ public class MacGenerator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
-	}
+        return "";
+    }
+
+    public boolean createMac(File f, String filename) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
+
+        File g = new File(filename);
+
+        if (!g.isDirectory()) try (PrintWriter output = new PrintWriter(new FileWriter(g, true))) {
+            if (!generateMac(f).equals(""))
+                output.write(generateMac(f));
+            output.close();
+            return true;
+        } catch (IOException e) {
+            throw new IOException("mac error");
+        }
+        return false;
+    }
+
+    public boolean checkMac(File f, File mac) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException, FileNotFoundException {
+
+        FileReader fr = new FileReader(mac);
+        BufferedReader bf = new BufferedReader(fr);
+
+        String previous = null;
+        try {
+            previous = bf.readLine();
+            bf.close();
+            fr.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return generateMac(f).equals(previous);
+    }
 
 }
