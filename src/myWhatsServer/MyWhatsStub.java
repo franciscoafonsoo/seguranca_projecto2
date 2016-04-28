@@ -66,14 +66,8 @@ public class MyWhatsStub {
                     out.writeObject(msg);
 
                     int count;
-                    byte[] bytes = new byte[1024];
-                    FileOutputStream fos = new FileOutputStream(new File("client/a.txt"));
-                    while((count = in.read(bytes)) > 0) {
-                    	fos.write(bytes);
-                    }
-                    fos.close();
-                    byte[] keyciphered = new byte[256];
-                    in.read(keyciphered);
+                    byte[] keyciphered = (byte[]) in.readObject();
+                    byte[] file = (byte[]) in.readObject();
                     Cipher c = Cipher.getInstance("RSA");
                     c.init(Cipher.UNWRAP_MODE, privateKey);
                     System.out.println(keyciphered);
@@ -82,7 +76,9 @@ public class MyWhatsStub {
                     Cipher cipher = Cipher.getInstance("AES");
                     cipher.init(Cipher.DECRYPT_MODE, chave);
                     CipherOutputStream cos = new CipherOutputStream(fichOS, cipher);
-                    FileInputStream fichIS = new FileInputStream("client/a.txt");
+                    File ficheir = new File("client/a.txt");
+                    Files.write(ficheir.toPath(), file);
+                    FileInputStream fichIS = new FileInputStream(ficheir);
                     int count2;
                     byte[] bufferFile = new byte[1024];
                     while((count2=fichIS.read(bufferFile))!=-1) {

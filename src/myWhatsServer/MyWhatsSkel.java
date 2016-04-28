@@ -325,7 +325,7 @@ public class MyWhatsSkel {
             java.util.Collections.sort(alph);
             File f = new File("files/" + alph.get(0) + "_" + alph.get(1) + "_" + fileName + ".txt");
 
-            Path path = Paths.get(f.getName());
+            Path path = Paths.get(f.getCanonicalPath());
             byte[] data = Files.readAllBytes(path);
 
 /*            FileInputStream fileIS = new FileInputStream(f);
@@ -338,7 +338,7 @@ public class MyWhatsSkel {
             // byte[] keybuffer = new byte[256];
             File keyFile = new File("chaves/" + fileName + ".key." + user);
 
-            Path pathkey = Paths.get(keyFile.getName());
+            Path pathkey = Paths.get(keyFile.getCanonicalPath());
             byte[] datakey = Files.readAllBytes(pathkey);
 
             // FileInputStream keyIS = new FileInputStream(keyFile);
