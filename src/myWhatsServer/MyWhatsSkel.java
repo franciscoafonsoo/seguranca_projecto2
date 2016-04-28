@@ -167,24 +167,29 @@ public class MyWhatsSkel {
 
     private void receiveFile(String fileName, String recvuser,String contact, ObjectInputStream is, Key key) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
 
-        try {
+        //try {
         	List<String> alph = new ArrayList<>();
             alph.add(contact);
             alph.add(recvuser);
             java.util.Collections.sort(alph);
             File f = new File("files/" + alph.get(0) + "_" + alph.get(1) + "_" + fileName + ".txt");
-            byte[] content = (byte[]) is.readObject();
-            encrypter.encryptFile(content, f);
+            int count;
+            File file = new File("temporary_files/unciphered.txt");
+            FileOutputStream fos = new FileOutputStream(file);
+            byte[] bytes = new byte[16*1024];
+            while((count = is.read(bytes)) > 0) {
+            	fos.write(bytes);
+            }
+            
+            encrypter.encryptFile(file, f);
             System.out.println("nome = " + fileName);
             System.out.println("contact = " + contact);
             
             
             //Files.write(f.toPath(), content);
-        } catch (IOException e) {
-            throw new IOException("receiveFile error");
-        } catch (ClassNotFoundException i) {
-            throw new ClassCastException("no ideia");
-        }
+//        } catch (IOException e) {
+//            throw new IOException("receiveFile error");
+//        }
     }
 
     /**
@@ -266,7 +271,7 @@ public class MyWhatsSkel {
 
     private void shareFile(String contact, String fileName, String user, ObjectOutputStream out, Key key) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
 
-        try {
+        //try {
 
         	List<String> alph = new ArrayList<>();
             alph.add(contact);
@@ -277,12 +282,17 @@ public class MyWhatsSkel {
             File tempFile = encrypter.decryptFile(f);
             
             System.out.println("enviar a cena");
-            byte[] fileAEnviar = Files.readAllBytes(Paths.get(tempFile.getAbsolutePath()));
-            System.out.println("file: " + fileAEnviar);
-            out.writeObject(fileAEnviar);
-        } catch (IOException e) {
-            throw new IOException("receiveFile error");
-        }
+            FileInputStream fis = new FileInputStream(tempFile);
+            byte[] bytes = new byte[1024];
+
+            int count;
+            while ((count = fis.read(bytes)) > 0) {
+                out.write(bytes, 0, count);
+            }
+            fis.close();
+//        } catch (IOException e) {
+//            throw new IOException("receiveFile error");
+//        }
     }
 
     /**

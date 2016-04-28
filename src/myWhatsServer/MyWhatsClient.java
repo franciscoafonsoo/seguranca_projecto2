@@ -91,12 +91,12 @@ public class MyWhatsClient {
 //                    }
 //                }
 //            }
-            if (argv.get(0).equals("-r")) {
-            	byte[] ficheiro = (byte[]) in.readObject();
-            	File f = new File("client/a.pdf");
-            	FileOutputStream fos = new FileOutputStream(f);
-            	fos.write(ficheiro);
-            }
+//            if (argv.get(0).equals("-r")) {
+//            	byte[] ficheiro = (byte[]) in.readObject();
+//            	File f = new File("client/a.pdf");
+//            	FileOutputStream fos = new FileOutputStream(f);
+//            	fos.write(ficheiro);
+//            }
         }
         out.close();
         in.close();

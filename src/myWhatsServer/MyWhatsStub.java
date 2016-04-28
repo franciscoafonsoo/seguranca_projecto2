@@ -39,17 +39,30 @@ public class MyWhatsStub {
                     else
                         msg = lista.get(0) + ":" + lista.get(1) + ":" + lista.get(2);
                     out.writeObject(msg);
-                    byte[] file = (byte[]) in.readObject();
-                    Files.write(Paths.get("client/a.pdf"), file);
+
+                    int count;
+                    byte[] bytes = new byte[16*1024];
+                    FileOutputStream fos = new FileOutputStream(new File("client/a.pdf"));
+                    while((count = in.read(bytes)) > 0) {
+                    	fos.write(bytes);
+                    }
+                    fos.close();
+                    
                     break;
                 case "-f":
-                    Path path = Paths.get(lista.get(2));
-                    byte[] data = Files.readAllBytes(path);
+                	FileInputStream fis = new FileInputStream(new File(lista.get(2)));
+                    byte[] readbytes = new byte[1024];
 
                     msg = lista.get(0) + ":" + lista.get(1) + ":" + lista.get(2);
-
                     out.writeObject(msg);
-                    out.writeObject(data);
+                    int size;
+                    while ((size = fis.read(readbytes)) > 0) {
+                        out.write(readbytes, 0, size);
+                    }
+                    
+                    
+
+                    
                     
                     break;
                 case "-m":
