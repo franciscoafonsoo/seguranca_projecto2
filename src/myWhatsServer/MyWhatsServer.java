@@ -140,6 +140,7 @@ public class MyWhatsServer {
                     if (!(pedido.equals("Nothing"))) skel.handle(pedido, user, in, out);
                 }
 
+                out.flush();
                 out.close();
                 in.close();
                 socket.close();

@@ -45,11 +45,15 @@ public class EncryptFile {
         byte[] byteArray = new byte[1024];
         int i = cis.read(byteArray);
         fos.write(byteArray);
-        while ((i=cis.read(byteArray))!= -1) {
+        System.out.println("i=" +i);
+        while (i!= -1) {
+        	System.out.println("i = " +i);
+        	i=cis.read(byteArray);
         	fos.write(byteArray);
 		}
         cis.close();
         fis.close();
+        fos.close();
         return tempFile;
 	}
 	

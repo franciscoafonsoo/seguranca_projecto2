@@ -77,6 +77,7 @@ public class MyWhatsSkel {
                 receiveFile(request[2],request[1], user, in, key);
                 break;
             case "-r":
+            	System.out.println("length = " + request.length);
                 if (request.length == 1) {
                     shareMessage(user, out, key);
                 } else if (request.length == 2) {
@@ -271,11 +272,14 @@ public class MyWhatsSkel {
             alph.add(contact);
             alph.add(user);
             java.util.Collections.sort(alph);
+            // fazer um read com o inputstream, cagar no codigo a chico
             File f = new File("files/" + alph.get(0) + "_" + alph.get(1) + "_" + fileName + ".txt");
             File tempFile = encrypter.decryptFile(f);
             
-            
-            out.writeObject(Files.readAllBytes(Paths.get(tempFile.getAbsolutePath())));
+            System.out.println("enviar a cena");
+            byte[] fileAEnviar = Files.readAllBytes(Paths.get(tempFile.getAbsolutePath()));
+            System.out.println("file: " + fileAEnviar);
+            out.writeObject(fileAEnviar);
         } catch (IOException e) {
             throw new IOException("receiveFile error");
         }
