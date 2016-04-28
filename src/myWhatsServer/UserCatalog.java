@@ -28,7 +28,7 @@ public class UserCatalog {
     private UserCatalog(Key key) throws IOException {
         mapUsers = new HashMap<String, String>();
         mapObjs = new HashMap<String, MyWhatsUser>();
-        mac = new MacGenerator();
+        mac = MacGenerator.getInstance();
         this.key = key;
         //loadState();
     }

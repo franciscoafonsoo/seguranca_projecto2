@@ -6,6 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.*;
 import java.util.Scanner;
+import java.util.logging.ConsoleHandler;
 
 import javax.crypto.NoSuchPaddingException;
 import javax.net.ServerSocketFactory;
@@ -25,17 +26,18 @@ public class MyWhatsServer {
         ServerSocket sSoc = null;
         MyWhatsSkel skel = new MyWhatsSkel(pass);
 
-        Console cnsl = null;
-        char[] passwd = cnsl.readPassword("Password MAC: ");
-        MacGenerator mac = new MacGenerator();
+        Scanner s = new Scanner(System.in);
+        System.out.println("Enter Password: ");
+        String passwd = s.next();
+        MacGenerator mac = MacGenerator.getInstance();
         mac.setPassword(passwd);
-        File f = new File("logs/passwords.txt");
+        File f = new File("log/passwords.txt");
         String filemac = "mac/passwords.txt";
         File g = new File(filemac);
 
 
         // verificacoes do mac do ficheiro de passwords.
-        if (g.exists()) {
+        if (g.exists() && f.exists()) {
             if (!mac.checkMac(f, g)) {
                 System.out.print("comparação de mac falhou. exiting...");
                 System.exit(1);

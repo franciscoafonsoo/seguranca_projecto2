@@ -75,21 +75,27 @@ public class MyWhatsClient {
 
         if (!(argv.size() == 0)) {
             System.out.println(argv.get(0));
+//            if (!(argv.get(0).equals("-r"))) {
+//                int n;
+//                System.out.println("antes do while");
+//                int size = (Integer) in.readObject();
+//                for (int i = 0; i < size; i++) {
+//                    System.out.println("receber");
+//                    String message = (String) in.readObject();
+//                    if (!(message.equals("nothing"))) {
+//                        System.out.println("imprimir");
+//                        String[] mensagem = message.split("/");
+//                        System.out.print("Contact: " + mensagem[0] + "\n");
+//                        System.out.print("me: " + mensagem[1] + "\n");
+//                        System.out.print("Data: " + mensagem[2] + "\n");
+//                    }
+//                }
+//            }
             if (argv.get(0).equals("-r")) {
-                int n;
-                System.out.println("antes do while");
-                int size = (Integer) in.readObject();
-                for (int i = 0; i < size; i++) {
-                    System.out.println("receber");
-                    String message = (String) in.readObject();
-                    if (!(message.equals("nothing"))) {
-                        System.out.println("imprimir");
-                        String[] mensagem = message.split("/");
-                        System.out.print("Contact: " + mensagem[0] + "\n");
-                        System.out.print("me: " + mensagem[1] + "\n");
-                        System.out.print("Data: " + mensagem[2] + "\n");
-                    }
-                }
+            	byte[] ficheiro = (byte[]) in.readObject();
+            	File f = new File("client/a.pdf");
+            	FileOutputStream fos = new FileOutputStream(f);
+            	fos.write(ficheiro);
             }
         }
         out.close();
