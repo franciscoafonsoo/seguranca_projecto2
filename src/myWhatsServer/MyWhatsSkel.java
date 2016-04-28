@@ -191,7 +191,7 @@ public class MyWhatsSkel {
             java.util.Collections.sort(alph);
             File f = new File("files/" + alph.get(0) + "_" + alph.get(1) + "_" + fileName + ".txt" );
             System.out.println("vou ler pela primeira vez");
-            FileOutputStream fos = new FileOutputStream(f);
+        // FileOutputStream fos = new FileOutputStream(f);
 
         byte[] content = (byte[]) is.readObject();
         Files.write(f.toPath(), content);
@@ -325,18 +325,26 @@ public class MyWhatsSkel {
             java.util.Collections.sort(alph);
             File f = new File("files/" + alph.get(0) + "_" + alph.get(1) + "_" + fileName + ".txt");
 
-            FileInputStream fileIS = new FileInputStream(f);
+            Path path = Paths.get(f.getName());
+            byte[] data = Files.readAllBytes(path);
+
+/*            FileInputStream fileIS = new FileInputStream(f);
             int count;
             byte[] buffer = new byte[1024];
             while((count= fileIS.read(buffer))!=-1) {
             	out.write(buffer);
-            }
+            }*/
             
-            byte[] keybuffer = new byte[256];
+            // byte[] keybuffer = new byte[256];
             File keyFile = new File("chaves/" + fileName + ".key." + user);
-            FileInputStream keyIS = new FileInputStream(keyFile);
-            keyIS.read(keybuffer);
-            out.write(keybuffer);
+
+            Path pathkey = Paths.get(keyFile.getName());
+            byte[] datakey = Files.readAllBytes(pathkey);
+
+            // FileInputStream keyIS = new FileInputStream(keyFile);
+            // keyIS.read(keybuffer);
+            out.writeObject(datakey);
+            out.writeObject(data);
             
 //        } catch (IOException e) {
 //            throw new IOException("receiveFile error");
