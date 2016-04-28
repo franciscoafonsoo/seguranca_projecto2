@@ -100,15 +100,18 @@ public class MyWhatsStub {
                 	FileInputStream fis = new FileInputStream(cipheredFile);
                     byte[] readbytes = new byte[1024];
 
+                    Path path = Paths.get("client/cifrado.txt");
+                    byte[] data = Files.readAllBytes(path);
+
                     msg = lista.get(0) + ":" + lista.get(1) + ":" + lista.get(2);
                     out.writeObject(msg);
-                    int size;
+                    out.writeObject(data);
+                    /*int size;
                     while ((size = fis.read(readbytes))!= -1) {
                     	System.out.println(size);
                         out.write(readbytes, 0, size);
-                    }
+                    }*/
                     out.flush();
-                    out.write("Sair".getBytes());
                     System.out.println("acabei de escrever");
                     Certificate cert = (Certificate) in.readObject();
                     Cipher ciph = Cipher.getInstance("RSA");

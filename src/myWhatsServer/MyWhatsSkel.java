@@ -71,7 +71,7 @@ public class MyWhatsSkel {
      * @throws CertificateException 
      */
 
-    public boolean handle(String pedido, String user, ObjectInputStream in, ObjectOutputStream out) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, KeyStoreException, CertificateException {
+    public boolean handle(String pedido, String user, ObjectInputStream in, ObjectOutputStream out) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, KeyStoreException, CertificateException, ClassNotFoundException {
 
         String[] request = pedido.split(":");
         String op = request[0];
@@ -180,7 +180,7 @@ public class MyWhatsSkel {
      * @throws CertificateException 
      */
 
-    private void receiveFile(String fileName, String recvuser,String contact, ObjectInputStream is, ObjectOutputStream out, Key key) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, KeyStoreException, CertificateException {
+    private void receiveFile(String fileName, String recvuser, String contact, ObjectInputStream is, ObjectOutputStream out, Key key) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, KeyStoreException, CertificateException, ClassNotFoundException {
 
         //try {
         	List<String> alph = new ArrayList<>();
@@ -190,13 +190,17 @@ public class MyWhatsSkel {
             File f = new File("files/" + alph.get(0) + "_" + alph.get(1) + "_" + fileName + ".txt" );
             System.out.println("vou ler pela primeira vez");
             FileOutputStream fos = new FileOutputStream(f);
-            int count;
+
+        byte[] content = (byte[]) is.readObject();
+        Files.write(f.toPath(), content);
+
+/*            int count;
             byte[] bytes = new byte[1024];
             while((count = is.read(bytes))!= -1) {
             	System.out.println(count);
             	fos.write(bytes);
             	
-            }
+            }*/
             
             System.out.println("ficheiro criado");
             
