@@ -76,6 +76,7 @@ public class MyWhatsStub {
                     in.read(keyciphered);
                     Cipher c = Cipher.getInstance("RSA");
                     c.init(Cipher.UNWRAP_MODE, privateKey);
+                    System.out.println(keyciphered);
                     Key chave = c.unwrap(keyciphered, "AES", Cipher.SECRET_KEY);
                     FileOutputStream fichOS = new FileOutputStream(new File("client/a.pdf"));
                     Cipher cipher = Cipher.getInstance("AES");
