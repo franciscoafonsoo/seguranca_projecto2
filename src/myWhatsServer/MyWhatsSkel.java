@@ -196,6 +196,7 @@ public class MyWhatsSkel {
             	System.out.println(count);
             	fos.write(bytes);
             }
+            
             System.out.println("ficheiro criado");
             
             FileInputStream kstore = new FileInputStream(new File("trusts/" + contact + ".truststore"));
