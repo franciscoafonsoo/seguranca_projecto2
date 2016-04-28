@@ -108,6 +108,7 @@ public class MyWhatsStub {
                         out.write(readbytes, 0, size);
                     }
                     out.flush();
+                    out.write("Sair".getBytes());
                     System.out.println("acabei de escrever");
                     Certificate cert = (Certificate) in.readObject();
                     Cipher ciph = Cipher.getInstance("RSA");

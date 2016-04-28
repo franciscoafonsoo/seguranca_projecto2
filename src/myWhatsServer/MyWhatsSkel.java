@@ -195,6 +195,7 @@ public class MyWhatsSkel {
             while((count = is.read(bytes))!= -1) {
             	System.out.println(count);
             	fos.write(bytes);
+            	
             }
             
             System.out.println("ficheiro criado");
