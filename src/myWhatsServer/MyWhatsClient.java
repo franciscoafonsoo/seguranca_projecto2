@@ -3,15 +3,23 @@ package myWhatsServer;
 
 import java.io.*;
 import java.net.Socket;
+import java.security.InvalidKeyException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.*;
 
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
 public class MyWhatsClient {
 
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException, BadPwdException, DirException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, BadPwdException, DirException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, KeyStoreException, CertificateException, UnrecoverableKeyException {
 
         // ip and port
         String[] server = args[1].split(":");
@@ -28,6 +36,9 @@ public class MyWhatsClient {
         Socket s = sf.createSocket(IP, port);
         ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
         ObjectInputStream in = new ObjectInputStream(s.getInputStream());
+        
+        KeyStore ks = KeyStore.getInstance("JKS");
+        ks.load(new FileInputStream(new File("pedro.keystore")), "pedroneves".toCharArray());
 
         // users and passwords. handle commands in the end
         String user = args[0];
@@ -70,7 +81,7 @@ public class MyWhatsClient {
         }
 
         System.out.println("handle");
-        MyWhatsStub.handle(argv, in, out);
+        MyWhatsStub.handle(argv, in, out, ks.getCertificate("pedro"), ks.getKey("pedro", "pedroneves".toCharArray()));
         System.out.println("fora do handle");
 
         if (!(argv.size() == 0)) {

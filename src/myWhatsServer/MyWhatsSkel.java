@@ -27,6 +27,7 @@ public class MyWhatsSkel {
     private GroupCatalog groupCat;
     private Key key;
     private EncryptFile encrypter;
+    private KeyStore keyStore;
 
     /**
      * construtor
@@ -57,14 +58,20 @@ public class MyWhatsSkel {
             return "NOK";
         }
     }
-
+    
+    public void setKeyStore(KeyStore keyStore) {
+    	this.keyStore = keyStore;
+    }
+    
     /**
      * registar um client "user"
      *
      * @throws IOException
+     * @throws KeyStoreException 
+     * @throws CertificateException 
      */
 
-    public boolean handle(String pedido, String user, ObjectInputStream in, ObjectOutputStream out) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException {
+    public boolean handle(String pedido, String user, ObjectInputStream in, ObjectOutputStream out) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, KeyStoreException, CertificateException {
 
         String[] request = pedido.split(":");
         String op = request[0];
@@ -73,8 +80,8 @@ public class MyWhatsSkel {
                 System.out.println("entrar no recvmessage");
                 return receiveMessage(request[2], user, request[1], key);
             case "-f":
-                receiveMessage(request[2], user, request[1], key);
-                receiveFile(request[2],request[1], user, in, key);
+                //receiveMessage(request[2], user, request[1], key);
+                receiveFile(request[2],request[1], user, in,out , key);
                 break;
             case "-r":
             	System.out.println("length = " + request.length);
@@ -101,8 +108,14 @@ public class MyWhatsSkel {
      * opcao -m
      * recebe mensagem e nome do ficheiro partilhado e a autorizacao de acesso ao client "user"
      * escreve para um ficheiro recvuser.txt na pasta msg
+     * @throws IOException 
+     * @throws KeyStoreException 
      */
 
+    public void sendCertificate(ObjectOutputStream out) throws KeyStoreException, IOException {
+    	out.writeObject(keyStore.getCertificate("SIServer"));
+    }
+    
     private boolean receiveMessage(String msg, String senduser, String recvuser, Key key) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException {
 
         System.out.println(userCat.contactExists(recvuser));
@@ -163,25 +176,59 @@ public class MyWhatsSkel {
      * @throws InvalidKeyException 
      * @throws NoSuchPaddingException 
      * @throws NoSuchAlgorithmException 
+     * @throws KeyStoreException 
+     * @throws CertificateException 
      */
 
-    private void receiveFile(String fileName, String recvuser,String contact, ObjectInputStream is, Key key) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
+    private void receiveFile(String fileName, String recvuser,String contact, ObjectInputStream is, ObjectOutputStream out, Key key) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, KeyStoreException, CertificateException {
 
         //try {
         	List<String> alph = new ArrayList<>();
             alph.add(contact);
             alph.add(recvuser);
             java.util.Collections.sort(alph);
-            File f = new File("files/" + alph.get(0) + "_" + alph.get(1) + "_" + fileName + ".txt");
+            File f = new File("files/" + alph.get(0) + "_" + alph.get(1) + "_" + fileName + ".txt" );
+            System.out.println("vou ler pela primeira vez");
+            FileOutputStream fos = new FileOutputStream(f);
             int count;
-            File file = new File("temporary_files/unciphered.txt");
-            FileOutputStream fos = new FileOutputStream(file);
-            byte[] bytes = new byte[16*1024];
-            while((count = is.read(bytes)) > 0) {
+            byte[] bytes = new byte[1024];
+            while((count = is.read(bytes))!= -1) {
+            	System.out.println(count);
             	fos.write(bytes);
             }
+            System.out.println("ficheiro criado");
             
-            encrypter.encryptFile(file, f);
+            FileInputStream kstore = new FileInputStream(new File("trusts/" + contact + ".truststore"));
+            KeyStore keyStore = KeyStore.getInstance("JKS");
+            if (recvuser == "pedro") {
+            	keyStore.load(kstore, "pedroneves".toCharArray());
+            }
+            else if (recvuser == "tiago") {
+            	keyStore.load(kstore, "tiagocalha".toCharArray());
+            }
+            else if (recvuser == "chico") {
+            	keyStore.load(kstore, "chicopires".toCharArray());
+            }
+            Certificate c = keyStore.getCertificate(contact);
+            out.writeObject(c);
+            System.out.println("vou ler!");
+            byte[] keyReceiver = new byte[256];
+            is.read(keyReceiver);
+            System.out.println("li a primeira");
+            byte[] keySender = new byte[256];
+            is.read(keySender);
+            System.out.println("li a segunda");
+            File ficheiroSender = new File("chaves/" +  fileName + ".key." + contact);
+            FileOutputStream ficheiroOS = new FileOutputStream(ficheiroSender);
+            ficheiroOS.write(keySender);
+            System.out.println("escrevi a primeira");
+            File ficheiroReceiver = new File("chaves/" + fileName + ".key." + recvuser);
+            FileOutputStream recvOS = new FileOutputStream(ficheiroReceiver);
+            recvOS.write(keyReceiver);
+            
+            
+            
+            
             System.out.println("nome = " + fileName);
             System.out.println("contact = " + contact);
             
@@ -277,19 +324,21 @@ public class MyWhatsSkel {
             alph.add(contact);
             alph.add(user);
             java.util.Collections.sort(alph);
-            // fazer um read com o inputstream, cagar no codigo a chico
             File f = new File("files/" + alph.get(0) + "_" + alph.get(1) + "_" + fileName + ".txt");
-            File tempFile = encrypter.decryptFile(f);
-            
-            System.out.println("enviar a cena");
-            FileInputStream fis = new FileInputStream(tempFile);
-            byte[] bytes = new byte[1024];
 
+            FileInputStream fileIS = new FileInputStream(f);
             int count;
-            while ((count = fis.read(bytes)) > 0) {
-                out.write(bytes, 0, count);
+            byte[] buffer = new byte[1024];
+            while((count= fileIS.read(buffer))!=-1) {
+            	out.write(buffer);
             }
-            fis.close();
+            
+            byte[] keybuffer = new byte[256];
+            File keyFile = new File("chaves/" + fileName + ".key." + user);
+            FileInputStream keyIS = new FileInputStream(keyFile);
+            keyIS.read(keybuffer);
+            out.write(keybuffer);
+            
 //        } catch (IOException e) {
 //            throw new IOException("receiveFile error");
 //        }

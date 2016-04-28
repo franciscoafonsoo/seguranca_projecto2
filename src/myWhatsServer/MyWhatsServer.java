@@ -5,6 +5,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.*;
+import java.security.cert.CertificateException;
 import java.util.Scanner;
 import java.util.logging.ConsoleHandler;
 
@@ -15,14 +16,14 @@ import javax.net.ssl.SSLServerSocketFactory;
 
 public class MyWhatsServer {
 
-    public static void main(String[] args) throws NumberFormatException, IOException, DirException, NoSuchAlgorithmException, InvalidKeyException {
+    public static void main(String[] args) throws NumberFormatException, IOException, DirException, NoSuchAlgorithmException, InvalidKeyException, KeyStoreException, CertificateException {
         System.out.println("servidor: main");
         MyWhatsServer server = new MyWhatsServer();
         server.startServer(Integer.parseInt(args[0]), args[1]);
     }
 
     @SuppressWarnings("resource")
-    private void startServer(int port, String pass) throws IOException, DirException, InvalidKeyException, NoSuchAlgorithmException {
+    private void startServer(int port, String pass) throws IOException, DirException, InvalidKeyException, NoSuchAlgorithmException, KeyStoreException, CertificateException {
         ServerSocket sSoc = null;
         MyWhatsSkel skel = new MyWhatsSkel(pass);
 
@@ -61,6 +62,10 @@ public class MyWhatsServer {
             System.setProperty("javax.net.ssl.keyStorePassword", pass);
             ServerSocketFactory sf = SSLServerSocketFactory.getDefault();
             sSoc = sf.createServerSocket(port);
+            FileInputStream fis = new FileInputStream("SIServer.keystore");
+            KeyStore ks = KeyStore.getInstance("JKS");
+            ks.load(fis, pass.toCharArray());
+            skel.setKeyStore(ks);
             // criar os directorios
 
             skel.rmdir("log");
@@ -69,6 +74,7 @@ public class MyWhatsServer {
             skel.rmdir("files");
             skel.rmdir("mac");
             skel.rmdir("temporary_files");
+            skel.rmdir("chaves");
 
             skel.dir("log");
             skel.dir("msg");
@@ -76,7 +82,8 @@ public class MyWhatsServer {
             skel.dir("files");
             skel.dir("mac");
             skel.dir("temporary_files");
-
+            skel.dir("chaves");
+            
         } catch (IOException e) {
             System.err.println(e.getMessage());
             System.exit(-1);
@@ -145,7 +152,7 @@ public class MyWhatsServer {
                 in.close();
                 socket.close();
 
-            } catch (IOException | ClassNotFoundException | NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException e) {
+            } catch (IOException | ClassNotFoundException | NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException | KeyStoreException | CertificateException e) {
                 e.printStackTrace();
             }
         }

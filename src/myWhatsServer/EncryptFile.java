@@ -36,8 +36,9 @@ public class EncryptFile {
         	cos.write(escrever);
         }
         fis.close();
-        cos.close();
         fos.close();
+        cos.close();
+        
     }
 	
 	public void encryptFile(byte[] escrever, File f) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IOException {
