@@ -16,6 +16,7 @@ import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -113,7 +114,7 @@ public class MyWhatsStub {
                     }*/
                     out.flush();
                     System.out.println("acabei de escrever");
-                    Certificate cert = (Certificate) in.readObject();
+                    X509Certificate cert = (X509Certificate) in.readObject();
                     Cipher ciph = Cipher.getInstance("RSA");
                     ciph.init(Cipher.WRAP_MODE, cert);
                     out.write(ciph.wrap(key));

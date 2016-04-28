@@ -10,6 +10,8 @@ import java.nio.file.Paths;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -204,18 +206,9 @@ public class MyWhatsSkel {
             
             System.out.println("ficheiro criado");
             
-            FileInputStream kstore = new FileInputStream(new File("trusts/" + contact + ".truststore"));
-            KeyStore keyStore = KeyStore.getInstance("JKS");
-            if (recvuser == "pedro") {
-            	keyStore.load(kstore, "pedroneves".toCharArray());
-            }
-            else if (recvuser == "tiago") {
-            	keyStore.load(kstore, "tiagocalha".toCharArray());
-            }
-            else if (recvuser == "chico") {
-            	keyStore.load(kstore, "chicopires".toCharArray());
-            }
-            Certificate c = keyStore.getCertificate(contact);
+            FileInputStream certIS = new FileInputStream(new File("certs/" + recvuser + ".cert"));
+            CertificateFactory fact = CertificateFactory.getInstance("X.509");
+            X509Certificate c = (X509Certificate) fact.generateCertificate(certIS);
             out.writeObject(c);
             System.out.println("vou ler!");
             byte[] keyReceiver = new byte[256];
