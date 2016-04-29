@@ -42,18 +42,22 @@ public class MyWhatsServer {
             if (!mac.checkMac(f, g)) {
                 System.out.print("comparação de mac falhou. exiting...");
                 System.exit(1);
-            } else {
-                int i = 0;
-                while (i != 1 && i != 2) {
-                    System.out.print("Criar novo MAC(1) ou Sair(2)?");
-                    Scanner scn = new Scanner(System.in);
-                    i = scn.nextInt();
-                    if (i == 1)
-                        mac.createMac(f, filemac);
-                    if (i == 2) {
-                        scn.close();
-                        System.exit(1);
-                    }
+            }
+            else {
+                System.out.print("MAC verificado");
+            }
+        }
+        else if (!g.exists() && f.exists()) {
+            int i = 0;
+            while (i != 1 && i != 2) {
+                System.out.print("Criar novo MAC(1) ou Sair(2)?");
+                Scanner scn = new Scanner(System.in);
+                i = scn.nextInt();
+                if (i == 1)
+                    mac.createMac(f, filemac);
+                if (i == 2) {
+                    scn.close();
+                    System.exit(1);
                 }
             }
         }
