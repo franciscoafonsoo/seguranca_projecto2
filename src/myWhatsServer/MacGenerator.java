@@ -59,7 +59,13 @@ public class MacGenerator {
             mac.update(data);
             // create a digest from the byte array
             byte[] digest = mac.doFinal();
-            return new String(digest);
+
+            String r = new String(digest);
+            
+            System.out.println("print mac");
+            System.out.println(r);
+
+            return r;
 
         } catch (NoSuchAlgorithmException e) {
             throw new NoSuchAlgorithmException("catalog - register");
@@ -83,14 +89,15 @@ public class MacGenerator {
 
         File g = new File(filename);
 
-        if (!g.isDirectory()) try (PrintWriter output = new PrintWriter(new FileWriter(g, true))) {
-            if (!generateMac(f).equals(""))
-                output.write(generateMac(f));
-            output.close();
-            return true;
-        } catch (IOException e) {
-            throw new IOException("mac error");
-        }
+        if (!g.isDirectory())
+            try (PrintWriter output = new PrintWriter(new FileWriter(g, true))) {
+                if (!generateMac(f).equals(""))
+                    output.write(generateMac(f));
+                output.close();
+                return true;
+            } catch (IOException e) {
+                throw new IOException("mac error");
+            }
         return false;
     }
 
