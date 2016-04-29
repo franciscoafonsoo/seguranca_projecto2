@@ -70,7 +70,7 @@ public class MyWhatsStub {
                     byte[] file = (byte[]) in.readObject();
                     Cipher c = Cipher.getInstance("RSA");
                     c.init(Cipher.UNWRAP_MODE, privateKey);
-                    System.out.println(keyciphered);
+                    System.out.println(keyciphered.length);
                     Key chave = c.unwrap(keyciphered, "AES", Cipher.SECRET_KEY);
                     FileOutputStream fichOS = new FileOutputStream(new File("client/a.pdf"));
                     Cipher cipher = Cipher.getInstance("AES");
@@ -84,6 +84,9 @@ public class MyWhatsStub {
                     while((count2=fichIS.read(bufferFile))!=-1) {
                     	cos.write(bufferFile);
                     }
+                    
+                    cos.close();
+                    fichOS.close();
                     
                     
                     break;

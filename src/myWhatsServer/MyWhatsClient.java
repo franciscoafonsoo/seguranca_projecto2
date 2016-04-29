@@ -38,7 +38,7 @@ public class MyWhatsClient {
         ObjectInputStream in = new ObjectInputStream(s.getInputStream());
         
         KeyStore ks = KeyStore.getInstance("JKS");
-        ks.load(new FileInputStream(new File("pedro.keystore")), "pedroneves".toCharArray());
+        ks.load(new FileInputStream(new File("tiago.keystore")), "tiagocalha".toCharArray());
 
         // users and passwords. handle commands in the end
         String user = args[0];
@@ -81,7 +81,7 @@ public class MyWhatsClient {
         }
 
         System.out.println("handle");
-        MyWhatsStub.handle(argv, in, out, ks.getCertificate("pedro"), ks.getKey("pedro", "pedroneves".toCharArray()));
+        MyWhatsStub.handle(argv, in, out, ks.getCertificate("tiago"), ks.getKey("tiago", "tiagocalha".toCharArray()));
         System.out.println("fora do handle");
 
         if (!(argv.size() == 0)) {
