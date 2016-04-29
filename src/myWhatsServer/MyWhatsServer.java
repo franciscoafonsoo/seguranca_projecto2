@@ -79,6 +79,7 @@ public class MyWhatsServer {
             skel.rmdir("mac");
             skel.rmdir("temporary_files");
             skel.rmdir("chaves");
+            skel.rmdir("signatures");
 
             skel.dir("log");
             skel.dir("msg");
@@ -87,6 +88,7 @@ public class MyWhatsServer {
             skel.dir("mac");
             skel.dir("temporary_files");
             skel.dir("chaves");
+            skel.dir("signatures");
             
         } catch (IOException e) {
             System.err.println(e.getMessage());

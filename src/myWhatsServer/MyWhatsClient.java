@@ -7,6 +7,7 @@ import java.security.InvalidKeyException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
 import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
@@ -38,9 +39,7 @@ public class MyWhatsClient {
         ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
         ObjectInputStream in = new ObjectInputStream(s.getInputStream());
         
-        KeyStore ks = KeyStore.getInstance("JKS");
-        ks.load(new FileInputStream(new File("tiago.keystore")), "tiagocalha".toCharArray());
-
+        
         // users and passwords. handle commands in the end
         String user = args[0];
         System.out.println("inicio");
@@ -81,8 +80,24 @@ public class MyWhatsClient {
             scan.close();
         }
 
+        
+        KeyStore ks = KeyStore.getInstance("JKS");
+        String[] userS = user.split(":");
+        if (userS[0].equals("tiago")) {
+        	ks.load(new FileInputStream(new File(userS[0] +".keystore")), "tiagocalha".toCharArray());
+        	MyWhatsStub.handle(argv, in, out, ks.getCertificate(userS[0]), (PrivateKey) ks.getKey(userS[0], "tiagocalha".toCharArray()));
+        }
+        else if (userS[0].equals("pedro")){
+        	ks.load(new FileInputStream(new File(userS[0] +".keystore")), "pedroneves".toCharArray());
+        	MyWhatsStub.handle(argv, in, out, ks.getCertificate(userS[0]), (PrivateKey) ks.getKey(userS[0], "pedroneves".toCharArray()));
+        }
+        else if (userS[0].equals("chico")) {
+        	ks.load(new FileInputStream(new File(userS[0] +".keystore")), "chicopires".toCharArray());
+        	MyWhatsStub.handle(argv, in, out, ks.getCertificate(userS[0]), (PrivateKey) ks.getKey(userS[0], "chicopires".toCharArray()));
+        }
+
         System.out.println("handle");
-        MyWhatsStub.handle(argv, in, out, ks.getCertificate("tiago"), ks.getKey("tiago", "tiagocalha".toCharArray()));
+        
         System.out.println("fora do handle");
 
         if (!(argv.size() == 0)) {

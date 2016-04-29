@@ -46,7 +46,7 @@ public class MyWhatsStub {
      */
 
     // TODO mau formato a ser impresso no ficheiro ( check SKEL )
-    public static void handle(List<String> lista, ObjectInputStream in, ObjectOutputStream out, Certificate own, Key privateKey) throws IOException, ClassNotFoundException, DirException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, SignatureException {
+    public static void handle(List<String> lista, ObjectInputStream in, ObjectOutputStream out, Certificate own, PrivateKey privateKey) throws IOException, ClassNotFoundException, DirException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, SignatureException {
 
         String msg;
 
@@ -134,7 +134,7 @@ public class MyWhatsStub {
                           
 
                     Signature s = Signature.getInstance("SHA256withRSA");
-                    s.initSign((PrivateKey) privateKey);
+                    s.initSign(privateKey);
                     Path pathsign = Paths.get(originalFile.getCanonicalPath());
                     byte[] datasign = Files.readAllBytes(pathsign);
                     s.update(datasign);
