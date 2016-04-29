@@ -66,6 +66,9 @@ public class MyWhatsStub {
                     out.writeObject(msg);
 
                     int count;
+                    
+                    //receber a assinatura e mais magia ***
+                    
                     byte[] keyciphered = (byte[]) in.readObject();
                     byte[] file = (byte[]) in.readObject();
                     Cipher c = Cipher.getInstance("RSA");
@@ -100,12 +103,16 @@ public class MyWhatsStub {
                 	encrypter.encryptFile(originalFile, cipheredFile);
                 	FileInputStream fis = new FileInputStream(cipheredFile);
                     byte[] readbytes = new byte[1024];
+                    
 
                     Path path = Paths.get("client/cifrado.txt");
                     byte[] data = Files.readAllBytes(path);
 
                     msg = lista.get(0) + ":" + lista.get(1) + ":" + lista.get(2);
                     out.writeObject(msg);
+                    
+                    //fazer aqui magia negra para assinaturas, assinar o ficheiro cifrado, nao vale a pena fazer em claro
+                    
                     out.writeObject(data);
                     /*int size;
                     while ((size = fis.read(readbytes))!= -1) {
