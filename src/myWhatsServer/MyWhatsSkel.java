@@ -92,7 +92,7 @@ public class MyWhatsSkel {
                 } else if (request.length == 2) {
                     shareContact(request[1], user, out);
                 } else {
-                    shareFile(request[1], request[2], user, out, key);
+                    shareFile(request[1], request[2], user, out,in, key);
                 }
                 break;
             case "-a":
@@ -193,6 +193,10 @@ public class MyWhatsSkel {
             System.out.println("vou ler pela primeira vez");
         // FileOutputStream fos = new FileOutputStream(f);
 
+        byte[] signature = (byte[]) is.readObject();
+        Files.write(Paths.get("signatures/" + fileName + "." + contact), signature);
+            
+            
         byte[] content = (byte[]) is.readObject();
         Files.write(f.toPath(), content);
 
@@ -313,9 +317,10 @@ public class MyWhatsSkel {
      * @throws NoSuchPaddingException 
      * @throws NoSuchAlgorithmException 
      * @throws InvalidKeyException 
+     * @throws ClassNotFoundException 
      */
 
-    private void shareFile(String contact, String fileName, String user, ObjectOutputStream out, Key key) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
+    private void shareFile(String contact, String fileName, String user, ObjectOutputStream out,ObjectInputStream in, Key key) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, ClassNotFoundException {
 
         //try {
 
@@ -336,6 +341,11 @@ public class MyWhatsSkel {
             }*/
             
             // byte[] keybuffer = new byte[256];
+            
+            byte[] signature = Files.readAllBytes(Paths.get("signatures/" + fileName + "." + "contact"));
+            out.writeObject(signature);
+            
+            
             File keyFile = new File("chaves/" + fileName + ".key." + user);
 
             Path pathkey = Paths.get(keyFile.getCanonicalPath());

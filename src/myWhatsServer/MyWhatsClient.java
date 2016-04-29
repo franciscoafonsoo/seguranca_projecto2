@@ -7,6 +7,7 @@ import java.security.InvalidKeyException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.*;
@@ -19,7 +20,7 @@ import javax.net.ssl.SSLSocketFactory;
 public class MyWhatsClient {
 
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException, BadPwdException, DirException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, KeyStoreException, CertificateException, UnrecoverableKeyException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, BadPwdException, DirException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, KeyStoreException, CertificateException, UnrecoverableKeyException, SignatureException {
 
         // ip and port
         String[] server = args[1].split(":");

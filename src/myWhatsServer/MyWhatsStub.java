@@ -12,7 +12,10 @@ import java.security.Key;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
 import java.security.SecureRandom;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
@@ -39,10 +42,11 @@ public class MyWhatsStub {
      * @throws NoSuchPaddingException 
      * @throws InvalidKeyException 
      * @throws IllegalBlockSizeException 
+     * @throws SignatureException 
      */
 
     // TODO mau formato a ser impresso no ficheiro ( check SKEL )
-    public static void handle(List<String> lista, ObjectInputStream in, ObjectOutputStream out, Certificate own, Key privateKey) throws IOException, ClassNotFoundException, DirException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException {
+    public static void handle(List<String> lista, ObjectInputStream in, ObjectOutputStream out, Certificate own, Key privateKey) throws IOException, ClassNotFoundException, DirException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, SignatureException {
 
         String msg;
 
@@ -111,7 +115,18 @@ public class MyWhatsStub {
                     msg = lista.get(0) + ":" + lista.get(1) + ":" + lista.get(2);
                     out.writeObject(msg);
                     
-                    //fazer aqui magia negra para assinaturas, assinar o ficheiro cifrado, nao vale a pena fazer em claro
+                    
+
+                          
+
+                    Signature s = Signature.getInstance("SHA256withRSA");
+                    s.initSign((PrivateKey) privateKey);
+                    Path pathsign = Paths.get(originalFile.getCanonicalPath());
+                    byte[] datasign = Files.readAllBytes(pathsign);
+                    s.update(datasign);
+                    byte[] signature = s.sign();
+                    
+                    out.writeObject(signature);
                     
                     out.writeObject(data);
                     /*int size;
