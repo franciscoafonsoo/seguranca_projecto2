@@ -73,13 +73,22 @@ public class MyWhatsStub {
                     
                     //receber a assinatura e mais magia ***
                     
+                    byte[] signatureReceived = (byte[]) in.readObject();
+                    Signature sig = Signature.getInstance("SHA256withRSA");
+                    X509Certificate certificado = (X509Certificate) in.readObject();
+                    sig.initVerify(certificado);
+                    
+                    
+                    
+                    
                     byte[] keyciphered = (byte[]) in.readObject();
                     byte[] file = (byte[]) in.readObject();
                     Cipher c = Cipher.getInstance("RSA");
                     c.init(Cipher.UNWRAP_MODE, privateKey);
                     System.out.println(keyciphered.length);
                     Key chave = c.unwrap(keyciphered, "AES", Cipher.SECRET_KEY);
-                    FileOutputStream fichOS = new FileOutputStream(new File("client/a.pdf"));
+                    File original = new File("client/a.pdf");
+                    FileOutputStream fichOS = new FileOutputStream(original);
                     Cipher cipher = Cipher.getInstance("AES");
                     cipher.init(Cipher.DECRYPT_MODE, chave);
                     CipherOutputStream cos = new CipherOutputStream(fichOS, cipher);
@@ -94,6 +103,11 @@ public class MyWhatsStub {
                     
                     cos.close();
                     fichOS.close();
+                    
+                    sig.update(Files.readAllBytes(Paths.get("client/a.pdf")));
+                    if (!sig.verify(signatureReceived)) {
+                    	System.out.println("assinatura falhada");
+                    }
                     
                     
                     break;

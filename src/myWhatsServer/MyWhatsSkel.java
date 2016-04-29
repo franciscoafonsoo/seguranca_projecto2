@@ -318,9 +318,10 @@ public class MyWhatsSkel {
      * @throws NoSuchAlgorithmException 
      * @throws InvalidKeyException 
      * @throws ClassNotFoundException 
+     * @throws CertificateException 
      */
 
-    private void shareFile(String contact, String fileName, String user, ObjectOutputStream out,ObjectInputStream in, Key key) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, ClassNotFoundException {
+    private void shareFile(String contact, String fileName, String user, ObjectOutputStream out,ObjectInputStream in, Key key) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, ClassNotFoundException, CertificateException {
 
         //try {
 
@@ -342,8 +343,13 @@ public class MyWhatsSkel {
             
             // byte[] keybuffer = new byte[256];
             
-            byte[] signature = Files.readAllBytes(Paths.get("signatures/" + fileName + "." + "contact"));
+            byte[] signature = Files.readAllBytes(Paths.get("signatures/" + fileName + "." + contact));
             out.writeObject(signature);
+            
+            FileInputStream certIS = new FileInputStream(new File("certs/" + contact + ".cert"));
+            CertificateFactory fact = CertificateFactory.getInstance("X.509");
+            X509Certificate c = (X509Certificate) fact.generateCertificate(certIS);
+            out.writeObject(c);
             
             
             File keyFile = new File("chaves/" + fileName + ".key." + user);
