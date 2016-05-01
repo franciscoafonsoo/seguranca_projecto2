@@ -2,14 +2,11 @@ package myWhatsServer;
 
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.Mac;
-import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 
@@ -61,8 +58,7 @@ public class MacGenerator {
             byte[] digest = mac.doFinal();
 
             String r = new String(digest);
-            
-            System.out.println("print mac");
+
             System.out.println(r);
 
             return r;
@@ -87,34 +83,71 @@ public class MacGenerator {
 
     public boolean createMac(File f, String filename) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
 
+        Path p = Paths.get(filename);
+        File a = new File(filename);
+        
+        try {
+        	if(a.exists())
+        		Files.delete(p);
+        } catch (NoSuchFileException x) {
+            System.err.format("%s: no such" + " file or directory%n", p);
+        } catch (DirectoryNotEmptyException x) {
+            System.err.format("%s not empty%n", p);
+        } catch (IOException x) {
+            // File permission problems are caught here.
+            System.err.println(x);
+        }
+
         File g = new File(filename);
 
         if (!g.isDirectory())
             try (PrintWriter output = new PrintWriter(new FileWriter(g, true))) {
                 if (!generateMac(f).equals(""))
-                    output.write(generateMac(f));
+                    output.print(generateMac(f));
+                output.flush();
                 output.close();
                 return true;
             } catch (IOException e) {
                 throw new IOException("mac error");
             }
+
         return false;
     }
 
     public boolean checkMac(File f, File mac) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException, FileNotFoundException {
 
-        FileReader fr = new FileReader(mac);
-        BufferedReader bf = new BufferedReader(fr);
-
         String previous = null;
+
         try {
+            byte[] encoded = Files.readAllBytes(Paths.get(mac.getAbsolutePath()));
+            previous = new String(encoded);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // String previous = null;
+/*        try {
             previous = bf.readLine();
             bf.close();
             fr.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         return generateMac(f).equals(previous);
+    }
+
+    public void dir(String name) throws DirException {
+        File log = new File(name);
+
+        if (!(log.exists() && log.isDirectory())) {
+            boolean feito = log.mkdirs();
+            if (feito) {
+                System.out.println(name + " CREATED");
+            } else {
+                throw new DirException("verificar permissoes, etc.");
+            }
+        } else
+            System.out.println(name + " OK");
     }
 
 }

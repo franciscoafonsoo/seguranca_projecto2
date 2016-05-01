@@ -84,6 +84,8 @@ public class UserCatalog {
                 mapUsers.put(user, pwd);
                 MyWhatsUser utilizador = new MyWhatsUser(user, pwd, salt);
                 mapObjs.put(user, utilizador);
+                output.flush();
+                output.close();
                 return mac.createMac(f, "mac/passwords.txt");
             } catch (IOException e) {
                 throw new IOException("receiveMessage error");
@@ -94,6 +96,7 @@ public class UserCatalog {
                 output.printf("%s\r\n", pwd);
                 MyWhatsUser utilizador = new MyWhatsUser(user, pwd, salt);
                 mapObjs.put(user, utilizador);
+                output.flush();
                 output.close();
                 // TODO VERIFICAR SE AQUI TAMBEM LEVA RETURN TRUE OU NAO
                 return mac.createMac(f, "mac/passwords.txt");

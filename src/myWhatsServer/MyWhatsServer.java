@@ -34,8 +34,7 @@ public class MyWhatsServer {
         mac.setPassword(passwd);
         File f = new File("log/passwords.txt");
         String filemac = "mac/passwords.txt";
-        File g = new File(filemac);
-
+        File g = new File("mac/passwords.txt");
 
         // verificacoes do mac do ficheiro de passwords.
         if (g.exists() && f.exists()) {
@@ -54,6 +53,7 @@ public class MyWhatsServer {
                 Scanner scn = new Scanner(System.in);
                 i = scn.nextInt();
                 if (i == 1)
+                    mac.dir("mac");
                     mac.createMac(f, filemac);
                 if (i == 2) {
                     scn.close();
@@ -61,6 +61,10 @@ public class MyWhatsServer {
                 }
             }
         }
+        else if (!f.exists()) {
+            System.out.println("ficheiro de passwords vai ser criado apos o primeiro registro");
+        }
+
         try {
             System.setProperty("javax.net.ssl.keyStore", "SIServer.keystore");
             System.setProperty("javax.net.ssl.keyStorePassword", pass);
@@ -72,20 +76,22 @@ public class MyWhatsServer {
             skel.setKeyStore(ks);
             // criar os directorios
 
-            skel.rmdir("log");
             skel.rmdir("msg");
             skel.rmdir("groups");
             skel.rmdir("files");
-            skel.rmdir("mac");
             skel.rmdir("temporary_files");
             skel.rmdir("chaves");
             skel.rmdir("signatures");
 
-            skel.dir("log");
+            if (!new File("log").isDirectory()) {
+                skel.dir("log");
+            }
+            if (!new File("mac").isDirectory()) {
+                skel.dir("mac");
+            }
             skel.dir("msg");
             skel.dir("groups");
             skel.dir("files");
-            skel.dir("mac");
             skel.dir("temporary_files");
             skel.dir("chaves");
             skel.dir("signatures");
