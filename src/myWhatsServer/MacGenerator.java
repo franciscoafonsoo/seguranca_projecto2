@@ -41,8 +41,6 @@ public class MacGenerator {
     private String generateMac(File f) throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeyException {
         try {
             // get a key for the HMAC-SHA256 keyed-hashing algorithm using the password given by the method caller
-            
-        	System.out.println(pwd);
         	
         	SecretKeySpec key = new SecretKeySpec(pwd, "HmacSHA256");
             
@@ -58,8 +56,6 @@ public class MacGenerator {
             byte[] digest = mac.doFinal();
 
             String r = new String(digest);
-
-            System.out.println(r);
 
             return r;
 

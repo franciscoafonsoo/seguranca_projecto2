@@ -39,17 +39,17 @@ public class MyWhatsServer {
         // verificacoes do mac do ficheiro de passwords.
         if (g.exists() && f.exists()) {
             if (!mac.checkMac(f, g)) {
-                System.out.print("comparação de mac falhou. exiting...");
+                System.out.println("comparação de mac falhou. exiting...");
                 System.exit(1);
             }
             else {
-                System.out.print("MAC verificado");
+                System.out.println("MAC verificado");
             }
         }
         else if (!g.exists() && f.exists()) {
             int i = 0;
             while (i != 1 && i != 2) {
-                System.out.print("Criar novo MAC(1) ou Sair(2)?");
+                System.out.println("Criar novo MAC(1) ou Sair(2)?");
                 Scanner scn = new Scanner(System.in);
                 i = scn.nextInt();
                 if (i == 1)
