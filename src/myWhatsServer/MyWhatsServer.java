@@ -53,7 +53,7 @@ public class MyWhatsServer {
                 Scanner scn = new Scanner(System.in);
                 i = scn.nextInt();
                 if (i == 1)
-                    mac.dir("mac");
+                    skel.dir("mac");
                     mac.createMac(f, filemac);
                 if (i == 2) {
                     scn.close();
