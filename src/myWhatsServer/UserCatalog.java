@@ -123,25 +123,48 @@ public class UserCatalog {
         try {
             System.out.println("login");
             System.out.println("user = " + user);
-            if (mapUsers.containsKey(user)) {
-            	MyWhatsUser userA = mapObjs.get(user);
-            	int salt = userA.getSalt();
-            	pwd = pwd + ":" +  salt;
-            	MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-            	messageDigest.update(pwd.getBytes());
-                // pwd passa a ser string da hash para comparacao
-                pwd = new String(messageDigest.digest());
-                System.out.println("pass guardada = " + mapUsers.get(user));
-                System.out.println("pass hashada no login = " + pwd);
-                return mapUsers.get(user).equals(pwd);
-            } else {
-                register(user, pwd);
-                return true;
-            }
+//            if (mapUsers.containsKey(user)) {
+//            	MyWhatsUser userA = mapObjs.get(user);
+//            	int salt = userA.getSalt();
+//            	pwd = pwd + ":" +  salt;
+//            	MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+//            	messageDigest.update(pwd.getBytes());
+//                // pwd passa a ser string da hash para comparacao
+//                pwd = new String(messageDigest.digest());
+//                System.out.println("pass guardada = " + mapUsers.get(user));
+//                System.out.println("pass hashada no login = " + pwd);
+//                return mapUsers.get(user).equals(pwd);
+//            } else {
+//                register(user, pwd);
+//                return true;
+//            }
 
-            Path filePath = new File("log/passwords.txt").toPath();
+            File password = new File("log/passwords.txt");
+            Path filePath = password.toPath();
             List<String> stringList = Files.readAllLines(filePath);
             String[] stringArray = stringList.toArray(new String[]{});
+            int i =0;
+            boolean found = false;
+            while (i<stringArray.length && !(found)) {
+            	String line = stringArray[i];
+            	String[] stuff = line.split(":");
+            	if (user.equals(stuff[0])) {
+            		String check = pwd + ":" + stuff[1];
+            		MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+                	messageDigest.update(pwd.getBytes());
+                    // pwd passa a ser string da hash para comparacao
+                    String newpwd = new String(messageDigest.digest());
+                    if (newpwd.equals(stuff[2])) {
+                    	return true;
+                    }
+                    else {
+                    	return false;
+                    }
+            		
+            	}
+            }
+            register(user, pwd);
+            return true;
 
 
         } catch (FileNotFoundException e) {
