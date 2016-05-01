@@ -11,6 +11,7 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -142,9 +143,21 @@ public class UserCatalog {
 //            }
 
             File password = new File("log/passwords.txt");
-            Path filePath = password.toPath();
-            List<String> stringList = Files.readAllLines(filePath);
-            String[] stringArray = stringList.toArray(new String[]{});
+            // Path filePath = password.toPath();
+
+            FileReader fileReader = new FileReader(password);
+            BufferedReader br = new BufferedReader(fileReader);
+            String linee;
+            String[] stringArray = null;
+            // if no more lines the readLine() returns null
+            int j = 0;
+            while ((linee = br.readLine()) != null) {
+                stringArray[j] = linee;
+                j = j + 1;
+            }
+
+            // List<String> stringList = Files.readAllLines(filePath);
+            // String[] stringArray = stringList.toArray(new String[]{});
             int i =0;
             boolean found = false;
             while (i<stringArray.length && !(found)) {
