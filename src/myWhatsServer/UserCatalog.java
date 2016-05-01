@@ -2,6 +2,8 @@ package myWhatsServer;
 
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.SecureRandom;
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -136,6 +138,11 @@ public class UserCatalog {
                 register(user, pwd);
                 return true;
             }
+
+            Path filePath = new File("log/passwords.txt").toPath();
+            List<String> stringList = Files.readAllLines(filePath);
+            String[] stringArray = stringList.toArray(new String[]{});
+
 
         } catch (FileNotFoundException e) {
             throw new FileNotFoundException("ficheiro nao encontrado");
