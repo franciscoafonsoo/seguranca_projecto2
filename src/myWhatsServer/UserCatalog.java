@@ -2,7 +2,9 @@ package myWhatsServer;
 
 
 import java.io.*;
+import java.nio.charset.MalformedInputException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.security.SecureRandom;
 import java.security.InvalidKeyException;
@@ -148,6 +150,7 @@ public class UserCatalog {
             while (i<stringArray.length && !(found)) {
             	String line = stringArray[i];
             	String[] stuff = line.split(":");
+            	System.out.println(user + "!!!!!!!" + stuff[0]);
             	if (user.equals(stuff[0])) {
             		String check = pwd + ":" + stuff[1];
             		MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
@@ -170,6 +173,36 @@ public class UserCatalog {
         } catch (FileNotFoundException e) {
             throw new FileNotFoundException("ficheiro nao encontrado");
         }
+        
+        catch (NoSuchFileException e) {
+        	register(user, pwd);
+        	return true;
+        }
+        
+        catch (MalformedInputException e) {
+        	File password = new File("log/passwords.txt");
+        	BufferedReader brTest = new BufferedReader(new FileReader(password));
+        	String line = brTest.readLine();
+        	String[] stuff = line.split(":");
+        	System.out.println(user + "!!!!!!" + stuff[0]);
+        	if (user.equals(stuff[0])) {
+        		String check = pwd + ":" + stuff[1];
+        		MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            	messageDigest.update(pwd.getBytes());
+                // pwd passa a ser string da hash para comparacao
+                String newpwd = new String(messageDigest.digest());
+                System.out.println(newpwd + "!!!!!" + stuff[2]);
+                if (newpwd.equals(stuff[2])) {
+                	return true;
+                }
+                else {
+                	return false;
+                }
+        	}
+        	register(user, pwd);
+        	return true;
+        }
+        
     }
 
     public boolean contactExists(String contact) {
