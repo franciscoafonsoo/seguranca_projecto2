@@ -22,6 +22,7 @@ public class MacGenerator {
 
     private static MacGenerator INSTANCE = null;
 
+    
     private MacGenerator() {
 	}
 

@@ -98,7 +98,8 @@ public class UserCatalog {
         } else if (!f.exists() && !f.isDirectory()) {
             try (PrintStream output = new PrintStream(f)) {
                 output.printf("%s", user + ":" + salt + ":");
-                output.printf("%s\r\n", pwd);
+                output.printf("%s", pwd);
+                output.println();
                 MyWhatsUser utilizador = new MyWhatsUser(user, pwd, salt);
                 mapObjs.put(user, utilizador);
                 output.flush();
@@ -126,65 +127,69 @@ public class UserCatalog {
         try {
             System.out.println("login");
             System.out.println("user = " + user);
-//            if (mapUsers.containsKey(user)) {
-//            	MyWhatsUser userA = mapObjs.get(user);
-//            	int salt = userA.getSalt();
-//            	pwd = pwd + ":" +  salt;
-//            	MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-//            	messageDigest.update(pwd.getBytes());
-//                // pwd passa a ser string da hash para comparacao
-//                pwd = new String(messageDigest.digest());
-//                System.out.println("pass guardada = " + mapUsers.get(user));
-//                System.out.println("pass hashada no login = " + pwd);
-//                return mapUsers.get(user).equals(pwd);
-//            } else {
-//                register(user, pwd);
-//                return true;
+            if (mapUsers.containsKey(user)) {
+            	MyWhatsUser userA = mapObjs.get(user);
+            	int salt = userA.getSalt();
+            	pwd = pwd + ":" +  salt;
+            	MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            	messageDigest.update(pwd.getBytes());
+                // pwd passa a ser string da hash para comparacao
+                pwd = new String(messageDigest.digest());
+                System.out.println("pass guardada = " + mapUsers.get(user));
+                System.out.println("pass hashada no login = " + pwd);
+                return mapUsers.get(user).equals(pwd);
+            } else {
+                register(user, pwd);
+                return true;
+            }
+
+//            File password = new File("log/passwords.txt");
+//            // Path filePath = password.toPath();
+//
+//            FileReader fileReader = new FileReader(password);
+//            BufferedReader br = new BufferedReader(fileReader);
+//            String linee;
+//            String[] stringArray = new String[100];
+//            // if no more lines the readLine() returns null
+//            int j = 0;
+//            while ((linee = br.readLine()) != null) {
+//                stringArray[j] = linee;
+//                j = j + 1;
 //            }
-
-            File password = new File("log/passwords.txt");
-            // Path filePath = password.toPath();
-
-            FileReader fileReader = new FileReader(password);
-            BufferedReader br = new BufferedReader(fileReader);
-            String linee;
-            String[] stringArray = null;
-            // if no more lines the readLine() returns null
-            int j = 0;
-            while ((linee = br.readLine()) != null) {
-                stringArray[j] = linee;
-                j = j + 1;
-            }
-
-            // List<String> stringList = Files.readAllLines(filePath);
-            // String[] stringArray = stringList.toArray(new String[]{});
-            int i =0;
-            boolean found = false;
-            while (i<stringArray.length && !(found)) {
-            	String line = stringArray[i];
-            	String[] stuff = line.split(":");
-            	System.out.println(user + "!!!!!!!" + stuff[0]);
-            	if (user.equals(stuff[0])) {
-            		String check = pwd + ":" + stuff[1];
-            		MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-                	messageDigest.update(pwd.getBytes());
-                    // pwd passa a ser string da hash para comparacao
-                    String newpwd = new String(messageDigest.digest());
-                    if (newpwd.equals(stuff[2])) {
-                    	return true;
-                    }
-                    else {
-                    	return false;
-                    }
-            		
-            	}
-            }
-            register(user, pwd);
-            return true;
-
+//
+//            // List<String> stringList = Files.readAllLines(filePath);
+//            // String[] stringArray = stringList.toArray(new String[]{});
+//            int i =0;
+//            boolean found = false;
+//            while (i<stringArray.length && !(found)) {
+//            	String line = stringArray[i];
+//            	String[] stuff = line.split(":");
+//            	System.out.println(user + "!!!!!!!" + stuff[0]);
+//            	if (user.equals(stuff[0])) {
+//            		String check = pwd + ":" + stuff[1];
+//            		System.out.println(check);
+//            		MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+//                	messageDigest.update(pwd.getBytes());
+//                    // pwd passa a ser string da hash para comparacao
+//                    String newpwd = new String(messageDigest.digest());
+//                    System.out.println(newpwd);
+//                    System.out.println(stuff[2]);
+//                    if (newpwd.equals(stuff[2])) {
+//                    	return true;
+//                    }
+//                    else {
+//                    	return false;
+//                    }
+//            		
+//            	}
+//            }
+//            register(user, pwd);
+//            return true;
+//
 
         } catch (FileNotFoundException e) {
-            throw new FileNotFoundException("ficheiro nao encontrado");
+        	register(user, pwd);
+        	return true;
         }
         
         catch (NoSuchFileException e) {
